@@ -12,7 +12,7 @@ This file is the source of truth for the daily kanban board.
     "owner": "Eng A",
     "priority": "P1",
     "status": "in_progress",
-    "notes": "",
+    "notes": "Kickoff complete: persistent header + route container + status rail scaffolded in pro-track-app.html; ready for QA/integration.",
     "order": 1
   },
   {
