@@ -1,0 +1,703 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>React Hooks Pro Track - Daily Kanban</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-0: #070b16;
+        --bg-1: #0b1020;
+        --bg-2: #121a31;
+        --bg-3: #1b2747;
+        --line: rgba(148, 180, 240, 0.28);
+        --line-soft: rgba(148, 180, 240, 0.14);
+        --text: #e9f0ff;
+        --muted: #9fb3dd;
+        --cyan: #22d3ee;
+        --lime: #84cc16;
+        --amber: #f59e0b;
+        --danger: #ef4444;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: "IBM Plex Sans", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at 10% 10%, rgba(34, 211, 238, 0.12), transparent 35%),
+          radial-gradient(circle at 90% 80%, rgba(245, 158, 11, 0.08), transparent 35%),
+          linear-gradient(180deg, var(--bg-0), var(--bg-1));
+      }
+
+      .app {
+        width: min(1440px, 96vw);
+        margin: 1rem auto 1.5rem;
+      }
+
+      .top {
+        border: 1px solid var(--line-soft);
+        border-radius: 14px;
+        background: linear-gradient(180deg, rgba(18, 26, 49, 0.95), rgba(11, 16, 32, 0.95));
+        padding: 0.9rem;
+        display: grid;
+        gap: 0.8rem;
+      }
+
+      .top-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .title {
+        display: flex;
+        gap: 0.7rem;
+        align-items: center;
+      }
+
+      .logo {
+        width: 30px;
+        height: 30px;
+        border: 1px solid var(--cyan);
+        border-radius: 7px;
+        display: grid;
+        place-items: center;
+        color: var(--cyan);
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.72rem;
+      }
+
+      h1 {
+        margin: 0;
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 1.05rem;
+      }
+
+      .subtitle {
+        color: var(--muted);
+        font-size: 0.84rem;
+      }
+
+      .controls {
+        display: grid;
+        grid-template-columns: 1fr 1fr auto auto auto;
+        gap: 0.6rem;
+      }
+
+      .input, .select, .btn {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: var(--bg-2);
+        color: var(--text);
+        min-height: 42px;
+        padding: 0.5rem 0.65rem;
+        font-family: inherit;
+      }
+
+      .btn {
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      .btn.primary {
+        border-color: color-mix(in hsl, var(--cyan), transparent 45%);
+        color: var(--cyan);
+      }
+
+      .btn.warn {
+        border-color: color-mix(in hsl, var(--amber), transparent 45%);
+        color: var(--amber);
+      }
+
+      .stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+      }
+
+      .chip {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 0.2rem 0.5rem;
+        font-size: 0.72rem;
+        color: var(--muted);
+        font-family: "IBM Plex Mono", monospace;
+      }
+
+      .board {
+        margin-top: 0.9rem;
+        display: grid;
+        grid-template-columns: repeat(5, minmax(260px, 1fr));
+        gap: 0.75rem;
+        overflow-x: auto;
+        padding-bottom: 0.35rem;
+      }
+
+      .col {
+        border: 1px solid var(--line-soft);
+        background: linear-gradient(180deg, rgba(18, 26, 49, 0.92), rgba(11, 16, 32, 0.92));
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        min-height: 62vh;
+      }
+
+      .col-head {
+        border-bottom: 1px solid var(--line-soft);
+        padding: 0.65rem 0.7rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .col-head strong {
+        font-size: 0.88rem;
+      }
+
+      .count {
+        font-family: "IBM Plex Mono", monospace;
+        color: var(--muted);
+        font-size: 0.75rem;
+      }
+
+      .lane {
+        padding: 0.6rem;
+        display: grid;
+        gap: 0.55rem;
+        align-content: start;
+        min-height: 100%;
+      }
+
+      .card {
+        border: 1px solid var(--line);
+        background: var(--bg-2);
+        border-radius: 10px;
+        padding: 0.55rem;
+        cursor: grab;
+      }
+
+      .card.dragging { opacity: 0.55; }
+
+      .card h3 {
+        margin: 0;
+        font-size: 0.82rem;
+        line-height: 1.35;
+      }
+
+      .meta {
+        margin-top: 0.45rem;
+        display: flex;
+        gap: 0.35rem;
+        flex-wrap: wrap;
+      }
+
+      .tag {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 0.14rem 0.42rem;
+        font-size: 0.66rem;
+        font-family: "IBM Plex Mono", monospace;
+        color: var(--muted);
+      }
+
+      .tag.owner { color: var(--cyan); border-color: color-mix(in hsl, var(--cyan), transparent 55%); }
+      .tag.blocked { color: var(--danger); border-color: color-mix(in hsl, var(--danger), transparent 55%); }
+
+      .card .notes {
+        margin-top: 0.45rem;
+        color: #c9d8fb;
+        font-size: 0.76rem;
+        min-height: 1.1rem;
+      }
+
+      .actions {
+        margin-top: 0.55rem;
+        display: flex;
+        gap: 0.35rem;
+      }
+
+      .small {
+        flex: 1;
+        border: 1px solid var(--line);
+        background: var(--bg-3);
+        color: var(--muted);
+        border-radius: 8px;
+        font-size: 0.7rem;
+        min-height: 30px;
+        cursor: pointer;
+      }
+
+      .drop-target {
+        outline: 2px dashed color-mix(in hsl, var(--cyan), transparent 40%);
+        outline-offset: -6px;
+      }
+
+      .hidden { display: none !important; }
+
+      @media (max-width: 1100px) {
+        .controls {
+          grid-template-columns: 1fr 1fr 1fr;
+        }
+      }
+
+      @media (max-width: 760px) {
+        .app { width: 98vw; }
+
+        .top-head {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .controls {
+          grid-template-columns: 1fr;
+        }
+
+        .btn { width: 100%; }
+
+        .board {
+          grid-template-columns: repeat(5, minmax(82vw, 1fr));
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="app">
+      <section class="top">
+        <div class="top-head">
+          <div class="title">
+            <div class="logo">RH</div>
+            <div>
+              <h1>Daily Kanban - React Hooks Pro Track</h1>
+              <div class="subtitle">Drag cards between columns. Sync via repo file <code>KANBAN-STATUS.md</code>.</div>
+            </div>
+          </div>
+          <div class="stats" id="stats"></div>
+        </div>
+
+        <div class="controls">
+          <input id="new-title" class="input" placeholder="Story title (example: ST-037 Add mobile bottom nav)" />
+          <select id="new-owner" class="select">
+            <option value="Eng A">Eng A</option>
+            <option value="Eng B">Eng B</option>
+            <option value="Eng C">Eng C</option>
+            <option value="Eng D">Eng D</option>
+            <option value="Shared">Shared</option>
+          </select>
+          <select id="new-priority" class="select">
+            <option value="P1">P1</option>
+            <option value="P2">P2</option>
+            <option value="P3">P3</option>
+          </select>
+          <button class="btn primary" id="add-card">Add Card</button>
+          <button class="btn warn" id="reset-board">Reset to Seed</button>
+        </div>
+
+        <div class="controls" style="grid-template-columns: 1fr 1fr auto auto auto;">
+          <input id="filter-text" class="input" placeholder="Filter by id/title (e.g., ST-01, visualizer, capstone)" />
+          <select id="filter-owner" class="select">
+            <option value="all">All Owners</option>
+            <option value="Eng A">Eng A</option>
+            <option value="Eng B">Eng B</option>
+            <option value="Eng C">Eng C</option>
+            <option value="Eng D">Eng D</option>
+            <option value="Shared">Shared</option>
+          </select>
+          <button class="btn" id="clear-filters">Clear Filters</button>
+          <button class="btn" id="pull-repo">Pull from Repo</button>
+          <button class="btn primary" id="save-repo">Save to Repo</button>
+        </div>
+      </section>
+
+      <section class="board" id="board">
+        <article class="col" data-status="backlog">
+          <div class="col-head"><strong>Backlog</strong><span class="count" id="count-backlog">0</span></div>
+          <div class="lane" id="lane-backlog"></div>
+        </article>
+        <article class="col" data-status="in_progress">
+          <div class="col-head"><strong>In Progress</strong><span class="count" id="count-in_progress">0</span></div>
+          <div class="lane" id="lane-in_progress"></div>
+        </article>
+        <article class="col" data-status="review">
+          <div class="col-head"><strong>Review / QA</strong><span class="count" id="count-review">0</span></div>
+          <div class="lane" id="lane-review"></div>
+        </article>
+        <article class="col" data-status="blocked">
+          <div class="col-head"><strong>Blocked</strong><span class="count" id="count-blocked">0</span></div>
+          <div class="lane" id="lane-blocked"></div>
+        </article>
+        <article class="col" data-status="done">
+          <div class="col-head"><strong>Done</strong><span class="count" id="count-done">0</span></div>
+          <div class="lane" id="lane-done"></div>
+        </article>
+      </section>
+    </main>
+
+    <script>
+      const STORAGE_KEY = "rh_pro_track_kanban_local_fallback_v1";
+      const BOARD_API = "/api/board";
+      const BOARD_FILE = "KANBAN-STATUS.md";
+
+      const seedCards = [
+        ["ST-001", "App shell layout", "Eng A", "P1", "in_progress"],
+        ["ST-002", "Theme tokens + primitives", "Eng A", "P1", "backlog"],
+        ["ST-003", "Responsive navigation model", "Eng A", "P1", "backlog"],
+        ["ST-004", "Accessibility baseline", "Eng A", "P2", "backlog"],
+        ["ST-005", "Monaco editor integration", "Eng B", "P1", "in_progress"],
+        ["ST-006", "Sandbox runtime executor", "Eng B", "P1", "backlog"],
+        ["ST-007", "Run/reset flow", "Eng B", "P2", "backlog"],
+        ["ST-008", "Lesson schema loader", "Eng B", "P1", "backlog"],
+        ["ST-009", "Render timeline component", "Eng D", "P1", "backlog"],
+        ["ST-010", "Dependency diff inspector", "Eng D", "P1", "backlog"],
+        ["ST-011", "Hook call-order tracker", "Eng D", "P2", "backlog"],
+        ["ST-012", "Visualizer adapter API", "Eng D", "P1", "backlog"],
+        ["ST-013", "Check runner contract", "Eng C", "P1", "in_progress"],
+        ["ST-014", "Gate state machine", "Eng C", "P1", "backlog"],
+        ["ST-015", "Retry policy", "Eng C", "P1", "backlog"],
+        ["ST-016", "Hint ladder unlock", "Eng C", "P1", "backlog"],
+        ["ST-017", "Multiple valid solutions rules", "Eng C", "P2", "backlog"],
+        ["ST-018", "Progress local persistence", "Eng C", "P2", "backlog"],
+        ["ST-019", "Completion ledger", "Eng C", "P2", "backlog"],
+        ["ST-020", "Proficiency validator", "Eng C", "P1", "backlog"],
+        ["ST-021", "Badge issuance UI", "Eng C/A", "P2", "backlog"],
+        ["ST-022", "Module 1 content + gate", "Eng B", "P2", "backlog"],
+        ["ST-023", "Module 2 content + gate", "Eng B", "P2", "backlog"],
+        ["ST-024", "Module 3 content + gate", "Eng B", "P1", "backlog"],
+        ["ST-025", "Module 4 content + gate", "Eng B", "P2", "backlog"],
+        ["ST-026", "Debug labs content", "Eng B", "P1", "backlog"],
+        ["ST-027", "Capstone rubric + tests", "Eng C/B", "P1", "backlog"],
+        ["ST-028", "Final assessment flow", "Eng B", "P1", "backlog"],
+        ["ST-029", "Telemetry schema", "Eng D", "P2", "backlog"],
+        ["ST-030", "Telemetry dispatcher", "Eng D", "P2", "backlog"],
+        ["ST-031", "Analytics adapters", "Eng D", "P3", "backlog"],
+        ["ST-032", "Failure classifier", "Eng D", "P3", "backlog"],
+        ["ST-033", "E2E gate tests", "Shared", "P1", "backlog"],
+        ["ST-034", "Cross-device QA", "Shared", "P1", "backlog"],
+        ["ST-035", "Performance checks", "Shared", "P2", "backlog"],
+        ["ST-036", "Pilot + release checklist", "Shared", "P2", "backlog"]
+      ];
+
+      const lanes = ["backlog", "in_progress", "review", "blocked", "done"];
+      let cards = [];
+      let dragId = null;
+      let syncMode = "repo";
+      let saveTimer = null;
+      let lastSavedAt = null;
+
+      const filterText = document.getElementById("filter-text");
+      const filterOwner = document.getElementById("filter-owner");
+
+      function toSeedState() {
+        return seedCards.map((row, index) => ({
+          id: row[0],
+          title: row[1],
+          owner: row[2],
+          priority: row[3],
+          status: row[4],
+          notes: "",
+          order: index + 1
+        }));
+      }
+
+      function persistLocal() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(cards));
+      }
+
+      function loadLocal() {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return toSeedState();
+        try {
+          return JSON.parse(raw);
+        } catch (_) {
+          return toSeedState();
+        }
+      }
+
+      function updateSyncChip(message, color = "default") {
+        const palette = {
+          default: "var(--muted)",
+          ok: "var(--lime)",
+          warn: "var(--amber)",
+          err: "var(--danger)",
+          info: "var(--cyan)"
+        };
+        const safeMsg = escapeHtml(message);
+        const current = document.getElementById("sync-chip");
+        const chipHtml = `<span id="sync-chip" class="chip" style="color:${palette[color]};">${safeMsg}</span>`;
+        if (current) {
+          current.outerHTML = chipHtml;
+        } else {
+          document.getElementById("stats").insertAdjacentHTML("beforeend", chipHtml);
+        }
+      }
+
+      async function loadFromRepo() {
+        const response = await fetch(BOARD_API, { cache: "no-store" });
+        if (!response.ok) {
+          throw new Error(`repo load failed (${response.status})`);
+        }
+        const payload = await response.json();
+        if (!Array.isArray(payload.cards)) {
+          throw new Error("invalid board payload");
+        }
+        cards = payload.cards;
+        lastSavedAt = payload.updatedAt || new Date().toISOString();
+        syncMode = "repo";
+        persistLocal();
+      }
+
+      async function saveToRepo() {
+        const response = await fetch(BOARD_API, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ cards })
+        });
+        if (!response.ok) {
+          throw new Error(`repo save failed (${response.status})`);
+        }
+        const payload = await response.json();
+        lastSavedAt = payload.updatedAt || new Date().toISOString();
+        syncMode = "repo";
+        updateSyncChip(`synced to ${BOARD_FILE} at ${new Date(lastSavedAt).toLocaleTimeString()}`, "ok");
+      }
+
+      function queueSave() {
+        persistLocal();
+        if (syncMode !== "repo") return;
+        clearTimeout(saveTimer);
+        saveTimer = setTimeout(async () => {
+          try {
+            await saveToRepo();
+          } catch (error) {
+            syncMode = "local";
+            updateSyncChip(`repo unavailable (${error.message}), using local fallback`, "warn");
+          }
+        }, 450);
+      }
+
+      function createCardNode(card) {
+        const el = document.createElement("article");
+        el.className = "card";
+        el.draggable = true;
+        el.dataset.id = card.id;
+
+        const blocked = card.status === "blocked";
+
+        el.innerHTML = `
+          <h3>${escapeHtml(card.id)} - ${escapeHtml(card.title)}</h3>
+          <div class="meta">
+            <span class="tag owner">${escapeHtml(card.owner)}</span>
+            <span class="tag">${escapeHtml(card.priority)}</span>
+            ${blocked ? '<span class="tag blocked">blocked</span>' : ""}
+          </div>
+          <div class="notes">${escapeHtml(card.notes || "")}</div>
+          <div class="actions">
+            <button class="small" data-action="note">Note</button>
+            <button class="small" data-action="delete">Delete</button>
+          </div>
+        `;
+
+        el.addEventListener("dragstart", () => {
+          dragId = card.id;
+          el.classList.add("dragging");
+        });
+
+        el.addEventListener("dragend", () => {
+          dragId = null;
+          el.classList.remove("dragging");
+        });
+
+        el.querySelector('[data-action="note"]').addEventListener("click", () => {
+          const next = prompt(`Update note for ${card.id}`, card.notes || "");
+          if (next === null) return;
+          card.notes = next.trim();
+          queueSave();
+          render();
+        });
+
+        el.querySelector('[data-action="delete"]').addEventListener("click", () => {
+          if (!confirm(`Delete ${card.id}?`)) return;
+          cards = cards.filter((c) => c.id !== card.id);
+          queueSave();
+          render();
+        });
+
+        return el;
+      }
+
+      function render() {
+        lanes.forEach((lane) => {
+          const laneEl = document.getElementById(`lane-${lane}`);
+          laneEl.innerHTML = "";
+
+          const textQuery = filterText.value.trim().toLowerCase();
+          const ownerQuery = filterOwner.value;
+
+          const laneCards = cards
+            .filter((c) => c.status === lane)
+            .filter((c) => {
+              const textMatch = !textQuery || `${c.id} ${c.title}`.toLowerCase().includes(textQuery);
+              const ownerMatch = ownerQuery === "all" || c.owner === ownerQuery;
+              return textMatch && ownerMatch;
+            })
+            .sort((a, b) => a.order - b.order);
+
+          laneCards.forEach((c) => laneEl.appendChild(createCardNode(c)));
+          document.getElementById(`count-${lane}`).textContent = laneCards.length;
+        });
+
+        const done = cards.filter((c) => c.status === "done").length;
+        const inProgress = cards.filter((c) => c.status === "in_progress").length;
+        const blocked = cards.filter((c) => c.status === "blocked").length;
+        const total = cards.length;
+
+        const syncSummary =
+          syncMode === "repo"
+            ? `sync: repo (${BOARD_FILE})`
+            : "sync: local fallback";
+        document.getElementById("stats").innerHTML = `
+          <span class="chip">total: ${total}</span>
+          <span class="chip">in progress: ${inProgress}</span>
+          <span class="chip">blocked: ${blocked}</span>
+          <span class="chip">done: ${done}</span>
+          <span class="chip">${syncSummary}</span>
+        `;
+        if (syncMode === "repo") {
+          const suffix = lastSavedAt ? ` at ${new Date(lastSavedAt).toLocaleTimeString()}` : "";
+          updateSyncChip(`synced to ${BOARD_FILE}${suffix}`, "ok");
+        }
+      }
+
+      function wireDnD() {
+        lanes.forEach((lane) => {
+          const laneEl = document.getElementById(`lane-${lane}`);
+
+          laneEl.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            laneEl.classList.add("drop-target");
+          });
+
+          laneEl.addEventListener("dragleave", () => {
+            laneEl.classList.remove("drop-target");
+          });
+
+          laneEl.addEventListener("drop", (e) => {
+            e.preventDefault();
+            laneEl.classList.remove("drop-target");
+            if (!dragId) return;
+
+            const card = cards.find((c) => c.id === dragId);
+            if (!card) return;
+
+            card.status = lane;
+            card.order = Date.now();
+            queueSave();
+            render();
+          });
+        });
+      }
+
+      function addCard() {
+        const titleInput = document.getElementById("new-title");
+        const ownerInput = document.getElementById("new-owner");
+        const priorityInput = document.getElementById("new-priority");
+
+        const raw = titleInput.value.trim();
+        if (!raw) return;
+
+        const parts = raw.split(" ");
+        const idMaybe = parts[0].toUpperCase();
+        const hasStoryPrefix = /^ST-\d+/.test(idMaybe);
+        const id = hasStoryPrefix ? idMaybe : `ST-${Math.floor(Math.random() * 900 + 100)}`;
+        const title = hasStoryPrefix ? parts.slice(1).join(" ") || "Untitled story" : raw;
+
+        if (cards.some((c) => c.id === id)) {
+          alert(`Card id ${id} already exists`);
+          return;
+        }
+
+        cards.push({
+          id,
+          title,
+          owner: ownerInput.value,
+          priority: priorityInput.value,
+          status: "backlog",
+          notes: "",
+          order: Date.now()
+        });
+
+        titleInput.value = "";
+        queueSave();
+        render();
+      }
+
+      function resetBoard() {
+        if (!confirm("Reset board to seeded stories?")) return;
+        cards = toSeedState();
+        queueSave();
+        render();
+      }
+
+      function escapeHtml(text) {
+        return String(text)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      async function initialize() {
+        try {
+          await loadFromRepo();
+          updateSyncChip(`loaded from ${BOARD_FILE}`, "info");
+        } catch (_) {
+          cards = loadLocal();
+          syncMode = "local";
+          updateSyncChip("repo API unavailable, using local fallback", "warn");
+        }
+        render();
+      }
+
+      document.getElementById("add-card").addEventListener("click", addCard);
+      document.getElementById("reset-board").addEventListener("click", resetBoard);
+      document.getElementById("save-repo").addEventListener("click", async () => {
+        try {
+          await saveToRepo();
+          render();
+        } catch (error) {
+          syncMode = "local";
+          updateSyncChip(`save failed: ${error.message}`, "err");
+        }
+      });
+      document.getElementById("pull-repo").addEventListener("click", async () => {
+        try {
+          await loadFromRepo();
+          updateSyncChip(`pulled latest from ${BOARD_FILE}`, "ok");
+          render();
+        } catch (error) {
+          updateSyncChip(`pull failed: ${error.message}`, "err");
+        }
+      });
+      document.getElementById("clear-filters").addEventListener("click", () => {
+        filterText.value = "";
+        filterOwner.value = "all";
+        render();
+      });
+      filterText.addEventListener("input", render);
+      filterOwner.addEventListener("change", render);
+
+      wireDnD();
+      initialize();
+    </script>
+  </body>
+</html>

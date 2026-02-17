@@ -1,0 +1,1432 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Blueprint Lab - React Hooks Pro Track</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+/* ─── RESET & TOKENS ─── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg-abyss:#070b16;
+  --bg-deep:#0b1020;
+  --bg-panel:#121a31;
+  --bg-surface:#1a2644;
+  --bg-raised:#1a2644;
+  --bg-hover:#22335d;
+
+  --border-dim:rgba(148,180,240,.14);
+  --border-soft:rgba(148,180,240,.18);
+  --border-med:rgba(148,180,240,.32);
+
+  --text-primary:#e9f0ff;
+  --text-secondary:#9fb3dd;
+  --text-dim:#7f95ba;
+
+  --cyan:#22d3ee;
+  --cyan-dim:rgba(34,211,238,.12);
+  --cyan-glow:rgba(34,211,238,.35);
+  --amber:#f59e0b;
+  --amber-dim:rgba(245,158,11,.1);
+  --amber-glow:rgba(245,158,11,.3);
+  --lime:#84cc16;
+  --lime-dim:rgba(132,204,22,.08);
+  --lime-glow:rgba(132,204,22,.3);
+  --red:#ef4444;
+  --red-dim:rgba(239,68,68,.1);
+
+  --font-display:"Space Grotesk", sans-serif;
+  --font-body:"IBM Plex Sans", system-ui, sans-serif;
+  --font-mono:"IBM Plex Mono", monospace;
+
+  --radius-sm:6px;
+  --radius-md:10px;
+  --radius-lg:16px;
+  --radius-xl:24px;
+
+  --ease-out-expo:cubic-bezier(.16,1,.3,1);
+  --ease-out-back:cubic-bezier(.34,1.56,.64,1);
+}
+
+html{font-size:15px;-webkit-font-smoothing:antialiased}
+body{
+  font-family:var(--font-body);
+  color:var(--text-primary);
+  background:var(--bg-abyss);
+  line-height:1.5;
+  overflow-x:hidden;
+  min-height:100vh;
+}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+
+/* ─── GLOBAL BACKGROUND ─── */
+body::before{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 50% at 15% 10%,rgba(0,229,255,.06),transparent),
+    radial-gradient(ellipse 50% 40% at 80% 85%,rgba(255,179,0,.04),transparent),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M60 0H0v60' fill='none' stroke='%23ffffff' stroke-opacity='.018' stroke-width='.5'/%3E%3C/svg%3E");
+}
+
+/* ─── GRID NOISE TEXTURE ─── */
+body::after{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  opacity:.35;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='.03'/%3E%3C/svg%3E");
+}
+
+/* ─── APP SHELL ─── */
+.app{position:relative;z-index:1;min-height:100vh}
+
+/* ─── NAVIGATION ─── */
+.nav{
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;gap:1rem;
+  padding:.75rem 2rem;
+  background:rgba(6,8,15,.82);
+  backdrop-filter:blur(20px) saturate(1.4);
+  border-bottom:1px solid var(--border-dim);
+}
+.nav-logo{
+  font-family:var(--font-mono);font-weight:600;font-size:.8rem;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--cyan);
+  display:flex;align-items:center;gap:.5rem;
+}
+.nav-logo::before{
+  content:"";display:block;width:8px;height:8px;border-radius:50%;
+  background:var(--cyan);box-shadow:0 0 8px var(--cyan-glow);
+}
+.nav-tabs{display:flex;gap:.25rem;margin-left:auto}
+.nav-tab{
+  padding:.45rem .85rem;border-radius:var(--radius-sm);
+  font-size:.78rem;font-weight:500;letter-spacing:.02em;
+  color:var(--text-dim);transition:all .2s;
+}
+.nav-tab:hover{color:var(--text-secondary);background:var(--bg-surface)}
+.nav-tab.active{color:var(--text-primary);background:var(--bg-raised)}
+
+/* ─── UTILITIES ─── */
+.container{max-width:1320px;margin:0 auto;padding:0 2rem}
+.mono{font-family:var(--font-mono)}
+.dim{color:var(--text-dim)}
+.secondary{color:var(--text-secondary)}
+.cyan{color:var(--cyan)}
+.amber{color:var(--amber)}
+.lime{color:var(--lime)}
+.red{color:var(--red)}
+
+.badge-pill{
+  display:inline-flex;align-items:center;gap:.35rem;
+  padding:.2rem .6rem;border-radius:99px;font-size:.7rem;font-weight:600;
+  letter-spacing:.04em;text-transform:uppercase;
+}
+.badge-cyan{background:var(--cyan-dim);color:var(--cyan);border:1px solid rgba(0,229,255,.2)}
+.badge-amber{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(255,179,0,.2)}
+.badge-lime{background:var(--lime-dim);color:var(--lime);border:1px solid rgba(156,255,30,.2)}
+.badge-red{background:var(--red-dim);color:var(--red);border:1px solid rgba(255,64,96,.2)}
+
+.btn{
+  display:inline-flex;align-items:center;gap:.5rem;
+  padding:.65rem 1.3rem;border-radius:var(--radius-md);
+  font-size:.82rem;font-weight:600;letter-spacing:.02em;
+  transition:all .25s var(--ease-out-expo);
+}
+.btn-primary{
+  background:var(--cyan);color:var(--bg-abyss);
+  box-shadow:0 0 0 0 var(--cyan-glow),0 2px 12px rgba(0,229,255,.2);
+}
+.btn-primary:hover{
+  box-shadow:0 0 20px var(--cyan-glow),0 4px 20px rgba(0,229,255,.3);
+  transform:translateY(-1px);
+}
+.btn-ghost{
+  background:transparent;border:1px solid var(--border-med);color:var(--text-secondary);
+}
+.btn-ghost:hover{background:var(--bg-surface);color:var(--text-primary);border-color:var(--border-soft)}
+.btn-amber{background:var(--amber);color:var(--bg-abyss);box-shadow:0 2px 12px rgba(255,179,0,.2)}
+.btn-amber:hover{box-shadow:0 0 20px var(--amber-glow);transform:translateY(-1px)}
+.btn-sm{padding:.4rem .85rem;font-size:.72rem}
+
+.card{
+  background:var(--bg-panel);
+  border:1px solid var(--border-dim);
+  border-radius:var(--radius-lg);
+  overflow:hidden;
+}
+
+/* ─── SCREEN FADE ─── */
+.screen{
+  animation:screenIn .6s var(--ease-out-expo) both;
+}
+@keyframes screenIn{
+  from{opacity:0;transform:translateY(16px)}
+  to{opacity:1;transform:none}
+}
+.screen[hidden]{display:none!important}
+
+/* ═══════════════════════════════════════════════
+   SCREEN 1: LAUNCH
+   ═══════════════════════════════════════════════ */
+.launch{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:calc(100vh - 56px);
+  text-align:center;padding:3rem 2rem;
+  position:relative;
+}
+.launch::before{
+  content:"";position:absolute;
+  width:600px;height:600px;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(circle,rgba(0,229,255,.07) 0%,transparent 65%);
+  pointer-events:none;
+  animation:launchPulse 4s ease-in-out infinite alternate;
+}
+@keyframes launchPulse{
+  0%{opacity:.5;transform:translate(-50%,-50%) scale(.9)}
+  100%{opacity:1;transform:translate(-50%,-50%) scale(1.1)}
+}
+.launch-overline{
+  font-family:var(--font-mono);font-size:.7rem;font-weight:600;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);
+  margin-bottom:1.5rem;
+  animation:fadeUp .8s var(--ease-out-expo) .1s both;
+}
+.launch-title{
+  font-family:var(--font-display);font-weight:700;
+  font-size:clamp(2.4rem,5.5vw,4.2rem);line-height:1.1;
+  letter-spacing:-.03em;
+  max-width:700px;
+  animation:fadeUp .8s var(--ease-out-expo) .2s both;
+}
+.launch-title em{
+  font-style:italic;color:var(--cyan);
+  text-shadow:0 0 40px rgba(0,229,255,.25);
+}
+.launch-subtitle{
+  margin-top:1.2rem;
+  font-size:1.05rem;color:var(--text-secondary);
+  max-width:500px;line-height:1.6;
+  animation:fadeUp .8s var(--ease-out-expo) .35s both;
+}
+.launch-pills{
+  display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;
+  margin-top:2rem;
+  animation:fadeUp .8s var(--ease-out-expo) .45s both;
+}
+.launch-pill{
+  padding:.45rem .9rem;border-radius:var(--radius-sm);
+  font-family:var(--font-mono);font-size:.72rem;font-weight:500;
+  color:var(--text-dim);
+  border:1px solid var(--border-dim);
+  background:rgba(15,21,37,.6);
+}
+.launch-actions{
+  display:flex;gap:.75rem;margin-top:2.5rem;
+  animation:fadeUp .8s var(--ease-out-expo) .55s both;
+}
+.launch-features{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;
+  margin-top:3.5rem;max-width:680px;
+  animation:fadeUp .8s var(--ease-out-expo) .65s both;
+}
+.launch-feature{
+  padding:1.2rem;border-radius:var(--radius-md);
+  background:var(--bg-panel);border:1px solid var(--border-dim);
+  text-align:left;
+}
+.launch-feature-icon{
+  font-size:1.3rem;margin-bottom:.5rem;display:block;
+}
+.launch-feature h4{font-size:.8rem;font-weight:600;margin-bottom:.3rem}
+.launch-feature p{font-size:.72rem;color:var(--text-dim);line-height:1.5}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:none}
+}
+
+/* ═══════════════════════════════════════════════
+   SCREEN 2: DASHBOARD
+   ═══════════════════════════════════════════════ */
+.dashboard{padding:2rem 0 4rem}
+.dash-header{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  margin-bottom:2rem;
+}
+.dash-header h1{
+  font-family:var(--font-display);font-size:1.8rem;font-weight:700;
+  letter-spacing:-.02em;
+}
+.dash-header-meta{text-align:right}
+.dash-header-meta .dash-time{
+  font-family:var(--font-mono);font-size:.82rem;color:var(--text-secondary);
+}
+.dash-header-meta .dash-progress{
+  font-size:.72rem;color:var(--text-dim);margin-top:.2rem;
+}
+
+/* Module track */
+.track-rail{
+  display:grid;grid-template-columns:repeat(7,1fr);gap:.5rem;
+  margin-bottom:2rem;
+}
+.track-node{
+  position:relative;padding:1rem;
+  border-radius:var(--radius-md);
+  background:var(--bg-panel);border:1px solid var(--border-dim);
+  transition:all .3s;cursor:default;
+}
+.track-node:hover{border-color:var(--border-med);background:var(--bg-surface)}
+.track-node-num{
+  font-family:var(--font-mono);font-size:.65rem;font-weight:600;
+  color:var(--text-dim);letter-spacing:.1em;margin-bottom:.4rem;
+}
+.track-node-title{font-size:.78rem;font-weight:600;margin-bottom:.5rem;line-height:1.3}
+.track-node-status{font-size:.65rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+
+.track-node.completed{border-color:rgba(156,255,30,.2)}
+.track-node.completed .track-node-status{color:var(--lime)}
+.track-node.completed::after{
+  content:"";position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--lime);border-radius:var(--radius-md) var(--radius-md) 0 0;
+}
+.track-node.active{border-color:rgba(0,229,255,.3);background:var(--bg-surface)}
+.track-node.active .track-node-status{color:var(--cyan)}
+.track-node.active::after{
+  content:"";position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--cyan);border-radius:var(--radius-md) var(--radius-md) 0 0;
+  box-shadow:0 0 12px var(--cyan-glow);
+}
+.track-node.locked{opacity:.45}
+.track-node.locked .track-node-status{color:var(--text-dim)}
+
+/* Dashboard grid */
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.dash-card{padding:1.5rem}
+.dash-card h3{
+  font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text-dim);margin-bottom:1rem;
+}
+.dash-card-continue{
+  grid-column:1/-1;
+  display:flex;align-items:center;justify-content:space-between;
+  background:linear-gradient(135deg,var(--bg-panel),var(--bg-surface));
+  border:1px solid rgba(0,229,255,.15);
+}
+.dash-card-continue h2{
+  font-family:var(--font-display);font-size:1.2rem;font-weight:700;
+}
+.dash-card-continue p{color:var(--text-secondary);font-size:.85rem;margin-top:.3rem}
+
+/* Pitfalls list */
+.pitfall-list{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+.pitfall-item{
+  display:flex;align-items:center;gap:.6rem;
+  padding:.55rem .75rem;border-radius:var(--radius-sm);
+  background:var(--bg-surface);font-size:.78rem;
+}
+.pitfall-dot{width:6px;height:6px;border-radius:50%;background:var(--amber);flex-shrink:0}
+
+/* Retry state */
+.retry-meter{margin-top:.5rem}
+.retry-bar-track{
+  height:6px;border-radius:3px;background:var(--bg-raised);overflow:hidden;
+  margin-top:.4rem;
+}
+.retry-bar-fill{
+  height:100%;border-radius:3px;
+  background:linear-gradient(90deg,var(--cyan),var(--lime));
+  width:33%;transition:width .6s var(--ease-out-expo);
+}
+.retry-label{
+  display:flex;justify-content:space-between;
+  font-family:var(--font-mono);font-size:.7rem;color:var(--text-dim);
+}
+
+/* ═══════════════════════════════════════════════
+   SCREEN 3: LESSON PLAYER
+   ═══════════════════════════════════════════════ */
+.player{
+  display:grid;
+  grid-template-columns:280px 1fr 300px;
+  grid-template-rows:auto 1fr auto;
+  height:calc(100vh - 56px);
+  overflow:hidden;
+}
+.player-bar{
+  grid-column:1/-1;
+  display:flex;align-items:center;gap:1rem;
+  padding:.6rem 1.2rem;
+  background:var(--bg-deep);
+  border-bottom:1px solid var(--border-dim);
+}
+.player-bar h2{font-size:.85rem;font-weight:600;flex:1}
+.player-bar-meta{
+  display:flex;gap:1rem;
+  font-family:var(--font-mono);font-size:.7rem;color:var(--text-dim);
+}
+
+/* Concept panel */
+.concept-panel{
+  grid-row:2/4;
+  border-right:1px solid var(--border-dim);
+  padding:1.2rem;overflow-y:auto;
+  background:var(--bg-deep);
+}
+.concept-panel h3{
+  font-family:var(--font-display);font-size:1.05rem;font-weight:700;
+  margin-bottom:.8rem;
+}
+.concept-section{margin-bottom:1.2rem}
+.concept-section h4{
+  font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text-dim);margin-bottom:.5rem;
+}
+.concept-section p,.concept-section li{
+  font-size:.8rem;color:var(--text-secondary);line-height:1.6;
+}
+.concept-section ul{list-style:none;display:flex;flex-direction:column;gap:.3rem}
+.concept-section li::before{
+  content:"→ ";color:var(--cyan);font-family:var(--font-mono);
+}
+.concept-code{
+  font-family:var(--font-mono);font-size:.72rem;
+  background:var(--bg-surface);border:1px solid var(--border-dim);
+  border-radius:var(--radius-sm);padding:.75rem;
+  color:var(--text-secondary);line-height:1.7;
+  overflow-x:auto;white-space:pre;
+}
+.concept-warning{
+  margin-top:.8rem;padding:.6rem .75rem;
+  border-radius:var(--radius-sm);
+  background:var(--amber-dim);border-left:2px solid var(--amber);
+  font-size:.75rem;color:var(--amber);line-height:1.5;
+}
+
+/* Editor area */
+.editor-area{
+  grid-row:2;display:flex;flex-direction:column;overflow:hidden;
+}
+.editor-tabs{
+  display:flex;gap:0;
+  background:var(--bg-deep);border-bottom:1px solid var(--border-dim);
+}
+.editor-tab{
+  padding:.5rem 1rem;
+  font-family:var(--font-mono);font-size:.72rem;
+  color:var(--text-dim);border-bottom:2px solid transparent;
+  transition:all .15s;
+}
+.editor-tab.active{color:var(--text-primary);border-bottom-color:var(--cyan);background:var(--bg-panel)}
+.editor-tab:hover{color:var(--text-secondary)}
+
+.editor-canvas{
+  flex:1;padding:1rem;overflow:auto;
+  background:var(--bg-panel);
+  font-family:var(--font-mono);font-size:.78rem;line-height:1.8;
+  color:var(--text-secondary);
+}
+.editor-canvas .line-num{
+  display:inline-block;width:2.5rem;text-align:right;
+  color:var(--text-dim);opacity:.5;margin-right:1rem;user-select:none;
+}
+.editor-canvas .kw{color:#c792ea}
+.editor-canvas .fn{color:#82aaff}
+.editor-canvas .str{color:#c3e88d}
+.editor-canvas .typ{color:var(--cyan)}
+.editor-canvas .cm{color:#546e7a;font-style:italic}
+.editor-canvas .op{color:#89ddff}
+.editor-canvas .num{color:#f78c6c}
+
+/* Preview */
+.preview-area{
+  grid-row:3;grid-column:2;
+  border-top:1px solid var(--border-dim);
+  display:flex;flex-direction:column;
+}
+.preview-bar{
+  display:flex;align-items:center;gap:.5rem;
+  padding:.4rem .8rem;
+  background:var(--bg-deep);border-bottom:1px solid var(--border-dim);
+  font-family:var(--font-mono);font-size:.65rem;color:var(--text-dim);
+}
+.preview-dot{width:6px;height:6px;border-radius:50%}
+.preview-canvas{
+  flex:1;padding:1rem;background:var(--bg-panel);
+  display:flex;flex-direction:column;gap:.5rem;
+  font-size:.82rem;
+}
+.preview-mock-card{
+  padding:.8rem 1rem;border-radius:var(--radius-sm);
+  background:var(--bg-surface);border:1px solid var(--border-dim);
+}
+.preview-mock-title{font-weight:600;font-size:.78rem;margin-bottom:.3rem}
+.preview-mock-bar{
+  height:4px;border-radius:2px;background:var(--bg-raised);overflow:hidden;
+  margin-top:.4rem;
+}
+.preview-mock-bar-fill{height:100%;border-radius:2px;background:var(--cyan);width:65%}
+
+/* Internals panel */
+.internals-panel{
+  grid-row:2/4;
+  border-left:1px solid var(--border-dim);
+  background:var(--bg-deep);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+}
+.internals-header{
+  padding:.8rem 1rem;
+  border-bottom:1px solid var(--border-dim);
+  font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text-dim);
+  display:flex;align-items:center;gap:.5rem;
+}
+.internals-header::before{
+  content:"";width:7px;height:7px;border-radius:50%;
+  background:var(--lime);box-shadow:0 0 6px var(--lime-glow);
+}
+.internals-body{flex:1;overflow-y:auto;padding:.8rem}
+
+/* Timeline events */
+.timeline{display:flex;flex-direction:column;gap:.35rem}
+.tl-event{
+  display:grid;grid-template-columns:auto 1fr auto;gap:.5rem;align-items:center;
+  padding:.45rem .6rem;border-radius:var(--radius-sm);
+  font-size:.72rem;
+  background:var(--bg-surface);border:1px solid var(--border-dim);
+  transition:all .2s;
+}
+.tl-event:hover{border-color:var(--border-med)}
+.tl-tag{
+  font-family:var(--font-mono);font-size:.6rem;font-weight:600;
+  padding:.1rem .4rem;border-radius:3px;letter-spacing:.04em;
+}
+.tl-render .tl-tag{background:rgba(0,229,255,.12);color:var(--cyan)}
+.tl-effect .tl-tag{background:rgba(255,179,0,.1);color:var(--amber)}
+.tl-cleanup .tl-tag{background:rgba(255,64,96,.1);color:var(--red)}
+.tl-event-label{color:var(--text-secondary)}
+.tl-event-time{font-family:var(--font-mono);font-size:.6rem;color:var(--text-dim)}
+
+/* Dep inspector */
+.dep-inspector{margin-top:1rem}
+.dep-inspector h4{
+  font-size:.65rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text-dim);margin-bottom:.5rem;
+}
+.dep-row{
+  display:flex;align-items:center;gap:.5rem;
+  padding:.35rem .5rem;font-family:var(--font-mono);font-size:.7rem;
+  border-radius:var(--radius-sm);
+  margin-bottom:.25rem;
+}
+.dep-changed{background:rgba(255,179,0,.08);color:var(--amber)}
+.dep-stable{background:var(--bg-surface);color:var(--text-dim)}
+.dep-indicator{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.dep-changed .dep-indicator{background:var(--amber);box-shadow:0 0 4px var(--amber-glow)}
+.dep-stable .dep-indicator{background:var(--text-dim);opacity:.4}
+
+/* Player bottom bar */
+.player-actions{
+  grid-column:2;
+  display:flex;align-items:center;gap:.5rem;
+  padding:.6rem 1rem;
+  background:var(--bg-deep);border-top:1px solid var(--border-dim);
+}
+.player-checks{
+  display:flex;gap:.5rem;flex:1;flex-wrap:wrap;
+}
+.check-item{
+  display:flex;align-items:center;gap:.35rem;
+  font-size:.72rem;color:var(--text-dim);
+}
+.check-box{
+  width:14px;height:14px;border-radius:3px;
+  border:1.5px solid var(--border-med);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.55rem;
+}
+.check-box.pass{border-color:var(--lime);color:var(--lime);background:var(--lime-dim)}
+.check-box.fail{border-color:var(--red);color:var(--red);background:var(--red-dim)}
+
+/* ═══════════════════════════════════════════════
+   SCREEN 4: DEBUG ARENA
+   ═══════════════════════════════════════════════ */
+.debug{
+  display:grid;
+  grid-template-columns:380px 1fr;
+  grid-template-rows:auto 1fr auto;
+  height:calc(100vh - 56px);
+  overflow:hidden;
+}
+.debug-bar{
+  grid-column:1/-1;
+  display:flex;align-items:center;gap:1rem;
+  padding:.6rem 1.2rem;
+  background:var(--bg-deep);border-bottom:1px solid var(--border-dim);
+}
+.debug-bar h2{font-size:.85rem;font-weight:600;flex:1}
+.debug-bar .badge-pill{margin-left:.5rem}
+
+/* Incident panel */
+.incident-panel{
+  grid-row:2/4;
+  border-right:1px solid var(--border-dim);
+  background:var(--bg-deep);
+  padding:1.2rem;overflow-y:auto;
+}
+.incident-panel h3{
+  font-family:var(--font-display);font-size:1.1rem;font-weight:700;
+  margin-bottom:.5rem;
+}
+.incident-section{margin-bottom:1.2rem}
+.incident-section h4{
+  font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text-dim);margin-bottom:.5rem;
+}
+.incident-section p{font-size:.8rem;color:var(--text-secondary);line-height:1.6}
+.incident-symptom{
+  padding:.7rem .85rem;border-radius:var(--radius-sm);
+  background:var(--red-dim);border-left:2px solid var(--red);
+  font-size:.78rem;color:var(--red);line-height:1.5;
+  margin-bottom:1rem;
+}
+.incident-steps{list-style:none;display:flex;flex-direction:column;gap:.3rem}
+.incident-steps li{
+  font-size:.78rem;color:var(--text-secondary);
+  padding-left:1.2rem;position:relative;
+}
+.incident-steps li::before{
+  content:attr(data-n);position:absolute;left:0;
+  font-family:var(--font-mono);font-size:.65rem;color:var(--text-dim);font-weight:600;
+}
+
+/* Debug workspace */
+.debug-workspace{grid-row:2;display:flex;flex-direction:column;overflow:hidden}
+.debug-editor{flex:1;overflow:auto;padding:1rem;background:var(--bg-panel);font-family:var(--font-mono);font-size:.78rem;line-height:1.8;color:var(--text-secondary)}
+.debug-trace{
+  border-top:1px solid var(--border-dim);
+  padding:.8rem;background:var(--bg-deep);
+  max-height:200px;overflow-y:auto;
+}
+.debug-trace h4{
+  font-size:.65rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text-dim);margin-bottom:.5rem;
+}
+.trace-flow{
+  display:flex;align-items:center;gap:.3rem;flex-wrap:wrap;
+  font-family:var(--font-mono);font-size:.68rem;
+}
+.trace-node{
+  padding:.25rem .5rem;border-radius:4px;
+  border:1px solid var(--border-dim);
+}
+.trace-node.render-n{background:var(--cyan-dim);color:var(--cyan);border-color:rgba(0,229,255,.2)}
+.trace-node.effect-n{background:var(--amber-dim);color:var(--amber);border-color:rgba(255,179,0,.2)}
+.trace-node.state-n{background:rgba(199,146,234,.1);color:#c792ea;border-color:rgba(199,146,234,.2)}
+.trace-arrow{color:var(--text-dim);font-size:.6rem}
+
+/* Debug bottom */
+.debug-bottom{
+  grid-column:1/-1;
+  display:flex;align-items:stretch;gap:0;
+  border-top:1px solid var(--border-dim);
+  background:var(--bg-deep);
+}
+.debug-explain{
+  flex:1;padding:.8rem 1rem;
+  border-right:1px solid var(--border-dim);
+}
+.debug-explain label{
+  display:block;font-size:.7rem;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;
+  color:var(--text-dim);margin-bottom:.4rem;
+}
+.debug-explain textarea{
+  width:100%;height:50px;resize:none;
+  background:var(--bg-surface);border:1px solid var(--border-dim);
+  border-radius:var(--radius-sm);padding:.5rem .7rem;
+  font-family:var(--font-body);font-size:.78rem;color:var(--text-primary);
+  outline:none;
+}
+.debug-explain textarea:focus{border-color:var(--cyan)}
+.debug-explain textarea::placeholder{color:var(--text-dim)}
+.debug-actions{
+  display:flex;align-items:center;gap:.5rem;padding:.8rem 1rem;
+}
+
+/* ═══════════════════════════════════════════════
+   SCREEN 5: CAPSTONE
+   ═══════════════════════════════════════════════ */
+.capstone{
+  display:grid;
+  grid-template-columns:340px 1fr;
+  grid-template-rows:auto 1fr auto;
+  height:calc(100vh - 56px);
+  overflow:hidden;
+}
+.capstone-bar{
+  grid-column:1/-1;
+  display:flex;align-items:center;gap:1rem;
+  padding:.6rem 1.2rem;
+  background:var(--bg-deep);border-bottom:1px solid var(--border-dim);
+}
+.capstone-bar h2{font-size:.85rem;font-weight:600;flex:1}
+
+/* Brief panel */
+.brief-panel{
+  grid-row:2/4;
+  border-right:1px solid var(--border-dim);
+  background:var(--bg-deep);
+  padding:1.2rem;overflow-y:auto;
+}
+.brief-panel h3{
+  font-family:var(--font-display);font-size:1.05rem;font-weight:700;
+  margin-bottom:.5rem;
+}
+.brief-panel>p{font-size:.82rem;color:var(--text-secondary);line-height:1.6;margin-bottom:1rem}
+.brief-constraints{list-style:none;display:flex;flex-direction:column;gap:.4rem;margin-bottom:1.5rem}
+.brief-constraints li{
+  display:flex;align-items:flex-start;gap:.5rem;
+  font-size:.78rem;color:var(--text-secondary);
+}
+.brief-constraints li::before{content:"◆";color:var(--cyan);font-size:.5rem;margin-top:.35rem}
+
+/* Rubric panel inside brief */
+.rubric-panel{
+  margin-top:1.5rem;padding-top:1rem;
+  border-top:1px solid var(--border-dim);
+}
+.rubric-panel h4{
+  font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text-dim);margin-bottom:.7rem;
+}
+.rubric-items{display:flex;flex-direction:column;gap:.4rem}
+.rubric-item{
+  display:flex;align-items:center;gap:.5rem;
+  padding:.5rem .65rem;border-radius:var(--radius-sm);
+  font-size:.75rem;
+  background:var(--bg-surface);border:1px solid var(--border-dim);
+}
+.rubric-icon{font-size:.75rem;flex-shrink:0;width:1.2rem;text-align:center}
+.rubric-item.pass{border-color:rgba(156,255,30,.15)}
+.rubric-item.pass .rubric-icon{color:var(--lime)}
+.rubric-item.fail{border-color:rgba(255,64,96,.15)}
+.rubric-item.fail .rubric-icon{color:var(--red)}
+.rubric-item .rubric-label{flex:1;color:var(--text-secondary)}
+.rubric-item .rubric-score{
+  font-family:var(--font-mono);font-size:.68rem;color:var(--text-dim);
+}
+
+/* Capstone editor */
+.capstone-workspace{grid-row:2;display:flex;flex-direction:column;overflow:hidden}
+.capstone-score{
+  grid-column:1/-1;
+  display:flex;align-items:center;gap:1.5rem;
+  padding:.7rem 1.2rem;
+  background:var(--bg-deep);border-top:1px solid var(--border-dim);
+}
+.score-big{
+  font-family:var(--font-display);font-size:1.6rem;font-weight:700;
+}
+.score-big.passing{color:var(--lime)}
+.score-big.failing{color:var(--amber)}
+.score-detail{font-size:.78rem;color:var(--text-secondary)}
+.score-detail span{font-family:var(--font-mono);font-size:.72rem}
+.capstone-score-actions{margin-left:auto;display:flex;gap:.5rem}
+
+/* ═══════════════════════════════════════════════
+   SCREEN 6: BADGE
+   ═══════════════════════════════════════════════ */
+.badge-screen{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:calc(100vh - 56px);
+  text-align:center;padding:3rem 2rem;
+}
+.badge-card{
+  position:relative;
+  padding:3rem 4rem;border-radius:var(--radius-xl);
+  background:linear-gradient(160deg,var(--bg-panel),var(--bg-surface));
+  border:1px solid rgba(156,255,30,.15);
+  animation:badgeIn .8s var(--ease-out-back) both;
+  max-width:520px;
+}
+@keyframes badgeIn{
+  from{opacity:0;transform:scale(.85) translateY(30px)}
+  to{opacity:1;transform:none}
+}
+.badge-card::before{
+  content:"";position:absolute;inset:-1px;border-radius:var(--radius-xl);
+  background:conic-gradient(from 0deg,var(--cyan),var(--lime),var(--amber),var(--cyan));
+  z-index:-1;opacity:.15;
+  filter:blur(1px);
+}
+.badge-glow{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:300px;height:300px;
+  background:radial-gradient(circle,rgba(156,255,30,.08),transparent 60%);
+  pointer-events:none;
+}
+.badge-icon{
+  width:80px;height:80px;margin:0 auto 1.5rem;
+  border-radius:50%;
+  background:linear-gradient(135deg,rgba(0,229,255,.15),rgba(156,255,30,.15));
+  border:2px solid rgba(156,255,30,.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:2rem;
+  box-shadow:0 0 30px rgba(156,255,30,.15);
+  animation:badgeIconIn .6s var(--ease-out-back) .3s both;
+}
+@keyframes badgeIconIn{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:none}}
+.badge-title{
+  font-family:var(--font-display);font-size:1.6rem;font-weight:700;
+  margin-bottom:.3rem;
+  animation:fadeUp .6s var(--ease-out-expo) .4s both;
+}
+.badge-subtitle{
+  font-family:var(--font-mono);font-size:.72rem;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--lime);
+  margin-bottom:1.5rem;
+  animation:fadeUp .6s var(--ease-out-expo) .5s both;
+}
+.badge-stats{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;
+  margin-bottom:2rem;
+  animation:fadeUp .6s var(--ease-out-expo) .6s both;
+}
+.badge-stat{text-align:center}
+.badge-stat-val{
+  font-family:var(--font-mono);font-size:1.3rem;font-weight:600;color:var(--text-primary);
+}
+.badge-stat-label{font-size:.68rem;color:var(--text-dim);margin-top:.15rem}
+.badge-actions{
+  display:flex;gap:.5rem;justify-content:center;
+  animation:fadeUp .6s var(--ease-out-expo) .7s both;
+}
+
+/* ─── RESPONSIVE LAYOUT ─── */
+@media (max-width: 980px){
+  .nav{padding:.65rem 1rem}
+  .container{padding:0 1rem}
+  .nav-tabs{overflow-x:auto;max-width:100%;padding-bottom:.25rem}
+  .dash-grid{grid-template-columns:1fr}
+  .player{grid-template-columns:1fr;grid-template-areas:"bar" "concept" "editor" "preview" "internals" "actions"}
+  .debug{grid-template-columns:1fr;grid-template-areas:"bar" "incident" "workspace" "trace" "bottom"}
+  .capstone{grid-template-columns:1fr;grid-template-areas:"bar" "brief" "workspace" "score"}
+}
+
+@media (max-width: 720px){
+  .launch{padding:2.2rem 1rem}
+  .launch-title{font-size:clamp(1.9rem,9vw,2.8rem)}
+  .launch-actions{flex-direction:column;width:100%;max-width:340px}
+  .launch-actions .btn{justify-content:center;width:100%}
+  .launch-features{grid-template-columns:1fr}
+  .nav-tab{padding:.45rem .7rem;font-size:.74rem}
+  .badge-stats{grid-template-columns:1fr}
+  .badge-actions{flex-direction:column}
+  .badge-actions .btn{width:100%;justify-content:center}
+}
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border-soft);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--border-med)}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+<!-- ─── NAV ─── -->
+<nav class="nav">
+  <div class="nav-logo">blueprint lab</div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" data-screen="launch">Launch</button>
+    <button class="nav-tab" data-screen="dashboard">Dashboard</button>
+    <button class="nav-tab" data-screen="player">Lesson Player</button>
+    <button class="nav-tab" data-screen="debug">Debug Arena</button>
+    <button class="nav-tab" data-screen="capstone">Capstone</button>
+    <button class="nav-tab" data-screen="badge">Badge</button>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 1: LAUNCH
+     ═══════════════════════════════════════════ -->
+<section class="screen launch" id="screen-launch">
+  <div class="launch-overline">Blueprint Lab · React Hooks Pro Track</div>
+  <h1 class="launch-title">Master production hooks<br>in <em>a few hours</em></h1>
+  <p class="launch-subtitle">An internals-first, TypeScript-native deep dive for senior engineers. Build real custom hooks, debug lifecycle bugs, ship a SaaS capstone.</p>
+  <div class="launch-pills">
+    <span class="launch-pill">7 gated modules</span>
+    <span class="launch-pill">strictly linear</span>
+    <span class="launch-pill">~3–4 hours</span>
+    <span class="launch-pill">TypeScript only</span>
+    <span class="launch-pill">SaaS capstone</span>
+  </div>
+  <div class="launch-actions">
+    <button class="btn btn-primary" onclick="showScreen('dashboard')">Start Pro Track</button>
+    <button class="btn btn-ghost" onclick="showScreen('dashboard')">Preview Curriculum</button>
+  </div>
+  <div class="launch-features">
+    <div class="launch-feature">
+      <span class="launch-feature-icon">⚙</span>
+      <h4>Internals Visualizer</h4>
+      <p>See renders, effects, cleanups, and dependency changes in real time</p>
+    </div>
+    <div class="launch-feature">
+      <span class="launch-feature-icon">🔬</span>
+      <h4>Debugging Arena</h4>
+      <p>Fix infinite loops, stale closures, and cleanup leaks with trace evidence</p>
+    </div>
+    <div class="launch-feature">
+      <span class="launch-feature-icon">🏗</span>
+      <h4>SaaS Capstone</h4>
+      <p>Build a production hook-driven feature scored against a real rubric</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 2: DASHBOARD
+     ═══════════════════════════════════════════ -->
+<section class="screen dashboard container" id="screen-dashboard" hidden>
+  <div class="dash-header">
+    <div>
+      <h1>React Hooks Pro Track</h1>
+      <p class="secondary" style="font-size:.85rem;margin-top:.2rem">Linear progression · All gates required</p>
+    </div>
+    <div class="dash-header-meta">
+      <div class="dash-time">~2h 40m remaining</div>
+      <div class="dash-progress">2 of 7 modules completed</div>
+    </div>
+  </div>
+
+  <div class="track-rail">
+    <div class="track-node completed">
+      <div class="track-node-num">01</div>
+      <div class="track-node-title">Internals Primer</div>
+      <div class="track-node-status">✓ Completed</div>
+    </div>
+    <div class="track-node completed">
+      <div class="track-node-num">02</div>
+      <div class="track-node-title">Core Hooks Fast Pass</div>
+      <div class="track-node-status">✓ Completed</div>
+    </div>
+    <div class="track-node active" onclick="showScreen('player')" style="cursor:pointer">
+      <div class="track-node-num">03</div>
+      <div class="track-node-title">Custom Hooks</div>
+      <div class="track-node-status">● In Progress</div>
+    </div>
+    <div class="track-node locked">
+      <div class="track-node-num">04</div>
+      <div class="track-node-title">Composition + Stability</div>
+      <div class="track-node-status">🔒 Locked</div>
+    </div>
+    <div class="track-node locked">
+      <div class="track-node-num">05</div>
+      <div class="track-node-title">Debug Labs</div>
+      <div class="track-node-status">🔒 Locked</div>
+    </div>
+    <div class="track-node locked">
+      <div class="track-node-num">06</div>
+      <div class="track-node-title">SaaS Capstone</div>
+      <div class="track-node-status">🔒 Locked</div>
+    </div>
+    <div class="track-node locked">
+      <div class="track-node-num">07</div>
+      <div class="track-node-title">Final Assessment</div>
+      <div class="track-node-status">🔒 Locked</div>
+    </div>
+  </div>
+
+  <div class="dash-grid">
+    <div class="card dash-card dash-card-continue" onclick="showScreen('player')" style="cursor:pointer">
+      <div>
+        <h2>Continue: Custom Hooks Foundations</h2>
+        <p>Implement a reusable <code class="mono cyan" style="font-size:.82rem">usePaginatedQuery</code> hook with typed API contract</p>
+      </div>
+      <button class="btn btn-primary">Resume →</button>
+    </div>
+    <div class="card dash-card">
+      <h3>Common Pitfalls</h3>
+      <ul class="pitfall-list">
+        <li class="pitfall-item"><span class="pitfall-dot"></span>Stale closures capturing old state</li>
+        <li class="pitfall-item"><span class="pitfall-dot"></span>Effect dependency arrays causing infinite loops</li>
+        <li class="pitfall-item"><span class="pitfall-dot"></span>Missing cleanup on unmount</li>
+        <li class="pitfall-item"><span class="pitfall-dot"></span>Over-memoization without profiling</li>
+      </ul>
+    </div>
+    <div class="card dash-card">
+      <h3>Gate Status</h3>
+      <div style="margin-bottom:.8rem">
+        <div class="retry-label">
+          <span>Module 3 · Attempt 1 of 3</span>
+          <span>Tier 0 hints</span>
+        </div>
+        <div class="retry-meter">
+          <div class="retry-bar-track"><div class="retry-bar-fill"></div></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:.4rem;flex-wrap:wrap">
+        <span class="badge-pill badge-lime">M1 Pass</span>
+        <span class="badge-pill badge-lime">M2 Pass</span>
+        <span class="badge-pill badge-cyan">M3 Active</span>
+        <span class="badge-pill" style="background:var(--bg-raised);color:var(--text-dim);border:1px solid var(--border-dim)">M4–M7</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 3: LESSON PLAYER
+     ═══════════════════════════════════════════ -->
+<section class="screen player" id="screen-player" hidden>
+  <div class="player-bar">
+    <h2>Module 3: Custom Hooks Foundations</h2>
+    <div class="player-bar-meta">
+      <span class="badge-pill badge-cyan">Attempt 1/3</span>
+      <span class="badge-pill" style="background:var(--bg-raised);color:var(--text-dim);border:1px solid var(--border-dim)">Hint: Locked until first fail</span>
+    </div>
+  </div>
+
+  <div class="concept-panel">
+    <h3>usePaginatedQuery</h3>
+    <div class="concept-section">
+      <h4>Goal</h4>
+      <p>Build a reusable hook that fetches paginated data with proper loading, error, and caching semantics.</p>
+    </div>
+    <div class="concept-section">
+      <h4>API Contract</h4>
+      <div class="concept-code"><span class="kw">function</span> <span class="fn">usePaginatedQuery</span>&lt;<span class="typ">T</span>&gt;(
+  <span class="fn">fetcher</span>: (<span class="fn">page</span>: <span class="typ">number</span>) =&gt; <span class="typ">Promise</span>&lt;<span class="typ">T</span>[]&gt;,
+  <span class="fn">options</span>?: { <span class="fn">pageSize</span>?: <span class="typ">number</span> }
+): {
+  <span class="fn">data</span>: <span class="typ">T</span>[] | <span class="typ">null</span>;
+  <span class="fn">page</span>: <span class="typ">number</span>;
+  <span class="fn">isLoading</span>: <span class="typ">boolean</span>;
+  <span class="fn">error</span>: <span class="typ">Error</span> | <span class="typ">null</span>;
+  <span class="fn">nextPage</span>: () =&gt; <span class="typ">void</span>;
+  <span class="fn">prevPage</span>: () =&gt; <span class="typ">void</span>;
+}</div>
+    </div>
+    <div class="concept-section">
+      <h4>Requirements</h4>
+      <ul>
+        <li>Generic over return type <code class="mono cyan" style="font-size:.72rem">T</code></li>
+        <li>Avoid duplicate fetches on re-render</li>
+        <li>Handle loading and error states</li>
+        <li>Clean up in-flight requests on unmount</li>
+      </ul>
+    </div>
+    <div class="concept-warning">⚠ Common failure: stale closure over <code class="mono">page</code> variable inside effect callback</div>
+  </div>
+
+  <div class="editor-area">
+    <div class="editor-tabs">
+      <button class="editor-tab active">usePaginatedQuery.ts</button>
+      <button class="editor-tab">App.tsx</button>
+    </div>
+    <div class="editor-canvas">
+      <div><span class="line-num">1</span><span class="kw">import</span> { useState, useEffect, useRef } <span class="kw">from</span> <span class="str">'react'</span>;</div>
+      <div><span class="line-num">2</span></div>
+      <div><span class="line-num">3</span><span class="kw">export function</span> <span class="fn">usePaginatedQuery</span>&lt;<span class="typ">T</span>&gt;(</div>
+      <div><span class="line-num">4</span>  <span class="fn">fetcher</span>: (<span class="fn">page</span>: <span class="typ">number</span>) =&gt; <span class="typ">Promise</span>&lt;<span class="typ">T</span>[]&gt;,</div>
+      <div><span class="line-num">5</span>  <span class="fn">options</span>?: { <span class="fn">pageSize</span>?: <span class="typ">number</span> }</div>
+      <div><span class="line-num">6</span>) {</div>
+      <div><span class="line-num">7</span>  <span class="kw">const</span> [<span class="fn">data</span>, <span class="fn">setData</span>] = <span class="fn">useState</span>&lt;<span class="typ">T</span>[] | <span class="typ">null</span>&gt;(<span class="typ">null</span>);</div>
+      <div><span class="line-num">8</span>  <span class="kw">const</span> [<span class="fn">page</span>, <span class="fn">setPage</span>] = <span class="fn">useState</span>(<span class="num">1</span>);</div>
+      <div><span class="line-num">9</span>  <span class="kw">const</span> [<span class="fn">isLoading</span>, <span class="fn">setIsLoading</span>] = <span class="fn">useState</span>(<span class="typ">false</span>);</div>
+      <div><span class="line-num">10</span>  <span class="kw">const</span> [<span class="fn">error</span>, <span class="fn">setError</span>] = <span class="fn">useState</span>&lt;<span class="typ">Error</span> | <span class="typ">null</span>&gt;(<span class="typ">null</span>);</div>
+      <div><span class="line-num">11</span></div>
+      <div><span class="line-num">12</span>  <span class="cm">// TODO: implement effect with cleanup</span></div>
+      <div><span class="line-num">13</span>  <span class="fn">useEffect</span>(() =&gt; {</div>
+      <div><span class="line-num">14</span>    <span class="kw">let</span> <span class="fn">cancelled</span> = <span class="typ">false</span>;</div>
+      <div><span class="line-num">15</span>    <span class="fn">setIsLoading</span>(<span class="typ">true</span>);</div>
+      <div><span class="line-num">16</span></div>
+      <div><span class="line-num">17</span>    <span class="fn">fetcher</span>(<span class="fn">page</span>)</div>
+      <div><span class="line-num">18</span>      .<span class="fn">then</span>((<span class="fn">result</span>) =&gt; {</div>
+      <div><span class="line-num">19</span>        <span class="kw">if</span> (!<span class="fn">cancelled</span>) {</div>
+      <div><span class="line-num">20</span>          <span class="fn">setData</span>(<span class="fn">result</span>);</div>
+      <div><span class="line-num">21</span>          <span class="fn">setIsLoading</span>(<span class="typ">false</span>);</div>
+      <div><span class="line-num">22</span>        }</div>
+      <div><span class="line-num">23</span>      })</div>
+      <div><span class="line-num">24</span>      .<span class="fn">catch</span>((<span class="fn">err</span>) =&gt; {</div>
+      <div><span class="line-num">25</span>        <span class="kw">if</span> (!<span class="fn">cancelled</span>) {</div>
+      <div><span class="line-num">26</span>          <span class="fn">setError</span>(<span class="fn">err</span>);</div>
+      <div><span class="line-num">27</span>          <span class="fn">setIsLoading</span>(<span class="typ">false</span>);</div>
+      <div><span class="line-num">28</span>        }</div>
+      <div><span class="line-num">29</span>      });</div>
+      <div><span class="line-num">30</span></div>
+      <div><span class="line-num">31</span>    <span class="kw">return</span> () =&gt; { <span class="fn">cancelled</span> = <span class="typ">true</span>; };</div>
+      <div><span class="line-num">32</span>  }, [<span class="fn">page</span>, <span class="fn">fetcher</span>]);</div>
+      <div><span class="line-num">33</span></div>
+      <div><span class="line-num">34</span>  <span class="kw">return</span> {</div>
+      <div><span class="line-num">35</span>    <span class="fn">data</span>, <span class="fn">page</span>, <span class="fn">isLoading</span>, <span class="fn">error</span>,</div>
+      <div><span class="line-num">36</span>    <span class="fn">nextPage</span>: () =&gt; <span class="fn">setPage</span>(<span class="fn">p</span> =&gt; <span class="fn">p</span> + <span class="num">1</span>),</div>
+      <div><span class="line-num">37</span>    <span class="fn">prevPage</span>: () =&gt; <span class="fn">setPage</span>(<span class="fn">p</span> =&gt; Math.<span class="fn">max</span>(<span class="num">1</span>, <span class="fn">p</span> - <span class="num">1</span>)),</div>
+      <div><span class="line-num">38</span>  };</div>
+      <div><span class="line-num">39</span>}</div>
+    </div>
+  </div>
+
+  <div class="preview-area">
+    <div class="preview-bar">
+      <span class="preview-dot" style="background:var(--lime)"></span>
+      Preview · localhost:5173
+    </div>
+    <div class="preview-canvas">
+      <div class="preview-mock-card">
+        <div class="preview-mock-title">Users — Page 1</div>
+        <div style="font-size:.75rem;color:var(--text-dim)">Showing 10 results</div>
+        <div class="preview-mock-bar"><div class="preview-mock-bar-fill"></div></div>
+      </div>
+      <div style="display:flex;gap:.4rem">
+        <button class="btn btn-sm btn-ghost" style="opacity:.4">← Prev</button>
+        <button class="btn btn-sm btn-ghost">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="internals-panel">
+    <div class="internals-header">Internals Visualizer</div>
+    <div class="internals-body">
+      <div class="timeline">
+        <div class="tl-event tl-render">
+          <span class="tl-tag">RENDER</span>
+          <span class="tl-event-label">Component mounted</span>
+          <span class="tl-event-time">0ms</span>
+        </div>
+        <div class="tl-event tl-effect">
+          <span class="tl-tag">EFFECT</span>
+          <span class="tl-event-label">useEffect → fetcher(1)</span>
+          <span class="tl-event-time">2ms</span>
+        </div>
+        <div class="tl-event tl-render">
+          <span class="tl-tag">RENDER</span>
+          <span class="tl-event-label">isLoading: true</span>
+          <span class="tl-event-time">3ms</span>
+        </div>
+        <div class="tl-event tl-render">
+          <span class="tl-tag">RENDER</span>
+          <span class="tl-event-label">data: [...10 items]</span>
+          <span class="tl-event-time">142ms</span>
+        </div>
+        <div class="tl-event tl-render">
+          <span class="tl-tag">RENDER</span>
+          <span class="tl-event-label">setPage(2) triggered</span>
+          <span class="tl-event-time">3420ms</span>
+        </div>
+        <div class="tl-event tl-cleanup">
+          <span class="tl-tag">CLEANUP</span>
+          <span class="tl-event-label">cancelled = true</span>
+          <span class="tl-event-time">3421ms</span>
+        </div>
+        <div class="tl-event tl-effect">
+          <span class="tl-tag">EFFECT</span>
+          <span class="tl-event-label">useEffect → fetcher(2)</span>
+          <span class="tl-event-time">3422ms</span>
+        </div>
+      </div>
+
+      <div class="dep-inspector">
+        <h4>Dependency Changes — Render #5</h4>
+        <div class="dep-row dep-changed">
+          <span class="dep-indicator"></span>
+          <span>page</span>
+          <span style="margin-left:auto;font-size:.62rem;opacity:.7">1 → 2</span>
+        </div>
+        <div class="dep-row dep-stable">
+          <span class="dep-indicator"></span>
+          <span>fetcher</span>
+          <span style="margin-left:auto;font-size:.62rem;opacity:.5">stable</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom checks bar spans editor column only via grid placement -->
+  <div class="player-actions">
+    <div class="player-checks">
+      <div class="check-item"><div class="check-box pass">✓</div> Returns typed result</div>
+      <div class="check-item"><div class="check-box pass">✓</div> Handles loading/error</div>
+      <div class="check-item"><div class="check-box fail">✕</div> Avoids duplicate fetch</div>
+    </div>
+    <button class="btn btn-sm btn-ghost">Run</button>
+    <button class="btn btn-sm btn-ghost">Unlock Hint</button>
+    <button class="btn btn-sm btn-amber">Submit Gate</button>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 4: DEBUG ARENA
+     ═══════════════════════════════════════════ -->
+<section class="screen debug" id="screen-debug" hidden>
+  <div class="debug-bar">
+    <h2>Debugging Arena - Lab 1 of 2: Infinite Effect Loop</h2>
+    <span class="badge-pill badge-red">Critical Bug</span>
+  </div>
+
+  <div class="incident-panel">
+    <h3>Incident Report</h3>
+    <div class="incident-symptom">API endpoint called 200+ times in 3 seconds. Browser tab becomes unresponsive.</div>
+    <div class="incident-section">
+      <h4>Symptom</h4>
+      <p>The <code class="mono cyan" style="font-size:.78rem">useUserSearch</code> hook triggers an infinite render→effect→setState→render cycle when the component mounts.</p>
+    </div>
+    <div class="incident-section">
+      <h4>Reproduction Steps</h4>
+      <ol class="incident-steps">
+        <li data-n="1.">Mount the SearchPanel component</li>
+        <li data-n="2.">Observe network tab — requests fire continuously</li>
+        <li data-n="3.">Console shows repeated "fetching..." logs</li>
+      </ol>
+    </div>
+    <div class="incident-section">
+      <h4>Expected Behavior</h4>
+      <p>Single fetch on mount. Re-fetch only when the <code class="mono" style="font-size:.78rem;color:var(--cyan)">query</code> parameter changes.</p>
+    </div>
+    <div class="incident-section">
+      <h4>Your Task</h4>
+      <p>Identify the root cause in the code, fix the dependency array, and explain <em>why</em> the original setup caused the loop.</p>
+    </div>
+  </div>
+
+  <div class="debug-workspace">
+    <div class="editor-tabs">
+      <button class="editor-tab active">useUserSearch.ts</button>
+      <button class="editor-tab">SearchPanel.tsx</button>
+    </div>
+    <div class="debug-editor">
+      <div><span class="line-num">1</span><span class="kw">import</span> { useState, useEffect } <span class="kw">from</span> <span class="str">'react'</span>;</div>
+      <div><span class="line-num">2</span></div>
+      <div><span class="line-num">3</span><span class="kw">export function</span> <span class="fn">useUserSearch</span>(<span class="fn">query</span>: <span class="typ">string</span>) {</div>
+      <div><span class="line-num">4</span>  <span class="kw">const</span> [<span class="fn">users</span>, <span class="fn">setUsers</span>] = <span class="fn">useState</span>&lt;<span class="typ">User</span>[]&gt;([]);</div>
+      <div><span class="line-num">5</span>  <span class="kw">const</span> [<span class="fn">loading</span>, <span class="fn">setLoading</span>] = <span class="fn">useState</span>(<span class="typ">false</span>);</div>
+      <div><span class="line-num">6</span></div>
+      <div><span class="line-num">7</span>  <span class="cm">// 🐛 Bug: this effect runs every render</span></div>
+      <div><span class="line-num">8</span>  <span class="fn">useEffect</span>(() =&gt; {</div>
+      <div><span class="line-num">9</span>    <span class="kw">const</span> <span class="fn">params</span> = { <span class="fn">q</span>: <span class="fn">query</span>, <span class="fn">limit</span>: <span class="num">20</span> };</div>
+      <div><span class="line-num">10</span>    <span class="fn">setLoading</span>(<span class="typ">true</span>);</div>
+      <div><span class="line-num">11</span></div>
+      <div><span class="line-num">12</span>    <span class="fn">fetchUsers</span>(<span class="fn">params</span>)</div>
+      <div><span class="line-num">13</span>      .<span class="fn">then</span>(<span class="fn">setUsers</span>)</div>
+      <div><span class="line-num">14</span>      .<span class="fn">finally</span>(() =&gt; <span class="fn">setLoading</span>(<span class="typ">false</span>));</div>
+      <div><span class="line-num">15</span>  }, [<span class="fn">query</span>, { <span class="fn">q</span>: <span class="fn">query</span>, <span class="fn">limit</span>: <span class="num">20</span> }]);</div>
+      <div style="background:rgba(255,64,96,.06);border-left:2px solid var(--red)"><span class="line-num">  </span><span style="font-size:.68rem;color:var(--red);padding-left:2.5rem">↑ Object literal creates new reference every render</span></div>
+      <div><span class="line-num">16</span></div>
+      <div><span class="line-num">17</span>  <span class="kw">return</span> { <span class="fn">users</span>, <span class="fn">loading</span> };</div>
+      <div><span class="line-num">18</span>}</div>
+    </div>
+  </div>
+
+  <div class="debug-trace">
+    <h4>Execution Trace</h4>
+    <div class="trace-flow">
+      <span class="trace-node render-n">R1</span>
+      <span class="trace-arrow">→</span>
+      <span class="trace-node effect-n">E1</span>
+      <span class="trace-arrow">→</span>
+      <span class="trace-node state-n">setState</span>
+      <span class="trace-arrow">→</span>
+      <span class="trace-node render-n">R2</span>
+      <span class="trace-arrow">→</span>
+      <span class="trace-node effect-n">E2</span>
+      <span class="trace-arrow">→</span>
+      <span class="trace-node state-n">setState</span>
+      <span class="trace-arrow">→</span>
+      <span class="trace-node render-n">R3</span>
+      <span class="trace-arrow">→</span>
+      <span class="trace-node effect-n">E3</span>
+      <span class="trace-arrow">→</span>
+      <span class="trace-node render-n" style="color:var(--red);border-color:rgba(255,64,96,.3);background:var(--red-dim)">R∞</span>
+    </div>
+  </div>
+
+  <div class="debug-bottom">
+    <div class="debug-explain">
+      <label>Root-Cause Explanation (required)</label>
+      <textarea placeholder="Explain why this dependency setup causes an infinite loop and why your fix is safe..."></textarea>
+    </div>
+    <div class="debug-actions">
+      <button class="btn btn-sm btn-ghost">Run Trace</button>
+      <button class="btn btn-sm btn-amber">Submit Fix</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 5: CAPSTONE
+     ═══════════════════════════════════════════ -->
+<section class="screen capstone" id="screen-capstone" hidden>
+  <div class="capstone-bar">
+    <h2>SaaS Capstone Workspace: Subscription Usage Panel</h2>
+    <span class="badge-pill badge-amber">Attempt 2/3</span>
+  </div>
+
+  <div class="brief-panel">
+    <h3>Project Brief</h3>
+    <p>Build a hook-driven subscription usage panel that displays real-time usage metrics for a SaaS billing dashboard.</p>
+    <ul class="brief-constraints">
+      <li>Custom hook <code class="mono cyan" style="font-size:.75rem">useUsageMetrics</code> for data fetching + caching</li>
+      <li>Optimistic refresh with polling interval</li>
+      <li>Typed error states with discriminated union</li>
+      <li>Clean up polling on unmount</li>
+      <li>Render count must stay under 8 for the test interaction sequence</li>
+    </ul>
+
+    <div class="rubric-panel">
+      <h4>Tests + Rubric</h4>
+      <div class="rubric-items">
+        <div class="rubric-item pass">
+          <span class="rubric-icon">✓</span>
+          <span class="rubric-label">Data fetch + cache lifecycle</span>
+          <span class="rubric-score">20/20</span>
+        </div>
+        <div class="rubric-item pass">
+          <span class="rubric-icon">✓</span>
+          <span class="rubric-label">Loading/error state machine</span>
+          <span class="rubric-score">20/20</span>
+        </div>
+        <div class="rubric-item fail">
+          <span class="rubric-icon">✕</span>
+          <span class="rubric-label">Unnecessary rerenders under polling</span>
+          <span class="rubric-score">8/20</span>
+        </div>
+        <div class="rubric-item pass">
+          <span class="rubric-icon">✓</span>
+          <span class="rubric-label">TypeScript quality + generics</span>
+          <span class="rubric-score">18/20</span>
+        </div>
+        <div class="rubric-item pass">
+          <span class="rubric-icon">✓</span>
+          <span class="rubric-label">Hook API design + reusability</span>
+          <span class="rubric-score">12/20</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="capstone-workspace">
+    <div class="editor-tabs">
+      <button class="editor-tab active">useUsageMetrics.ts</button>
+      <button class="editor-tab">UsagePanel.tsx</button>
+      <button class="editor-tab">types.ts</button>
+    </div>
+    <div class="editor-canvas" style="flex:1">
+      <div><span class="line-num">1</span><span class="kw">import</span> { useState, useEffect, useCallback, useRef } <span class="kw">from</span> <span class="str">'react'</span>;</div>
+      <div><span class="line-num">2</span><span class="kw">import type</span> { <span class="typ">UsageMetrics</span>, <span class="typ">MetricsError</span> } <span class="kw">from</span> <span class="str">'./types'</span>;</div>
+      <div><span class="line-num">3</span></div>
+      <div><span class="line-num">4</span><span class="kw">interface</span> <span class="typ">UseUsageMetricsOptions</span> {</div>
+      <div><span class="line-num">5</span>  <span class="fn">pollInterval</span>?: <span class="typ">number</span>;</div>
+      <div><span class="line-num">6</span>  <span class="fn">enabled</span>?: <span class="typ">boolean</span>;</div>
+      <div><span class="line-num">7</span>}</div>
+      <div><span class="line-num">8</span></div>
+      <div><span class="line-num">9</span><span class="kw">type</span> <span class="typ">MetricsState</span> =</div>
+      <div><span class="line-num">10</span>  | { <span class="fn">status</span>: <span class="str">'idle'</span> }</div>
+      <div><span class="line-num">11</span>  | { <span class="fn">status</span>: <span class="str">'loading'</span> }</div>
+      <div><span class="line-num">12</span>  | { <span class="fn">status</span>: <span class="str">'success'</span>; <span class="fn">data</span>: <span class="typ">UsageMetrics</span> }</div>
+      <div><span class="line-num">13</span>  | { <span class="fn">status</span>: <span class="str">'error'</span>; <span class="fn">error</span>: <span class="typ">MetricsError</span> };</div>
+      <div><span class="line-num">14</span></div>
+      <div><span class="line-num">15</span><span class="kw">export function</span> <span class="fn">useUsageMetrics</span>(</div>
+      <div><span class="line-num">16</span>  <span class="fn">subscriptionId</span>: <span class="typ">string</span>,</div>
+      <div><span class="line-num">17</span>  <span class="fn">options</span>: <span class="typ">UseUsageMetricsOptions</span> = {}</div>
+      <div><span class="line-num">18</span>) {</div>
+      <div><span class="line-num">19</span>  <span class="kw">const</span> { <span class="fn">pollInterval</span> = <span class="num">30000</span>, <span class="fn">enabled</span> = <span class="typ">true</span> } = <span class="fn">options</span>;</div>
+      <div><span class="line-num">20</span>  <span class="kw">const</span> [<span class="fn">state</span>, <span class="fn">setState</span>] = <span class="fn">useState</span>&lt;<span class="typ">MetricsState</span>&gt;({ <span class="fn">status</span>: <span class="str">'idle'</span> });</div>
+      <div><span class="line-num">21</span>  <span class="kw">const</span> <span class="fn">intervalRef</span> = <span class="fn">useRef</span>&lt;<span class="typ">number</span>&gt;();</div>
+      <div><span class="line-num">22</span></div>
+      <div><span class="line-num">23</span>  <span class="cm">// ... implementation continues</span></div>
+      <div><span class="line-num">24</span>}</div>
+    </div>
+  </div>
+
+  <div class="capstone-score">
+    <div>
+      <div class="score-big failing">78<span style="font-size:.8rem;color:var(--text-dim)">/100</span></div>
+      <div class="score-detail">Threshold: <span>85</span> · Missing: rerender optimization</div>
+    </div>
+    <div style="margin-left:2rem">
+      <div class="score-detail">Attempt <span>2 of 3</span></div>
+      <div class="score-detail" style="margin-top:.15rem">Hints: <span class="amber">Tier 2 unlocked</span></div>
+    </div>
+    <div class="capstone-score-actions">
+      <button class="btn btn-sm btn-ghost">Run Tests</button>
+      <button class="btn btn-sm btn-ghost">View Rubric</button>
+      <button class="btn btn-sm btn-amber">Submit Capstone</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 6: BADGE
+     ═══════════════════════════════════════════ -->
+<section class="screen badge-screen" id="screen-badge" hidden>
+  <div class="badge-card">
+    <div class="badge-glow"></div>
+    <div class="badge-icon">⚛</div>
+    <div class="badge-title">React Hooks Proficient</div>
+    <div class="badge-subtitle">Final Assessment + Badge</div>
+    <div class="badge-stats">
+      <div class="badge-stat">
+        <div class="badge-stat-val">86<span style="font-size:.7rem;color:var(--text-dim)">/100</span></div>
+        <div class="badge-stat-label">Final Score</div>
+      </div>
+      <div class="badge-stat">
+        <div class="badge-stat-val">7/7</div>
+        <div class="badge-stat-label">Modules Passed</div>
+      </div>
+      <div class="badge-stat">
+        <div class="badge-stat-val">0</div>
+        <div class="badge-stat-label">Final Hints Used</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:1.5rem;font-size:.75rem;animation:fadeUp .6s var(--ease-out-expo) .65s both">
+      <div style="padding:.5rem .7rem;border-radius:var(--radius-sm);background:var(--bg-surface);border:1px solid var(--border-dim)">
+        <div class="dim" style="font-size:.65rem;margin-bottom:.15rem">Capstone Score</div>
+        <div class="lime mono" style="font-weight:600">88/100</div>
+      </div>
+      <div style="padding:.5rem .7rem;border-radius:var(--radius-sm);background:var(--bg-surface);border:1px solid var(--border-dim)">
+        <div class="dim" style="font-size:.65rem;margin-bottom:.15rem">Completion Time</div>
+        <div class="mono" style="font-weight:600">3h 12m</div>
+      </div>
+    </div>
+    <div class="badge-actions">
+      <button class="btn btn-primary btn-sm">Download Badge</button>
+      <button class="btn btn-ghost btn-sm">Review Solutions</button>
+      <button class="btn btn-ghost btn-sm">Practice Mode</button>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<script>
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => {
+    s.hidden = true;
+  });
+  const target = document.getElementById('screen-' + id);
+  if (target) {
+    target.hidden = false;
+    // Force reflow to retrigger animation
+    target.classList.remove('screen');
+    void target.offsetWidth;
+    target.classList.add('screen');
+  }
+  document.querySelectorAll('.nav-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.screen === id);
+  });
+}
+
+document.querySelectorAll('.nav-tab').forEach(tab => {
+  tab.addEventListener('click', () => showScreen(tab.dataset.screen));
+});
+</script>
+</body>
+</html>
