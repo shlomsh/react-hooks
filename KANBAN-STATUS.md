@@ -1,6 +1,6 @@
 # Kanban Status
 
-Last updated: 2026-02-18T08:37:22Z
+Last updated: 2026-02-18T10:00:00Z
 
 This file is the source of truth for the daily kanban board.
 
@@ -75,7 +75,7 @@ This file is the source of truth for the daily kanban board.
     "owner": "Eng B",
     "priority": "P1",
     "status": "in_progress",
-    "notes": "Project rules revised for enterprise flow: mandatory unit+e2e gates, no commit before tests pass, worktree-per-task, rebase-on-main before merge.",
+    "notes": "Active 2026-02-18. Implementing ST-006a (useSandbox hook TDD), ST-006b (PreviewPanel + ConsoleOutput), ST-006c (safety limits: 5s timeout, 200-event cap). No Sandpack dep available — using iframe + esbuild-wasm approach. Tests written first per TDD mandate.",
     "order": 8
   },
   {
@@ -317,8 +317,8 @@ This file is the source of truth for the daily kanban board.
     "title": "E2E gate tests",
     "owner": "Shared",
     "priority": "P1",
-    "status": "in_progress",
-    "notes": "Project rules revised for enterprise flow: mandatory unit+e2e gates, no commit before tests pass, worktree-per-task, rebase-on-main before merge.",
+    "status": "done",
+    "notes": "Completed 2026-02-18. Added enforceable test gates in code: npm scripts test:unit/test:e2e/test:all, ST-033 e2e flow suite (src/assessment/gateFlow.e2e.test.ts), tracked pre-commit hook (.githooks/pre-commit) running test:all, installer script (scripts/install-git-hooks.mjs), and CI workflow (.github/workflows/test-gates.yml).",
     "order": 33
   },
   {

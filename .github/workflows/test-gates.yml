@@ -1,0 +1,26 @@
+name: Test Gates
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  unit-and-e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run required test gates
+        run: npm run test:all

@@ -6,10 +6,14 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "test": "vitest run",
+    "test": "npm run test:unit",
+    "test:unit": "vitest run --exclude \"src/**/*.e2e.test.ts\"",
+    "test:e2e": "vitest run e2e.test.ts",
+    "test:all": "npm run test:unit && npm run test:e2e",
     "test:watch": "vitest",
     "test:st001-shell": "node scripts/verify-st001-shell.mjs",
-    "ci": "npm run lint && npm run build && npm run test",
+    "hooks:install": "node scripts/install-git-hooks.mjs",
+    "ci": "npm run lint && npm run build && npm run test:all",
     "lint": "eslint .",
     "preview": "vite preview"
   },
