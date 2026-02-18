@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { module1 } from "../../../content/module-1";
+import { getLessonByIndex } from "../../../content/lessons";
 import type {
   Lesson,
   ModuleMetadata,
@@ -14,7 +14,7 @@ import type {
 
 describe("ST-038: Lesson schema contract", () => {
   describe("module-1 validates against schema", () => {
-    const lesson: Lesson = module1;
+    const lesson: Lesson = getLessonByIndex(0);
 
     it("has a unique exerciseId", () => {
       expect(lesson.exerciseId).toBeTruthy();

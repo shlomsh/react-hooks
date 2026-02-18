@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { module1 } from "../content/module-1";
+import { getLessonByIndex } from "../content/lessons";
 import type { Lesson } from "../types/lesson-schema";
 import type { EditorFile } from "./useEditorState";
 
@@ -18,9 +18,21 @@ function mapLessonFilesToEditorFiles(lesson: Lesson): EditorFile[] {
     }));
 }
 
+function resolveLessonIndexFromQuery(): number {
+  const search = new URLSearchParams(window.location.search);
+  const rawLesson = search.get("lesson");
+  if (!rawLesson) return 0;
+
+  const parsed = Number.parseInt(rawLesson, 10);
+  if (Number.isNaN(parsed)) return 0;
+
+  // URL is 1-based for readability: ?lesson=1, ?lesson=2...
+  return parsed - 1;
+}
+
 export function useLessonLoader(): LoadedLesson {
   return useMemo(() => {
-    const lesson = module1;
+    const lesson = getLessonByIndex(resolveLessonIndexFromQuery());
     return {
       lesson,
       files: mapLessonFilesToEditorFiles(lesson),

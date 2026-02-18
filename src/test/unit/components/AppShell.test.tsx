@@ -19,7 +19,7 @@ describe("AppShell viewport gate", () => {
       render(<AppShell />);
 
       expect(screen.getByText("Desktop viewport required")).toBeInTheDocument();
-      expect(screen.queryByText("Submit Gate")).not.toBeInTheDocument();
+      expect(screen.queryByRole("button", { name: "Run" })).not.toBeInTheDocument();
     }
   );
 
@@ -29,7 +29,7 @@ describe("AppShell viewport gate", () => {
       setViewportWidth(width);
       render(<AppShell />);
 
-      expect(screen.getByText("Submit Gate")).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "Run" })).toBeInTheDocument();
       expect(screen.queryByText("Desktop viewport required")).not.toBeInTheDocument();
     }
   );
@@ -43,7 +43,7 @@ describe("AppShell viewport gate", () => {
       setViewportWidth(1280);
     });
     await waitFor(() =>
-      expect(screen.getByText("Submit Gate")).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: "Run" })).toBeInTheDocument()
     );
   });
 
@@ -51,7 +51,7 @@ describe("AppShell viewport gate", () => {
     setViewportWidth(1440);
     render(<AppShell />);
 
-    expect(screen.getByText("Submit Gate")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Run" })).toBeInTheDocument();
     act(() => {
       setViewportWidth(1279);
     });

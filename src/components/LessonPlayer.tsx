@@ -1,4 +1,12 @@
-import { useCallback, useMemo, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+  type MouseEvent as ReactMouseEvent,
+} from "react";
 import { ConceptPanel } from "./ConceptPanel";
 import { VisualizerPanel } from "./VisualizerPanel";
 import { ControlBar } from "./ControlBar";
@@ -10,6 +18,13 @@ import { useSandbox } from "../hooks/useSandbox";
 import { useLessonLoader } from "../hooks/useLessonLoader";
 import { runLessonChecks, type LessonRunResult } from "../assessment/checkRunner";
 import styles from "./LessonPlayer.module.css";
+
+const MIN_LEFT_PANEL_WIDTH = 240;
+const MAX_LEFT_PANEL_WIDTH = 520;
+const MIN_WORKSPACE_WIDTH = 640;
+const INTERNALS_PANEL_WIDTH = 300;
+const MIN_EDITOR_HEIGHT = 220;
+const MIN_BOTTOM_PANEL_HEIGHT = 170;
 
 export function LessonPlayer() {
   const { lesson, files: lessonFiles } = useLessonLoader();
@@ -27,6 +42,14 @@ export function LessonPlayer() {
   const [validationResult, setValidationResult] = useState<LessonRunResult | null>(null);
   const [gateSubmitted, setGateSubmitted] = useState(false);
   const [unlockedHintTier, setUnlockedHintTier] = useState(0);
+  const [showInternals, setShowInternals] = useState(false);
+  const [activeBottomTab, setActiveBottomTab] = useState<"output" | "checks" | "search">(
+    "output"
+  );
+  const [leftPanelWidth, setLeftPanelWidth] = useState(320);
+  const [bottomPanelHeight, setBottomPanelHeight] = useState(260);
+  const workspaceRef = useRef<HTMLDivElement | null>(null);
+  const controlBarRef = useRef<HTMLDivElement | null>(null);
 
   const handleContentChange = useCallback(
     (content: string) => {
@@ -129,50 +152,248 @@ export function LessonPlayer() {
       }),
     [lesson.checks, validationResult?.checks]
   );
+  const passedChecksCount = checkItems.filter((check) => check.pass === true).length;
+  const totalChecksCount = checkItems.length;
+  const primaryActionLabel = gateSubmitted
+    ? "Gate Submitted"
+    : awaitingGateSubmit
+      ? "Submit Gate"
+      : sandbox.state.status === "running"
+        ? "Running..."
+        : "Run";
+  const primaryActionDisabled = gateSubmitted
+    ? true
+    : awaitingGateSubmit
+      ? submitDisabled
+      : hasErrors || sandbox.state.status === "running";
+  const onPrimaryAction = awaitingGateSubmit ? handleSubmitGate : handleRun;
+  const clampLeftPanelWidth = useCallback(
+    (requestedWidth: number) => {
+      const reservedForInternals = showInternals ? INTERNALS_PANEL_WIDTH : 0;
+      const computedMax = Math.min(
+        MAX_LEFT_PANEL_WIDTH,
+        window.innerWidth - MIN_WORKSPACE_WIDTH - reservedForInternals
+      );
+      return Math.max(MIN_LEFT_PANEL_WIDTH, Math.min(requestedWidth, computedMax));
+    },
+    [showInternals]
+  );
+
+  useEffect(() => {
+    setLeftPanelWidth((prev) => clampLeftPanelWidth(prev));
+  }, [clampLeftPanelWidth]);
+
+  const handleResizeStart = useCallback(
+    (event: ReactMouseEvent<HTMLDivElement>) => {
+      if (window.innerWidth < 1100) {
+        return;
+      }
+      event.preventDefault();
+
+      const onMove = (moveEvent: MouseEvent) => {
+        setLeftPanelWidth(clampLeftPanelWidth(moveEvent.clientX));
+      };
+      const onUp = () => {
+        document.body.style.cursor = "";
+        document.body.style.userSelect = "";
+        window.removeEventListener("mousemove", onMove);
+      };
+
+      document.body.style.cursor = "col-resize";
+      document.body.style.userSelect = "none";
+      window.addEventListener("mousemove", onMove);
+      window.addEventListener("mouseup", onUp, { once: true });
+    },
+    [clampLeftPanelWidth]
+  );
+  const clampBottomPanelHeight = useCallback((requestedHeight: number) => {
+    const workspaceHeight =
+      workspaceRef.current?.clientHeight ?? window.innerHeight;
+    const controlBarHeight = controlBarRef.current?.offsetHeight ?? 120;
+    const availableHeight = workspaceHeight - controlBarHeight - 8;
+    const maxBottomHeight = Math.max(
+      MIN_BOTTOM_PANEL_HEIGHT,
+      availableHeight - MIN_EDITOR_HEIGHT
+    );
+    return Math.max(
+      MIN_BOTTOM_PANEL_HEIGHT,
+      Math.min(requestedHeight, maxBottomHeight)
+    );
+  }, []);
+
+  useEffect(() => {
+    const onResize = () => {
+      setBottomPanelHeight((prev) => clampBottomPanelHeight(prev));
+    };
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [clampBottomPanelHeight]);
+
+  const handleVerticalResizeStart = useCallback(
+    (event: ReactMouseEvent<HTMLDivElement>) => {
+      if (window.innerWidth < 1180 || !workspaceRef.current) {
+        return;
+      }
+      event.preventDefault();
+
+      const onMove = (moveEvent: MouseEvent) => {
+        if (!workspaceRef.current) return;
+        const workspaceRect = workspaceRef.current.getBoundingClientRect();
+        const controlBarHeight = controlBarRef.current?.offsetHeight ?? 120;
+        const nextHeight =
+          workspaceRect.bottom - controlBarHeight - moveEvent.clientY;
+        setBottomPanelHeight(clampBottomPanelHeight(nextHeight));
+      };
+      const onUp = () => {
+        document.body.style.cursor = "";
+        document.body.style.userSelect = "";
+        window.removeEventListener("mousemove", onMove);
+      };
+
+      document.body.style.cursor = "row-resize";
+      document.body.style.userSelect = "none";
+      window.addEventListener("mousemove", onMove);
+      window.addEventListener("mouseup", onUp, { once: true });
+    },
+    [clampBottomPanelHeight]
+  );
 
   return (
-    <div className={styles.player}>
+    <div
+      className={`${styles.player} ${showInternals ? styles.playerWithInternals : ""}`}
+      style={{ "--left-panel-width": `${leftPanelWidth}px` } as CSSProperties}
+    >
       <ConceptPanel lesson={lesson} />
+      <div
+        className={styles.resizeHandle}
+        onMouseDown={handleResizeStart}
+        role="separator"
+        aria-label="Resize lesson panel"
+        aria-orientation="vertical"
+      />
 
-      <div className={styles.editorArea}>
-        <EditorTabs
-          files={files}
-          activeIndex={activeIndex}
-          onSelect={setActiveFile}
+      <div
+        className={styles.workspace}
+        ref={workspaceRef}
+        style={{ "--bottom-panel-height": `${bottomPanelHeight}px` } as CSSProperties}
+      >
+        <div className={styles.editorArea}>
+          <div className={styles.editorHeader}>
+            <EditorTabs
+              files={files}
+              activeIndex={activeIndex}
+              onSelect={setActiveFile}
+            />
+            <button
+              type="button"
+              className={styles.internalsToggle}
+              onClick={() => setShowInternals((prev) => !prev)}
+            >
+              {showInternals ? "Hide internals" : "Show internals"}
+            </button>
+          </div>
+          <CodeEditor
+            value={activeFile.content}
+            language={activeFile.language}
+            onChange={handleContentChange}
+            onErrorsChange={setHasErrors}
+          />
+        </div>
+
+        <div
+          className={styles.verticalResizeHandle}
+          onMouseDown={handleVerticalResizeStart}
+          role="separator"
+          aria-label="Resize output panel"
+          aria-orientation="horizontal"
         />
-        <CodeEditor
-          value={activeFile.content}
-          language={activeFile.language}
-          onChange={handleContentChange}
-          onErrorsChange={setHasErrors}
-        />
-      </div>
 
-      <div className={styles.previewArea}>
-        <PreviewPanel sandbox={sandbox.state} awaitingGateSubmit={awaitingGateSubmit} />
-      </div>
+        <div className={styles.bottomPanel}>
+          <div className={styles.bottomTabs}>
+            <button
+              type="button"
+              className={`${styles.bottomTab} ${activeBottomTab === "output" ? styles.bottomTabActive : ""}`}
+              onClick={() => setActiveBottomTab("output")}
+            >
+              Output
+            </button>
+            <button
+              type="button"
+              className={`${styles.bottomTab} ${activeBottomTab === "checks" ? styles.bottomTabActive : ""}`}
+              onClick={() => setActiveBottomTab("checks")}
+            >
+              Checks
+              <span className={styles.checkCountBadge}>
+                {passedChecksCount}/{totalChecksCount}
+              </span>
+            </button>
+            <button
+              type="button"
+              className={`${styles.bottomTab} ${activeBottomTab === "search" ? styles.bottomTabActive : ""}`}
+              onClick={() => setActiveBottomTab("search")}
+            >
+              Search
+            </button>
+          </div>
+          {activeBottomTab === "output" ? (
+            <PreviewPanel sandbox={sandbox.state} awaitingGateSubmit={awaitingGateSubmit} />
+          ) : null}
+          {activeBottomTab === "checks" ? (
+            <div className={styles.checksPanel}>
+              <p className={styles.checksTitle}>Gate checks</p>
+              <div className={styles.checkRows}>
+                {checkItems.map((check) => {
+                  const statusLabel = check.pass === null ? "Pending" : check.pass ? "Passed" : "Failed";
+                  const statusClass =
+                    check.pass === null
+                      ? styles.checkPending
+                      : check.pass
+                        ? styles.checkPass
+                        : styles.checkFail;
+                  return (
+                    <div key={check.id} className={styles.checkRow}>
+                      <span className={`${styles.checkState} ${statusClass}`}>{statusLabel}</span>
+                      <span className={styles.checkText}>{check.label}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ) : null}
+          {activeBottomTab === "search" ? (
+            <div className={styles.searchPanel}>
+              <p className={styles.searchTitle}>Reference search</p>
+              <p className={styles.searchText}>
+                Search is optional for this step. Most learners can finish this task without using it.
+              </p>
+            </div>
+          ) : null}
+        </div>
 
-      <VisualizerPanel />
-
-      <div className={styles.controlBar}>
-        <ControlBar
-          hasErrors={hasErrors}
-          runStatus={sandbox.state.status}
-          checkItems={checkItems}
-          progressLabel={progressLabel}
-          coachMessage={coachMessage}
-          statusNote={statusNote}
-          hintText={hintText}
-          canUnlockHint={unlockedHintTier < lesson.hintLadder.length}
-          stepStates={stepStates}
-          submitLabel={submitLabel}
-          submitDisabled={submitDisabled}
-          onRun={handleRun}
-          onReset={handleReset}
-          onUnlockHint={handleUnlockHint}
-          onSubmitGate={handleSubmitGate}
-        />
+        <div className={styles.controlBar} ref={controlBarRef}>
+          <ControlBar
+            hasErrors={hasErrors}
+            runStatus={sandbox.state.status}
+            progressLabel={progressLabel}
+            coachMessage={coachMessage}
+            statusNote={statusNote}
+            hintText={hintText}
+            canUnlockHint={unlockedHintTier < lesson.hintLadder.length}
+            stepStates={stepStates}
+            primaryActionLabel={primaryActionLabel}
+            primaryActionDisabled={primaryActionDisabled}
+            onPrimaryAction={onPrimaryAction}
+            onReset={handleReset}
+            onUnlockHint={handleUnlockHint}
+          />
+        </div>
       </div>
+      {showInternals ? (
+        <div className={styles.internalsArea}>
+          <VisualizerPanel />
+        </div>
+      ) : null}
     </div>
   );
 }

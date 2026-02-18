@@ -4,6 +4,7 @@ import { useLessonLoader } from "../../../hooks/useLessonLoader";
 
 describe("useLessonLoader", () => {
   it("loads module-1 lesson metadata and editor files", () => {
+    window.history.replaceState({}, "", "/");
     const { result } = renderHook(() => useLessonLoader());
 
     expect(result.current.lesson.exerciseId).toBe("mod-1-hooks-intro-counter");
@@ -13,6 +14,7 @@ describe("useLessonLoader", () => {
   });
 
   it("filters hidden files from editor tabs", () => {
+    window.history.replaceState({}, "", "/");
     const { result } = renderHook(() => useLessonLoader());
     const hasHidden = result.current.lesson.files.some((file) => file.hidden);
     if (hasHidden) {
@@ -21,5 +23,14 @@ describe("useLessonLoader", () => {
         .map((file) => file.fileName);
       expect(result.current.files.some((file) => hiddenNames.includes(file.filename))).toBe(false);
     }
+  });
+
+  it("loads module-2 when lesson query param is provided", () => {
+    window.history.replaceState({}, "", "/?lesson=2");
+    const { result } = renderHook(() => useLessonLoader());
+
+    expect(result.current.lesson.exerciseId).toBe("mod-2-hooks-search-paging");
+    expect(result.current.lesson.module.moduleId).toBe(2);
+    expect(result.current.files[0].filename).toBe("SearchPaging.tsx");
   });
 });

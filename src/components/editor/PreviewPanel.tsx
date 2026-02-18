@@ -7,69 +7,78 @@ interface PreviewPanelProps {
 }
 
 export function PreviewPanel({ sandbox, awaitingGateSubmit }: PreviewPanelProps) {
-  const nextAction =
-    sandbox.status === "timeout"
-      ? "Try a smaller change first, then run again."
+  const statusLine =
+    sandbox.status === "running"
+      ? `[system] Running ${sandbox.activeFile ?? "current file"}...`
       : sandbox.status === "error"
-        ? "Run failed. Next step: adjust one line, then click Run again."
-        : sandbox.status === "success"
-          ? awaitingGateSubmit
-            ? "Run succeeded. Final step: click Submit Gate to evaluate lesson criteria."
-            : "Success. Great progress - you completed the first run loop."
-          : null;
+        ? `[system] Run failed${sandbox.errorMessage ? `: ${sandbox.errorMessage}` : "."}`
+        : sandbox.status === "timeout"
+          ? `[system] ${sandbox.errorMessage ?? "Execution timed out."}`
+          : sandbox.status === "idle"
+            ? "[system] Ready. Click Run to execute."
+            : null;
+  const statusLabel =
+    sandbox.status === "success"
+      ? awaitingGateSubmit
+        ? "Success: ready to submit"
+        : "Success"
+      : sandbox.status.charAt(0).toUpperCase() + sandbox.status.slice(1);
+  const statusClass =
+    sandbox.status === "success"
+      ? styles.statusSuccess
+      : sandbox.status === "running"
+        ? styles.statusRunning
+        : sandbox.status === "error" || sandbox.status === "timeout"
+          ? styles.statusError
+          : styles.statusIdle;
+  const hasRuntimeEvents = sandbox.events.length > 0;
 
   return (
     <div className={styles.preview}>
       <div className={styles.bar}>
         <span className={styles.dot} />
-        <span className={styles.barText}>Preview &middot; localhost:5173</span>
-        <span className={styles.runStatus}>Run: {sandbox.status}</span>
+        <span className={styles.barText}>Console</span>
+        <span className={`${styles.runStatus} ${statusClass}`}>{statusLabel}</span>
       </div>
       <div className={styles.canvas}>
         <div className={styles.placeholder}>
-          <div className={styles.mockCard}>
-            <div className={styles.mockTitle}>Search Results</div>
-            <div className={styles.mockItem}>
-              <span>React Hooks Guide</span>
-              <span className={styles.mockScore}>score: 94</span>
-            </div>
-            <div className={styles.mockItem}>
-              <span>Custom Hooks Patterns</span>
-              <span className={styles.mockScore}>score: 87</span>
-            </div>
-            <div className={styles.mockItem}>
-              <span>useEffect Deep Dive</span>
-              <span className={styles.mockScore}>score: 82</span>
-            </div>
-            <div className={styles.mockBar}>
-              <div className={styles.mockBarFill} />
-            </div>
-          </div>
-
           <div className={styles.consoleCard}>
-            <div className={styles.consoleTitle}>
-              Console Output{sandbox.activeFile ? ` (${sandbox.activeFile})` : ""}
-            </div>
-            {sandbox.events.length === 0 ? (
-              <div className={styles.consoleLineMuted}>No run output yet.</div>
-            ) : (
-              <div className={styles.consoleLog}>
-                {sandbox.events.map((event) => (
+            <div className={styles.consoleLog}>
+              {statusLine ? (
+                <div className={`${styles.consoleLine} ${styles.consoleSystemLine}`}>
+                  <span className={styles.consolePrompt}>$</span>
+                  <span>{statusLine}</span>
+                </div>
+              ) : null}
+              {hasRuntimeEvents ? (
+                sandbox.events.map((event) => (
                   <div key={event.id} className={styles.consoleLine}>
-                    <span className={styles.consoleLevel}>[{event.level}]</span>{" "}
-                    {event.message}
+                    <span className={styles.consolePrompt}>
+                      {event.level === "error" ? "!" : ">"}
+                    </span>
+                    <span
+                      className={`${styles.consoleLevel} ${event.level === "error" ? styles.levelError : event.level === "warn" ? styles.levelWarn : styles.levelLog}`}
+                    >
+                      [{event.level}]
+                    </span>{" "}
+                    <span>{event.message}</span>
                   </div>
-                ))}
-                {sandbox.truncated ? (
-                  <div className={styles.consoleLineMuted}>
-                    Output truncated at 200 events.
-                  </div>
-                ) : null}
-              </div>
-            )}
-            {nextAction ? (
-              <div className={styles.nextAction}>{nextAction}</div>
-            ) : null}
+                ))
+              ) : sandbox.status === "idle" ? (
+                <div className={styles.consoleLineMuted}>
+                  waiting for runtime output...
+                </div>
+              ) : (
+                <div className={styles.consoleLineMuted}>
+                  process completed with no console logs.
+                </div>
+              )}
+              {sandbox.truncated ? (
+                <div className={styles.consoleLineMuted}>
+                  output truncated at 200 events.
+                </div>
+              ) : null}
+            </div>
           </div>
         </div>
       </div>

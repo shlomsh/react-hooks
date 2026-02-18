@@ -1,12 +1,6 @@
-import type { Lesson } from "../types/lesson-schema";
+import type { LessonManifest } from "../../lesson-manifest";
 
-/**
- * Module 1: Intro to React Hooks — "Your First useState Win"
- *
- * Beginner-friendly entry lesson focused on one concept:
- * useState updates UI state in response to user actions.
- */
-export const module1: Lesson = {
+const lesson: LessonManifest = {
   exerciseId: "mod-1-hooks-intro-counter",
   module: {
     moduleId: 1,
@@ -21,7 +15,7 @@ export const module1: Lesson = {
     unlocksModule: 2,
   },
 
-  title: "Fix the Counter Bug",
+  title: "Counter Intro",
   description:
     "The Increment button is buggy: it adds 2. Your mission is to change it to +1, verify with Run, then submit the gate.",
   constraints: [
@@ -77,27 +71,7 @@ You will practice the core \`useState\` update pattern:
       language: "typescriptreact",
       editable: true,
       category: "component",
-      starterCode: `import { useState } from "react";
-
-export default function CounterIntro() {
-  const [count, setCount] = useState(0);
-
-  return (
-    <div style={{ padding: "1rem", fontFamily: "sans-serif" }}>
-      <h2>Counter Intro</h2>
-      <p>Count: {count}</p>
-      {/* TODO: fix this bug: Increment should add 1, not 2 */}
-      <button onClick={() => setCount((c) => c + 2)}>Increment</button>
-      <button onClick={() => setCount((c) => c - 1)} style={{ marginLeft: "0.5rem" }}>
-        Decrement
-      </button>
-      <button onClick={() => setCount(0)} style={{ marginLeft: "0.5rem" }}>
-        Reset
-      </button>
-    </div>
-  );
-}
-`,
+      starterFile: "CounterIntro.tsx",
     },
     {
       fileName: "App.tsx",
@@ -105,12 +79,7 @@ export default function CounterIntro() {
       editable: false,
       hidden: false,
       category: "component",
-      starterCode: `import CounterIntro from "./CounterIntro";
-
-export default function App() {
-  return <CounterIntro />;
-}
-`,
+      starterFile: "App.tsx",
     },
   ],
 
@@ -203,3 +172,5 @@ export default function App() {
     allowMultipleSolutions: true,
   },
 };
+
+export default lesson;
