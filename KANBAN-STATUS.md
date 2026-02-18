@@ -1,6 +1,6 @@
 # Kanban Status
 
-Last updated: 2026-02-18T19:13:31.000Z
+Last updated: 2026-02-18T19:20:54.000Z
 
 This file is the source of truth for the daily kanban board.
 
@@ -263,8 +263,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Capstone rubric + tests",
     "owner": "Codex",
     "priority": "P1",
-    "status": "done",
-    "notes": "Completed 2026-02-18. Added Module 6 capstone lesson pack (07-capstone-stable-workspace) with rubric-score gate (threshold 80), multi-file starter (useStableWorkspace, StableWorkspaceCapstone, App), and check coverage for dependency stabilization + reset semantics. Added loader/check/schema tests for ?lesson=7 and capstone scoring behavior.",
+    "status": "in_progress",
+    "notes": "Re-opened 2026-02-18 for follow-up iteration and validation pass on Module 6 capstone behavior and rubric checks.",
     "order": 27
   },
   {
