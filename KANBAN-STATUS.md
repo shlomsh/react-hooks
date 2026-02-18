@@ -1,6 +1,6 @@
 # Kanban Status
 
-Last updated: 2026-02-18T14:00:29.872Z
+Last updated: 2026-02-18T14:53:37.802Z
 
 This file is the source of truth for the daily kanban board.
 
@@ -99,19 +99,19 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-009",
     "title": "Render timeline component",
-    "owner": "Shared",
+    "owner": "Claude",
     "priority": "P1",
-    "status": "backlog",
-    "notes": "",
+    "status": "done",
+    "notes": "Completed 2026-02-18. VisualizerPanel renders live RenderEvent/EffectEvent/CleanupEvent rows with R/E/CL tags and relative timestamps from VisualizerContext. Empty state + truncation banner at 200 events. All 168 tests passing. Branch: codex/st-012-009-010-visualizer-adapter.",
     "order": 9
   },
   {
     "id": "ST-010",
     "title": "Dependency diff inspector",
-    "owner": "Shared",
+    "owner": "Claude",
     "priority": "P1",
-    "status": "backlog",
-    "notes": "",
+    "status": "done",
+    "notes": "Completed 2026-02-18. Displays latest DepSnapshot from most recent EffectEvent with per-dep rows showing changed (amber) vs stable distinction and prevValue → value transitions. Empty state when no deps captured. Wired to live sandbox telemetry. All 168 tests passing. Branch: codex/st-012-009-010-visualizer-adapter.",
     "order": 10
   },
   {
@@ -126,10 +126,10 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-012",
     "title": "Visualizer adapter API",
-    "owner": "Shared",
+    "owner": "Claude",
     "priority": "P1",
-    "status": "backlog",
-    "notes": "",
+    "status": "done",
+    "notes": "Completed 2026-02-18. VisualizerEvent discriminated union (RenderEvent | EffectEvent | CleanupEvent), DepSnapshot with change detection, VisualizerSink factory with 200-event cap, VisualizerContext/Provider/useVisualizer hook. useSandbox accepts optional sink; React mock instrumentation emits events with timestamps. VisualizerProvider wraps LessonPlayer in AppShell. All 168 tests passing (166 unit + 2 e2e). Branch: codex/st-012-009-010-visualizer-adapter.",
     "order": 12
   },
   {
@@ -252,7 +252,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-026",
     "title": "Debug labs content",
-    "owner": "Shared",
+    "owner": "Codex",
     "priority": "P1",
     "status": "done",
     "notes": "Completed 2026-02-18. Module 5 Debug Labs shipped as two scenarios: (1) Scenario 1 — Infinite Loop (useObservedSection.ts, IntersectionObserver with unstable object dep, fix: useMemo stabilization); (2) Scenario 2 — Stale Callback (useLogOnSave.ts, useCallback with empty deps, fix: add count to deps). Both lessons at ?lesson=5 and ?lesson=6. All gate checks use double-escaped regex. Also fixed dynamic breadcrumb (AppShell now reads lesson.module.moduleId + lesson.title via useLessonLoader). 140 tests passing.",
@@ -261,7 +261,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-027",
     "title": "Capstone rubric + tests",
-    "owner": "Shared",
+    "owner": "Codex",
     "priority": "P1",
     "status": "backlog",
     "notes": "",
