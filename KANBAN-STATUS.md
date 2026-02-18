@@ -1,6 +1,6 @@
 # Kanban Status
 
-Last updated: 2026-02-18T20:38:52.000Z
+Last updated: 2026-02-18T20:41:19.000Z
 
 This file is the source of truth for the daily kanban board.
 
@@ -290,8 +290,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Telemetry dispatcher",
     "owner": "Shared",
     "priority": "P2",
-    "status": "in_progress",
-    "notes": "Started 2026-02-18. Implementing client telemetry dispatcher with queueing and batched flush.",
+    "status": "done",
+    "notes": "Completed 2026-02-18. Implemented TelemetryDispatcher with enqueue queue, max queue cap, batch threshold flush, interval flush for partial batches, failure-safe retry retention, start/stop timer control, and telemetry transport abstraction in src/telemetry/dispatcher.ts. Added unit coverage in src/test/unit/telemetry/dispatcher.test.ts.",
     "order": 30
   },
   {
