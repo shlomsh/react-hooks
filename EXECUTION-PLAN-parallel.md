@@ -215,7 +215,7 @@ Use this table during execution updates.
 | ST-028 | Eng B | DONE |  |  | ST-022..ST-027 |  |
 | ST-029 | Eng D | DONE |  |  |  |  |
 | ST-030 | Eng D | DONE |  |  | ST-029 |  |
-| ST-031 | Eng D | BACKLOG |  |  | ST-019, ST-030 |  |
+| ST-031 | Eng D | DONE |  |  | ST-019, ST-030 |  |
 | ST-032 | Eng D | BACKLOG |  |  | ST-030 |  |
 | ST-033 | Shared | DONE |  |  | Core epics complete |  |
 | ST-034 | Shared | DONE |  |  | Core epics complete | Desktop-only QA |
