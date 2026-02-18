@@ -6,6 +6,15 @@ interface PreviewPanelProps {
 }
 
 export function PreviewPanel({ sandbox }: PreviewPanelProps) {
+  const nextAction =
+    sandbox.status === "timeout"
+      ? "Try a smaller change first, then run again."
+      : sandbox.status === "error"
+        ? "Run failed. Next step: adjust one line, then click Run again."
+        : sandbox.status === "success"
+          ? "Success. Great progress - you completed the first run loop."
+          : null;
+
   return (
     <div className={styles.preview}>
       <div className={styles.bar}>
@@ -55,6 +64,9 @@ export function PreviewPanel({ sandbox }: PreviewPanelProps) {
                 ) : null}
               </div>
             )}
+            {nextAction ? (
+              <div className={styles.nextAction}>{nextAction}</div>
+            ) : null}
           </div>
         </div>
       </div>

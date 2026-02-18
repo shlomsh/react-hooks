@@ -5,6 +5,9 @@ interface ControlBarProps {
   hasErrors: boolean;
   runStatus: SandboxStatus;
   checkLabels: string[];
+  progressLabel: string;
+  coachMessage: string;
+  stepStates: boolean[];
   onRun: () => void;
   onReset: () => void;
 }
@@ -13,11 +16,28 @@ export function ControlBar({
   hasErrors,
   runStatus,
   checkLabels,
+  progressLabel,
+  coachMessage,
+  stepStates,
   onRun,
   onReset,
 }: ControlBarProps) {
   return (
     <div className={styles.bar}>
+      <div className={styles.left}>
+        <div className={styles.progressRow}>
+          <span className={styles.progressLabel}>{progressLabel}</span>
+          {stepStates.map((done, index) => (
+            <span
+              key={index + 1}
+              className={`${styles.stepChip} ${done ? styles.stepDone : styles.stepTodo}`}
+            >
+              {done ? "\u2713" : index + 1}
+            </span>
+          ))}
+        </div>
+        <div className={styles.coachMessage}>{coachMessage}</div>
+      </div>
       <div className={styles.checks}>
         {checkLabels.map((label, index) => (
           <CheckItem key={label} label={label} pass={index === 0} />

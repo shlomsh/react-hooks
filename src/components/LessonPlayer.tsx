@@ -40,6 +40,25 @@ export function LessonPlayer() {
     sandbox.reset();
   }, [lessonFiles, resetFiles, sandbox]);
 
+  const hasEditedSomething = files.some((file) => {
+    const baseline = lessonFiles.find((seed) => seed.filename === file.filename);
+    return baseline ? baseline.content !== file.content : false;
+  });
+  const hasRun = sandbox.state.status !== "idle";
+  const hasSuccess = sandbox.state.status === "success";
+  const stepStates = [hasEditedSomething, hasRun, hasSuccess];
+  const completedSteps = stepStates.filter(Boolean).length;
+  const progressLabel = `${completedSteps}/3 complete`;
+  const coachMessage = hasErrors
+    ? "Step 1: fix TypeScript errors, then click Run."
+    : hasSuccess
+      ? "Nice work - your first run passed. You are ready for the next challenge."
+      : sandbox.state.status === "error" || sandbox.state.status === "timeout"
+        ? "Good attempt. Use the console hint, make one small fix, and run again."
+        : hasEditedSomething
+          ? "Step 2: click Run to validate your change."
+          : "Step 1: edit one line in LifecycleLogger.tsx for a quick win.";
+
   return (
     <div className={styles.player}>
       <ConceptPanel lesson={lesson} />
@@ -69,6 +88,9 @@ export function LessonPlayer() {
           hasErrors={hasErrors}
           runStatus={sandbox.state.status}
           checkLabels={lesson.checks.map((check) => check.failMessage)}
+          progressLabel={progressLabel}
+          coachMessage={coachMessage}
+          stepStates={stepStates}
           onRun={handleRun}
           onReset={handleReset}
         />

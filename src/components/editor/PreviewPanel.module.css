@@ -127,3 +127,9 @@
 .consoleLevel {
   color: var(--cyan);
 }
+
+.nextAction {
+  margin-top: 0.5rem;
+  font-size: 0.7rem;
+  color: var(--amber);
+}
