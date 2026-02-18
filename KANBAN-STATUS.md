@@ -1,6 +1,6 @@
 # Kanban Status
 
-Last updated: 2026-02-18T19:20:54.000Z
+Last updated: 2026-02-18T21:27:00.000Z
 
 This file is the source of truth for the daily kanban board.
 
@@ -117,10 +117,10 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-011",
     "title": "Hook call-order tracker",
-    "owner": "Shared",
+    "owner": "Claude",
     "priority": "P2",
-    "status": "backlog",
-    "notes": "",
+    "status": "done",
+    "notes": "Completed 2026-02-18. Implemented pure data model (hookCallOrderTracker.ts) with createHookCallRecord, startRenderCycle, appendHookCall, getCallsForRender, getAllRenderCycles (MAX_RENDER_CYCLES=50 cap). HookCallOrderSection component renders latest render cycle hook call sequence with ordered badge, empty state, and render count summary. Wired into VisualizerPanel with placeholder cycles. 19 new tests (13 unit + 6 component), all 164 passing. Branch: codex/st-011-hook-call-order-tracker.",
     "order": 11
   },
   {

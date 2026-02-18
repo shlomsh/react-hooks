@@ -1,4 +1,28 @@
 import styles from "./VisualizerPanel.module.css";
+import { HookCallOrderSection } from "../visualizer/HookCallOrderSection";
+import type { RenderCycle } from "../visualizer/hookCallOrderTracker";
+
+// Placeholder cycles for the static prototype — replaced by live trace data
+// once the sandbox instrumentation layer (ST-012) posts events.
+const PLACEHOLDER_CYCLES: RenderCycle[] = [
+  {
+    renderNumber: 1,
+    timestamp: Date.now() - 300,
+    calls: [
+      { id: "p1", hookName: "useState", hookLabel: "useState", callIndex: 0 },
+      { id: "p2", hookName: "useEffect", hookLabel: "useEffect", callIndex: 1 },
+    ],
+  },
+  {
+    renderNumber: 2,
+    timestamp: Date.now() - 150,
+    calls: [
+      { id: "p3", hookName: "useState", hookLabel: "useState", callIndex: 0 },
+      { id: "p4", hookName: "useEffect", hookLabel: "useEffect", callIndex: 1 },
+      { id: "p5", hookName: "useCallback", hookLabel: "useCallback", callIndex: 2 },
+    ],
+  },
+];
 
 export function VisualizerPanel() {
   return (
@@ -29,6 +53,8 @@ export function VisualizerPanel() {
           <DepRow name="options" changed from="{…}" to="{…}" />
         </div>
       </div>
+
+      <HookCallOrderSection cycles={PLACEHOLDER_CYCLES} />
     </aside>
   );
 }
