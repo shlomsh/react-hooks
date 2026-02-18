@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { module1 } from "../content/module-1";
+import { module1 } from "../../../content/module-1";
 import type {
   Lesson,
   ModuleMetadata,
@@ -10,7 +10,7 @@ import type {
   HintTier3,
   RubricDimension,
   GateConfig,
-} from "./lesson-schema";
+} from "../../../types/lesson-schema";
 
 describe("ST-038: Lesson schema contract", () => {
   describe("module-1 validates against schema", () => {

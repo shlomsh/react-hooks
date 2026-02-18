@@ -1,6 +1,6 @@
 import { act, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { AppShell } from "./AppShell";
+import { AppShell } from "../../../components/AppShell";
 
 function setViewportWidth(width: number) {
   Object.defineProperty(window, "innerWidth", {

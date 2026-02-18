@@ -8,8 +8,8 @@
 import { describe, it, expect } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import type { ReactNode } from "react";
-import { GateProvider, useGate } from "./GateContext";
-import { useHintLadder, type HintLadder } from "./useHintLadder";
+import { GateProvider, useGate } from "../../../assessment/GateContext";
+import { useHintLadder, type HintLadder } from "../../../assessment/useHintLadder";
 
 // ---------------------------------------------------------------------------
 // Fixtures

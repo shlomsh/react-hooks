@@ -4,7 +4,7 @@
 
 import { describe, it, expect } from "vitest";
 import { renderHook, act } from "@testing-library/react";
-import { GateProvider, useGate } from "./GateContext";
+import { GateProvider, useGate } from "../../../assessment/GateContext";
 import type { ReactNode } from "react";
 
 function wrapper({ children }: { children: ReactNode }) {

@@ -14,7 +14,7 @@ import {
   initialGateState,
   type GateState,
   type GateAction,
-} from "./gateStateMachine";
+} from "../../../assessment/gateStateMachine";
 
 // ---------------------------------------------------------------------------
 // Helpers

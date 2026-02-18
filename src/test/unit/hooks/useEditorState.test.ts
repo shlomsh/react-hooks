@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { renderHook, act } from "@testing-library/react";
-import { useEditorState } from "./useEditorState";
+import { useEditorState } from "../../../hooks/useEditorState";
 
 describe("ST-005: useEditorState", () => {
   it("initializes with starter files and first file active", () => {

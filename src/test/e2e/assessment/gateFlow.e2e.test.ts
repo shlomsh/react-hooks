@@ -4,7 +4,7 @@ import {
   initialGateState,
   type GateAction,
   type GateState,
-} from "./gateStateMachine";
+} from "../../../assessment/gateStateMachine";
 
 function run(actions: GateAction[], seed = initialGateState): GateState {
   return actions.reduce((state, action) => gateReducer(state, action), seed);

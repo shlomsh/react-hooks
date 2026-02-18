@@ -19,7 +19,7 @@ import {
   getHighestUnlockedTier,
   isHintTierUnlocked,
   type HintLadder,
-} from "./hintLadder";
+} from "../../../assessment/hintLadder";
 
 // ---------------------------------------------------------------------------
 // Fixtures
