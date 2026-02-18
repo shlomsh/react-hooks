@@ -17,28 +17,28 @@ describe("AppShell viewport gate", () => {
   });
 
   it.each([375, 768, 1024, 1279])(
-    "blocks lesson player for viewport width %ipx",
+    "blocks content for viewport width %ipx",
     (width) => {
       setViewportWidth(width);
       render(<AppShell />);
 
       expect(screen.getByText("Desktop viewport required")).toBeInTheDocument();
-      expect(screen.queryByRole("button", { name: "Run" })).not.toBeInTheDocument();
     }
   );
 
   it.each([1280, 1440])(
-    "renders lesson player for viewport width %ipx",
+    "renders launch screen for viewport width %ipx (default route)",
     (width) => {
       setViewportWidth(width);
       render(<AppShell />);
 
-      expect(screen.getByRole("button", { name: "Run" })).toBeInTheDocument();
+      // Default route (no query params) is launch screen
+      expect(screen.getByText(/start pro track/i)).toBeInTheDocument();
       expect(screen.queryByText("Desktop viewport required")).not.toBeInTheDocument();
     }
   );
 
-  it("switches from blocked to lesson view on resize to desktop", async () => {
+  it("switches from blocked to content on resize to desktop", async () => {
     setViewportWidth(1024);
     render(<AppShell />);
 
@@ -47,15 +47,15 @@ describe("AppShell viewport gate", () => {
       setViewportWidth(1280);
     });
     await waitFor(() =>
-      expect(screen.getByRole("button", { name: "Run" })).toBeInTheDocument()
+      expect(screen.getByText(/start pro track/i)).toBeInTheDocument()
     );
   });
 
-  it("switches from lesson view to blocked on resize below desktop width", async () => {
+  it("switches from content to blocked on resize below desktop width", async () => {
     setViewportWidth(1440);
     render(<AppShell />);
 
-    expect(screen.getByRole("button", { name: "Run" })).toBeInTheDocument();
+    expect(screen.getByText(/start pro track/i)).toBeInTheDocument();
     act(() => {
       setViewportWidth(1279);
     });
@@ -64,19 +64,21 @@ describe("AppShell viewport gate", () => {
     );
   });
 
-  it("switches between lesson and dashboard tabs on desktop", () => {
+  it("navigates between tabs on desktop", () => {
     setViewportWidth(1440);
     render(<AppShell />);
 
-    expect(screen.getByRole("button", { name: "Run" })).toBeInTheDocument();
+    // Default is launch
+    expect(screen.getByText(/start pro track/i)).toBeInTheDocument();
+
+    // Click Dashboard tab
     fireEvent.click(screen.getByRole("button", { name: "Dashboard" }));
-    expect(screen.getByRole("heading", { name: "Track Dashboard" })).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Run" })).not.toBeInTheDocument();
+    expect(screen.getByText("React Hooks Pro Track")).toBeInTheDocument();
     expect(window.location.search).toContain("view=dashboard");
 
-    fireEvent.click(screen.getByRole("button", { name: "Lesson" }));
-    expect(screen.getByRole("button", { name: "Run" })).toBeInTheDocument();
-    expect(window.location.search).not.toContain("view=dashboard");
+    // Click Launch tab
+    fireEvent.click(screen.getByRole("button", { name: "Launch" }));
+    expect(screen.getByText(/start pro track/i)).toBeInTheDocument();
   });
 
   it("supports dashboard deep link via URL", () => {
@@ -84,16 +86,36 @@ describe("AppShell viewport gate", () => {
     window.history.replaceState({}, "", "/?view=dashboard");
     render(<AppShell />);
 
-    expect(screen.getByRole("heading", { name: "Track Dashboard" })).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Run" })).not.toBeInTheDocument();
+    expect(screen.getByText("React Hooks Pro Track")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Dashboard" })).toHaveAttribute("aria-current", "page");
   });
 
-  it("shows completion banner on dashboard when complete flag is present", () => {
+  it("supports lesson deep link via URL", () => {
     setViewportWidth(1440);
-    window.history.replaceState({}, "", "/?view=dashboard&complete=1");
+    window.history.replaceState({}, "", "/?lesson=1");
     render(<AppShell />);
 
-    expect(screen.getByText("Final assessment complete. Track progression is now fully passed.")).toBeInTheDocument();
+    // Should show lesson player (Run button exists)
+    expect(screen.getByRole("button", { name: "Run" })).toBeInTheDocument();
+  });
+
+  it("supports badge deep link via URL", () => {
+    setViewportWidth(1440);
+    window.history.replaceState({}, "", "/?view=badge");
+    render(<AppShell />);
+
+    expect(screen.getByText(/react hooks proficient/i)).toBeInTheDocument();
+  });
+
+  it("renders all 6 nav tabs", () => {
+    setViewportWidth(1440);
+    render(<AppShell />);
+
+    expect(screen.getByRole("button", { name: "Launch" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Dashboard" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Lesson Player" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Debug Arena" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Capstone" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Badge" })).toBeInTheDocument();
   });
 });

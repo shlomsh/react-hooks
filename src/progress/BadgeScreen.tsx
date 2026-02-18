@@ -1,9 +1,8 @@
 /**
- * ST-021 — Badge issuance UI
+ * ST-021 / ST-042 — Badge issuance UI (aligned with prototype §15.7)
  *
  * Full-page badge screen shown after the learner earns proficiency.
- * Displays badge graphic, confirmation of all 6 criteria, earned date,
- * download CTA, and continue/share CTA.
+ * Displays badge card with glow, stats grid, extra stats, and CTAs.
  */
 
 import styles from "./BadgeScreen.module.css";
@@ -12,70 +11,92 @@ import styles from "./BadgeScreen.module.css";
 // Types
 // ---------------------------------------------------------------------------
 
-interface BadgeScreenProps {
-  earnedAt: Date;
-  onDownload: () => void;
-  onContinue: () => void;
+export interface BadgeStats {
+  finalScore: number;
+  maxScore: number;
+  modulesPassed: number;
+  totalModules: number;
+  finalHintsUsed: number;
+  capstoneScore: number;
+  capstoneMax: number;
+  completionTime: string;
 }
 
-// ---------------------------------------------------------------------------
-// Proficiency criteria (PRD Section 4)
-// ---------------------------------------------------------------------------
-
-const CRITERIA = [
-  "Passed all 7 module gates in strict order",
-  "Passed 3 custom-hook implementation labs with no critical rubric failures",
-  "Passed 2 internals-focused debugging labs",
-  "Completed SaaS capstone with score ≥ 85/100",
-  "Finished capstone within 3 retries",
-  "Scored ≥ 80% on final assessment without final-stage hints",
-];
+interface BadgeScreenProps {
+  stats: BadgeStats;
+  onDownload: () => void;
+  onReviewSolutions: () => void;
+  onPracticeMode: () => void;
+}
 
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
 
-export function BadgeScreen({ earnedAt, onDownload, onContinue }: BadgeScreenProps) {
-  const dateLabel = earnedAt.toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-
+export function BadgeScreen({
+  stats,
+  onDownload,
+  onReviewSolutions,
+  onPracticeMode,
+}: BadgeScreenProps) {
   return (
     <div className={styles.screen} role="main">
-      {/* Badge graphic */}
-      <div className={styles.badgeWrap} aria-hidden="true">
-        <div className={styles.badgeRing}>
-          <div className={styles.badgeInner}>
-            <span className={styles.badgeIcon}>⬡</span>
+      <div className={styles.badgeCard}>
+        <div className={styles.glow} />
+        <div className={styles.badgeIcon} aria-hidden="true">
+          ⚛
+        </div>
+
+        <h1 className={styles.heading}>React Hooks Proficient</h1>
+        <p className={styles.subtitle}>Final Assessment + Badge</p>
+
+        {/* Primary stats grid */}
+        <div className={styles.stats}>
+          <div>
+            <div className={styles.statVal}>
+              {stats.finalScore}
+              <span className={styles.statValDenom}>/{stats.maxScore}</span>
+            </div>
+            <div className={styles.statLabel}>Final Score</div>
+          </div>
+          <div>
+            <div className={styles.statVal}>
+              {stats.modulesPassed}/{stats.totalModules}
+            </div>
+            <div className={styles.statLabel}>Modules Passed</div>
+          </div>
+          <div>
+            <div className={styles.statVal}>{stats.finalHintsUsed}</div>
+            <div className={styles.statLabel}>Final Hints Used</div>
           </div>
         </div>
-      </div>
 
-      {/* Heading */}
-      <h1 className={styles.heading}>React Hooks Pro</h1>
-      <p className={styles.subtitle}>Proficiency Confirmed</p>
-      <p className={styles.date}>Earned {dateLabel}</p>
+        {/* Extra stats */}
+        <div className={styles.extraStats}>
+          <div className={styles.extraStatCard}>
+            <div className={styles.extraStatLabel}>Capstone Score</div>
+            <div className={`${styles.extraStatVal} ${styles.lime}`}>
+              {stats.capstoneScore}/{stats.capstoneMax}
+            </div>
+          </div>
+          <div className={styles.extraStatCard}>
+            <div className={styles.extraStatLabel}>Completion Time</div>
+            <div className={styles.extraStatVal}>{stats.completionTime}</div>
+          </div>
+        </div>
 
-      {/* Criteria checklist */}
-      <ul className={styles.criteriaList} aria-label="Proficiency criteria">
-        {CRITERIA.map((text) => (
-          <li key={text} className={styles.criterionItem}>
-            <span className={styles.checkmark} aria-hidden="true">✓</span>
-            <span>{text}</span>
-          </li>
-        ))}
-      </ul>
-
-      {/* CTAs */}
-      <div className={styles.actions}>
-        <button className={styles.downloadBtn} onClick={onDownload} type="button">
-          Download Badge
-        </button>
-        <button className={styles.continueBtn} onClick={onContinue} type="button">
-          Share Achievement
-        </button>
+        {/* CTAs */}
+        <div className={styles.actions}>
+          <button className={styles.btnPrimary} onClick={onDownload} type="button">
+            Download Badge
+          </button>
+          <button className={styles.btnGhost} onClick={onReviewSolutions} type="button">
+            Review Solutions
+          </button>
+          <button className={styles.btnGhost} onClick={onPracticeMode} type="button">
+            Practice Mode
+          </button>
+        </div>
       </div>
     </div>
   );

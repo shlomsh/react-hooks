@@ -1,0 +1,314 @@
+/* ── Capstone Workspace Screen ────────────────────────────────────────── */
+
+.screen {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  grid-template-rows: auto 1fr auto;
+  height: calc(100vh - 48px);
+  overflow: hidden;
+  animation: screenIn 0.6s var(--ease-out-expo) both;
+}
+
+@keyframes screenIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Top bar */
+.bar {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.6rem 1.2rem;
+  background: var(--bg-deep);
+  border-bottom: 1px solid var(--border-dim);
+}
+
+.barTitle {
+  font-size: 0.85rem;
+  font-weight: 600;
+  flex: 1;
+}
+
+.badgeAmber {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 99px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: var(--amber-dim);
+  color: var(--amber);
+  border: 1px solid rgba(255, 179, 0, 0.2);
+}
+
+/* Brief panel (left) */
+.briefPanel {
+  grid-row: 2 / 4;
+  border-right: 1px solid var(--border-dim);
+  background: var(--bg-deep);
+  padding: 1.2rem;
+  overflow-y: auto;
+}
+
+.briefTitle {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.briefDesc {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.constraints {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1.5rem;
+  padding: 0;
+}
+
+.constraint {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.constraint::before {
+  content: "\25C6";
+  color: var(--cyan);
+  font-size: 0.5rem;
+  margin-top: 0.35rem;
+  flex-shrink: 0;
+}
+
+/* Rubric panel */
+.rubricPanel {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-dim);
+}
+
+.rubricTitle {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 0.7rem;
+}
+
+.rubricItems {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.rubricItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-dim);
+}
+
+.rubricIcon {
+  font-size: 0.75rem;
+  flex-shrink: 0;
+  width: 1.2rem;
+  text-align: center;
+}
+
+.rubricPass {
+  border-color: rgba(118, 224, 0, 0.15);
+}
+
+.rubricPass .rubricIcon {
+  color: var(--lime);
+}
+
+.rubricFail {
+  border-color: rgba(255, 64, 96, 0.15);
+}
+
+.rubricFail .rubricIcon {
+  color: var(--red);
+}
+
+.rubricLabel {
+  flex: 1;
+  color: var(--text-secondary);
+}
+
+.rubricScore {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-dim);
+}
+
+/* Workspace (right) */
+.workspace {
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.editorTabs {
+  display: flex;
+  gap: 0;
+  background: var(--bg-deep);
+  border-bottom: 1px solid var(--border-dim);
+}
+
+.editorTab {
+  padding: 0.5rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s;
+  cursor: pointer;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  background: none;
+}
+
+.editorTab:hover {
+  color: var(--text-secondary);
+}
+
+.editorTabActive {
+  color: var(--text-primary);
+  border-bottom-color: var(--cyan);
+  background: var(--bg-panel);
+}
+
+.editorCanvas {
+  flex: 1;
+  overflow: auto;
+  padding: 1rem;
+  background: var(--bg-panel);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+.editorPlaceholder {
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+/* Score bar (bottom) */
+.scoreBar {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.7rem 1.2rem;
+  background: var(--bg-deep);
+  border-top: 1px solid var(--border-dim);
+}
+
+.scoreBig {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.scorePassing {
+  color: var(--lime);
+}
+
+.scoreFailing {
+  color: var(--amber);
+}
+
+.scoreDenom {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.scoreDetail {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.scoreDetailMono {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+
+.scoreDetailAmber {
+  color: var(--amber);
+}
+
+.scoreInfo {
+  margin-left: 2rem;
+}
+
+.scoreActions {
+  margin-left: auto;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btnGhost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-md);
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: transparent;
+  border: 1px solid var(--border-med);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: all 0.2s;
+}
+
+.btnGhost:hover {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+}
+
+.btnAmber {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-md);
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: var(--amber);
+  color: var(--bg-abyss);
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+  box-shadow: 0 2px 12px rgba(255, 179, 0, 0.2);
+  transition: all 0.25s var(--ease-out-expo);
+}
+
+.btnAmber:hover {
+  box-shadow: 0 0 20px var(--amber-glow);
+  transform: translateY(-1px);
+}

@@ -129,6 +129,20 @@
   overflow: hidden;
 }
 
+/* Status rail + route container grid (prototype: 280px | 1fr) */
+.shellGrid {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 1rem;
+  padding: 1rem 1.25rem 1.25rem;
+  height: 100%;
+  overflow: auto;
+}
+
+.routeContainer {
+  min-height: 0;
+}
+
 .dashboardRoute {
   height: 100%;
   overflow: auto;

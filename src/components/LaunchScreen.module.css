@@ -1,0 +1,186 @@
+/* ── Launch Screen ────────────────────────────────────────────────────── */
+
+.screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 48px);
+  text-align: center;
+  padding: 3rem 2rem;
+  position: relative;
+  animation: screenIn 0.6s var(--ease-out-expo) both;
+}
+
+@keyframes screenIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Radial glow behind hero */
+.screen::before {
+  content: "";
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(0, 229, 255, 0.07) 0%, transparent 65%);
+  pointer-events: none;
+  animation: launchPulse 4s ease-in-out infinite alternate;
+}
+
+@keyframes launchPulse {
+  0% { opacity: 0.5; transform: translate(-50%, -50%) scale(0.9); }
+  100% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+}
+
+.overline {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  margin-bottom: 1.5rem;
+  animation: fadeUp 0.8s var(--ease-out-expo) 0.1s both;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  max-width: 700px;
+  animation: fadeUp 0.8s var(--ease-out-expo) 0.2s both;
+}
+
+.titleAccent {
+  font-style: italic;
+  color: var(--cyan);
+  text-shadow: 0 0 40px rgba(0, 229, 255, 0.25);
+}
+
+.subtitle {
+  margin-top: 1.2rem;
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  max-width: 500px;
+  line-height: 1.6;
+  animation: fadeUp 0.8s var(--ease-out-expo) 0.35s both;
+}
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 2rem;
+  animation: fadeUp 0.8s var(--ease-out-expo) 0.45s both;
+}
+
+.pill {
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-dim);
+  border: 1px solid var(--border-dim);
+  background: rgba(15, 21, 37, 0.6);
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 2.5rem;
+  animation: fadeUp 0.8s var(--ease-out-expo) 0.55s both;
+}
+
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.3rem;
+  border-radius: var(--radius-md);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  background: var(--cyan);
+  color: var(--bg-abyss);
+  box-shadow: 0 0 0 0 var(--cyan-glow), 0 2px 12px rgba(0, 229, 255, 0.2);
+  transition: all 0.25s var(--ease-out-expo);
+  cursor: pointer;
+  border: none;
+  font-family: var(--font-body);
+}
+
+.btnPrimary:hover {
+  box-shadow: 0 0 20px var(--cyan-glow), 0 4px 20px rgba(0, 229, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.btnGhost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.3rem;
+  border-radius: var(--radius-md);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  background: transparent;
+  border: 1px solid var(--border-med);
+  color: var(--text-secondary);
+  transition: all 0.25s var(--ease-out-expo);
+  cursor: pointer;
+  font-family: var(--font-body);
+}
+
+.btnGhost:hover {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border-color: var(--border-soft);
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 3.5rem;
+  max-width: 680px;
+  animation: fadeUp 0.8s var(--ease-out-expo) 0.65s both;
+}
+
+.feature {
+  padding: 1.2rem;
+  border-radius: var(--radius-md);
+  background: var(--bg-panel);
+  border: 1px solid var(--border-dim);
+  text-align: left;
+}
+
+.featureIcon {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.featureTitle {
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.featureDesc {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: none; }
+}

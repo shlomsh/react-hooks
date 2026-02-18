@@ -1,0 +1,331 @@
+/* ── Debug Arena Screen ───────────────────────────────────────────────── */
+
+.screen {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  grid-template-rows: auto 1fr auto;
+  height: calc(100vh - 48px);
+  overflow: hidden;
+  animation: screenIn 0.6s var(--ease-out-expo) both;
+}
+
+@keyframes screenIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Top bar */
+.bar {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.6rem 1.2rem;
+  background: var(--bg-deep);
+  border-bottom: 1px solid var(--border-dim);
+}
+
+.barTitle {
+  font-size: 0.85rem;
+  font-weight: 600;
+  flex: 1;
+}
+
+.badgeRed {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 99px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: var(--red-dim);
+  color: var(--red);
+  border: 1px solid rgba(255, 64, 96, 0.2);
+}
+
+/* Incident panel (left) */
+.incidentPanel {
+  grid-row: 2 / 4;
+  border-right: 1px solid var(--border-dim);
+  background: var(--bg-deep);
+  padding: 1.2rem;
+  overflow-y: auto;
+}
+
+.incidentTitle {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.symptomBox {
+  padding: 0.7rem 0.85rem;
+  border-radius: var(--radius-sm);
+  background: var(--red-dim);
+  border-left: 2px solid var(--red);
+  font-size: 0.78rem;
+  color: var(--red);
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.section {
+  margin-bottom: 1.2rem;
+}
+
+.sectionTitle {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 0.5rem;
+}
+
+.sectionBody {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.steps {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0;
+  margin: 0;
+}
+
+.step {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  padding-left: 1.2rem;
+  position: relative;
+}
+
+.stepNum {
+  position: absolute;
+  left: 0;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
+/* Debug workspace (right) */
+.workspace {
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.editorTabs {
+  display: flex;
+  gap: 0;
+  background: var(--bg-deep);
+  border-bottom: 1px solid var(--border-dim);
+}
+
+.editorTab {
+  padding: 0.5rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.editorTab:hover {
+  color: var(--text-secondary);
+}
+
+.editorTabActive {
+  color: var(--text-primary);
+  border-bottom-color: var(--cyan);
+  background: var(--bg-panel);
+}
+
+.editorCanvas {
+  flex: 1;
+  overflow: auto;
+  padding: 1rem;
+  background: var(--bg-panel);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+.editorPlaceholder {
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+/* Execution trace */
+.trace {
+  border-top: 1px solid var(--border-dim);
+  padding: 0.8rem;
+  background: var(--bg-deep);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.traceTitle {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 0.5rem;
+}
+
+.traceFlow {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+}
+
+.traceNode {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid var(--border-dim);
+}
+
+.traceRender {
+  background: var(--cyan-dim);
+  color: var(--cyan);
+  border-color: rgba(0, 229, 255, 0.2);
+}
+
+.traceEffect {
+  background: var(--amber-dim);
+  color: var(--amber);
+  border-color: rgba(255, 179, 0, 0.2);
+}
+
+.traceState {
+  background: rgba(167, 139, 250, 0.1);
+  color: var(--violet);
+  border-color: rgba(167, 139, 250, 0.2);
+}
+
+.traceInfinite {
+  color: var(--red);
+  border-color: rgba(255, 64, 96, 0.3);
+  background: var(--red-dim);
+}
+
+.traceArrow {
+  color: var(--text-dim);
+  font-size: 0.6rem;
+}
+
+/* Bottom bar */
+.bottom {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  border-top: 1px solid var(--border-dim);
+  background: var(--bg-deep);
+}
+
+.explain {
+  flex: 1;
+  padding: 0.8rem 1rem;
+  border-right: 1px solid var(--border-dim);
+}
+
+.explainLabel {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 0.4rem;
+}
+
+.explainInput {
+  width: 100%;
+  height: 50px;
+  resize: none;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-dim);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.7rem;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: var(--text-primary);
+  outline: none;
+}
+
+.explainInput:focus {
+  border-color: var(--cyan);
+}
+
+.explainInput::placeholder {
+  color: var(--text-dim);
+}
+
+.bottomActions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1rem;
+}
+
+.btnGhost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-md);
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: transparent;
+  border: 1px solid var(--border-med);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: all 0.2s;
+}
+
+.btnGhost:hover {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+}
+
+.btnAmber {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-md);
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: var(--amber);
+  color: var(--bg-abyss);
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+  box-shadow: 0 2px 12px rgba(255, 179, 0, 0.2);
+  transition: all 0.25s var(--ease-out-expo);
+}
+
+.btnAmber:hover {
+  box-shadow: 0 0 20px var(--amber-glow);
+  transform: translateY(-1px);
+}

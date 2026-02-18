@@ -1,15 +1,75 @@
 import { useEffect, useState } from "react";
 import { LessonPlayer } from "./LessonPlayer";
+import { LaunchScreen } from "./LaunchScreen";
+import { DashboardScreen } from "./DashboardScreen";
+import { DebugArenaScreen } from "./DebugArenaScreen";
+import { CapstoneScreen } from "./CapstoneScreen";
+import { StatusRail } from "./StatusRail";
+import { BadgeScreen } from "../progress/BadgeScreen";
 import { useLessonLoader } from "../hooks/useLessonLoader";
-import { lessons } from "../content/lessons";
+import { useProgress } from "../progress/useProgress";
+import {
+  getCompletedModuleCount,
+  getNextUnlockedModule,
+  getModuleAttempts,
+} from "../progress/completionLedger";
 import styles from "./AppShell.module.css";
 
 const MIN_DESKTOP_WIDTH = 1280;
-type AppRoute = "lesson" | "dashboard";
+
+type AppRoute = "launch" | "dashboard" | "lesson" | "debug" | "capstone" | "badge";
+
+const NAV_TABS: { route: AppRoute; label: string }[] = [
+  { route: "launch", label: "Launch" },
+  { route: "dashboard", label: "Dashboard" },
+  { route: "lesson", label: "Lesson Player" },
+  { route: "debug", label: "Debug Arena" },
+  { route: "capstone", label: "Capstone" },
+  { route: "badge", label: "Badge" },
+];
 
 function resolveRouteFromQuery(): AppRoute {
   const params = new URLSearchParams(window.location.search);
-  return params.get("view") === "dashboard" ? "dashboard" : "lesson";
+  const view = params.get("view");
+  if (view === "dashboard") return "dashboard";
+  if (view === "launch") return "launch";
+  if (view === "debug") return "debug";
+  if (view === "capstone") return "capstone";
+  if (view === "badge") return "badge";
+  if (view === "lesson") return "lesson";
+  // Default: if a lesson param exists, show lesson; otherwise launch
+  return params.has("lesson") ? "lesson" : "launch";
+}
+
+/** True for routes that show the status rail sidebar */
+function hasStatusRail(route: AppRoute): boolean {
+  return route !== "launch";
+}
+
+/** True for routes that use their own full-height grid layout */
+function isFullHeightScreen(route: AppRoute): boolean {
+  return route === "lesson" || route === "debug" || route === "capstone";
+}
+
+function getBreadcrumb(route: AppRoute, moduleId: number, title: string) {
+  switch (route) {
+    case "launch":
+      return { module: "START", label: "Launch" };
+    case "dashboard":
+      return { module: "TRACK", label: "Dashboard" };
+    case "badge":
+      return { module: "DONE", label: "Badge" };
+    default:
+      return { module: `M${moduleId}`, label: title };
+  }
+}
+
+function estimateTimeRemaining(completedCount: number): string {
+  const remaining = (7 - completedCount) * 30;
+  if (remaining <= 0) return "Completed";
+  const hours = Math.floor(remaining / 60);
+  const mins = remaining % 60;
+  return hours > 0 ? `~${hours}h ${mins}m` : `~${mins}m`;
 }
 
 function hasCompletionFlag(): boolean {
@@ -19,6 +79,7 @@ function hasCompletionFlag(): boolean {
 
 export function AppShell() {
   const { lesson } = useLessonLoader();
+  const { state: progress } = useProgress();
   const [isDesktopViewport, setIsDesktopViewport] = useState(
     () => window.innerWidth >= MIN_DESKTOP_WIDTH
   );
@@ -31,7 +92,6 @@ export function AppShell() {
     const onResize = () => {
       setIsDesktopViewport(window.innerWidth >= MIN_DESKTOP_WIDTH);
     };
-
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
@@ -49,11 +109,14 @@ export function AppShell() {
     if (nextRoute === route && lessonNumber === undefined) return;
 
     const url = new URL(window.location.href);
-    if (nextRoute === "dashboard") {
-      url.searchParams.set("view", "dashboard");
-    } else {
+    if (nextRoute === "launch") {
       url.searchParams.delete("view");
+      url.searchParams.delete("lesson");
       url.searchParams.delete("complete");
+    } else if (nextRoute === "lesson") {
+      url.searchParams.delete("view");
+    } else {
+      url.searchParams.set("view", nextRoute);
     }
 
     if (typeof lessonNumber === "number") {
@@ -67,7 +130,90 @@ export function AppShell() {
     }
   };
 
-  const isLessonRoute = route === "lesson";
+  const completedCount = getCompletedModuleCount(progress);
+  const nextModuleId = getNextUnlockedModule(progress) ?? 1;
+  const currentAttempts = getModuleAttempts(progress, nextModuleId);
+
+  const breadcrumb = getBreadcrumb(route, lesson.module.moduleId, lesson.title);
+  const showRail = hasStatusRail(route);
+
+  // ---------- render ----------
+
+  function renderScreen() {
+    switch (route) {
+      case "launch":
+        return (
+          <LaunchScreen
+            onStart={() => navigate("dashboard")}
+            onPreview={() => navigate("dashboard")}
+          />
+        );
+
+      case "dashboard":
+        return (
+          <DashboardScreen
+            progress={progress}
+            onOpenLesson={(lessonNum) => navigate("lesson", lessonNum)}
+            showCompletionToast={showCompletionToast}
+          />
+        );
+
+      case "debug":
+        return (
+          <DebugArenaScreen
+            lesson={lesson}
+            onRunTrace={() => {}}
+            onSubmitFix={() => {}}
+          />
+        );
+
+      case "capstone":
+        return (
+          <CapstoneScreen
+            lesson={lesson}
+            attempt={currentAttempts}
+            maxAttempts={lesson.gate.maxAttempts}
+            hintTier="Tier 0"
+            rubricResults={lesson.rubric.map((r) => ({
+              label: r.label,
+              passed: false,
+              score: 0,
+              maxScore: r.weight,
+            }))}
+            totalScore={0}
+            maxTotalScore={100}
+            threshold={lesson.gate.scoreThreshold ?? 85}
+            missingNote=""
+            onRunTests={() => {}}
+            onViewRubric={() => {}}
+            onSubmit={() => {}}
+          />
+        );
+
+      case "badge":
+        return (
+          <BadgeScreen
+            stats={{
+              finalScore: 86,
+              maxScore: 100,
+              modulesPassed: completedCount,
+              totalModules: 7,
+              finalHintsUsed: 0,
+              capstoneScore: 88,
+              capstoneMax: 100,
+              completionTime: "3h 12m",
+            }}
+            onDownload={() => {}}
+            onReviewSolutions={() => {}}
+            onPracticeMode={() => {}}
+          />
+        );
+
+      case "lesson":
+      default:
+        return <LessonPlayer />;
+    }
+  }
 
   return (
     <div className={styles.shell}>
@@ -78,63 +224,39 @@ export function AppShell() {
         </div>
         <span className={styles.divider} />
         <nav className={styles.nav}>
-          <button
-            className={`${styles.navTab} ${isLessonRoute ? styles.active : ""}`}
-            onClick={() => navigate("lesson")}
-            aria-current={isLessonRoute ? "page" : undefined}
-          >
-            Lesson
-          </button>
-          <button
-            className={`${styles.navTab} ${!isLessonRoute ? styles.active : ""}`}
-            onClick={() => navigate("dashboard")}
-            aria-current={!isLessonRoute ? "page" : undefined}
-          >
-            Dashboard
-          </button>
+          {NAV_TABS.map((tab) => (
+            <button
+              key={tab.route}
+              className={`${styles.navTab} ${route === tab.route ? styles.active : ""}`}
+              onClick={() => navigate(tab.route)}
+              aria-current={route === tab.route ? "page" : undefined}
+            >
+              {tab.label}
+            </button>
+          ))}
         </nav>
         <div className={styles.breadcrumb}>
-          <span className={styles.breadcrumbModule}>
-            {isLessonRoute ? `M${lesson.module.moduleId}` : "TRACK"}
-          </span>
+          <span className={styles.breadcrumbModule}>{breadcrumb.module}</span>
           <span className={styles.breadcrumbSep}>·</span>
-          <span className={styles.breadcrumbLesson}>
-            {isLessonRoute ? lesson.title : "Dashboard"}
-          </span>
+          <span className={styles.breadcrumbLesson}>{breadcrumb.label}</span>
         </div>
       </header>
       <main className={styles.main}>
         {isDesktopViewport ? (
-          isLessonRoute ? (
-            <LessonPlayer />
+          showRail && !isFullHeightScreen(route) ? (
+            <div className={styles.shellGrid}>
+              <StatusRail
+                currentModule={nextModuleId}
+                attempts={currentAttempts > 0 ? `${currentAttempts}/3` : "-"}
+                hintTier="Locked"
+                modulesPassed={completedCount}
+                totalModules={7}
+                timeRemaining={estimateTimeRemaining(completedCount)}
+              />
+              <div className={styles.routeContainer}>{renderScreen()}</div>
+            </div>
           ) : (
-            <section className={styles.dashboardRoute} aria-label="Track dashboard">
-              <h1 className={styles.dashboardTitle}>Track Dashboard</h1>
-              {showCompletionToast ? (
-                <p className={styles.dashboardComplete}>
-                  Final assessment complete. Track progression is now fully passed.
-                </p>
-              ) : null}
-              <p className={styles.dashboardBody}>
-                Pick a lesson to continue. Navigation is URL-backed for desktop workflow.
-              </p>
-              <ul className={styles.dashboardList}>
-                {lessons.map((item, index) => (
-                  <li key={item.exerciseId} className={styles.dashboardCard}>
-                    <div className={styles.dashboardMeta}>
-                      <span className={styles.dashboardModule}>M{item.module.moduleId}</span>
-                      <span className={styles.dashboardName}>{item.title}</span>
-                    </div>
-                    <button
-                      className={styles.dashboardOpen}
-                      onClick={() => navigate("lesson", index + 1)}
-                    >
-                      Open
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </section>
+            renderScreen()
           )
         ) : (
           <section

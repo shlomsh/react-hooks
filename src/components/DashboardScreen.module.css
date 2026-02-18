@@ -1,0 +1,319 @@
+/* ── Dashboard Screen ─────────────────────────────────────────────────── */
+
+.screen {
+  padding: 2rem 0 4rem;
+  max-width: 1320px;
+  margin: 0 auto;
+  animation: screenIn 0.6s var(--ease-out-expo) both;
+}
+
+@keyframes screenIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Header row */
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.headerTitle {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.headerSub {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 0.2rem;
+}
+
+.headerMeta {
+  text-align: right;
+}
+
+.headerTime {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.headerProgress {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  margin-top: 0.2rem;
+}
+
+/* Module track rail */
+.trackRail {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.trackNode {
+  position: relative;
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  background: var(--bg-panel);
+  border: 1px solid var(--border-dim);
+  transition: all 0.3s;
+  cursor: default;
+}
+
+.trackNode:hover {
+  border-color: var(--border-med);
+  background: var(--bg-surface);
+}
+
+.trackNodeNum {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.4rem;
+}
+
+.trackNodeTitle {
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+.trackNodeStatus {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Completed state */
+.completed {
+  border-color: rgba(118, 224, 0, 0.2);
+}
+
+.completed .trackNodeStatus {
+  color: var(--lime);
+}
+
+.completed::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--lime);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+/* Active state */
+.active {
+  border-color: rgba(0, 229, 255, 0.3);
+  background: var(--bg-surface);
+  cursor: pointer;
+}
+
+.active .trackNodeStatus {
+  color: var(--cyan);
+}
+
+.active::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--cyan);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  box-shadow: 0 0 12px var(--cyan-glow);
+}
+
+/* Locked state */
+.locked {
+  opacity: 0.45;
+}
+
+.locked .trackNodeStatus {
+  color: var(--text-dim);
+}
+
+/* Dashboard card grid */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-dim);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  overflow: hidden;
+}
+
+.cardTitle {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 1rem;
+}
+
+/* Continue card */
+.continueCard {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, var(--bg-panel), var(--bg-surface));
+  border: 1px solid rgba(0, 229, 255, 0.15);
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.continueCard:hover {
+  border-color: rgba(0, 229, 255, 0.3);
+}
+
+.continueTitle {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.continueDesc {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin-top: 0.3rem;
+}
+
+.continueDesc code {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--cyan);
+}
+
+.btnResume {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.3rem;
+  border-radius: var(--radius-md);
+  font-size: 0.82rem;
+  font-weight: 600;
+  background: var(--cyan);
+  color: var(--bg-abyss);
+  box-shadow: 0 2px 12px rgba(0, 229, 255, 0.2);
+  transition: all 0.25s var(--ease-out-expo);
+  cursor: pointer;
+  border: none;
+  font-family: var(--font-body);
+  flex-shrink: 0;
+}
+
+.btnResume:hover {
+  box-shadow: 0 0 20px var(--cyan-glow);
+  transform: translateY(-1px);
+}
+
+/* Pitfalls list */
+.pitfallList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0;
+  margin: 0;
+}
+
+.pitfallItem {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  font-size: 0.78rem;
+}
+
+.pitfallDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--amber);
+  flex-shrink: 0;
+}
+
+/* Retry meter */
+.retryLabel {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+
+.retryBarTrack {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--bg-raised);
+  overflow: hidden;
+  margin-top: 0.4rem;
+}
+
+.retryBarFill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--cyan), var(--lime));
+  transition: width 0.6s var(--ease-out-expo);
+}
+
+/* Badge pills */
+.badges {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-top: 0.8rem;
+}
+
+.badgePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 99px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.badgeLime {
+  background: var(--lime-dim);
+  color: var(--lime);
+  border: 1px solid rgba(118, 224, 0, 0.2);
+}
+
+.badgeCyan {
+  background: var(--cyan-dim);
+  color: var(--cyan);
+  border: 1px solid rgba(0, 229, 255, 0.2);
+}
+
+.badgeDim {
+  background: var(--bg-raised);
+  color: var(--text-dim);
+  border: 1px solid var(--border-dim);
+}
