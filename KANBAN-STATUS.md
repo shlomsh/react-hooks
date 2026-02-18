@@ -83,8 +83,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Run/reset flow",
     "owner": "Eng B",
     "priority": "P2",
-    "status": "backlog",
-    "notes": "",
+    "status": "in_progress",
+    "notes": "Active 2026-02-18. Run flow wired through sandbox status (idle/running/success/error/timeout) and Reset action restores lesson files + clears output state from LessonPlayer.",
     "order": 9
   },
   {
@@ -92,8 +92,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Lesson schema loader",
     "owner": "Eng B",
     "priority": "P1",
-    "status": "backlog",
-    "notes": "",
+    "status": "in_progress",
+    "notes": "Active 2026-02-18. Added useLessonLoader to map ST-038 schema (module1) into editor files and drive ConceptPanel/ControlBar content from lesson contract. Next: multi-module source selection + progression wiring.",
     "order": 10
   },
   {
@@ -164,8 +164,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Retry policy",
     "owner": "Eng C",
     "priority": "P1",
-    "status": "in_progress",
-    "notes": "Claimed 2026-02-18. Soft-block UI + useRetryPolicy hook consuming GateContext. Stub-based, no sandbox dep. Unblocked by ST-014 + ST-016.",
+    "status": "done",
+    "notes": "Completed 2026-02-18. useRetryPolicy hook: canSubmit, isSoftBlocked, softBlockMessage, attemptLabel, attemptsUsed, attemptsRemaining, isPassed. 30 tests (116 total). Branch: st-015-retry-policy.",
     "order": 16
   },
   {
@@ -182,8 +182,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Progress local persistence",
     "owner": "Eng C",
     "priority": "P2",
-    "status": "backlog",
-    "notes": "",
+    "status": "in_progress",
+    "notes": "Claimed 2026-02-18. useProgressPersistence hook: save/load lesson progress to localStorage.",
     "order": 18
   },
   {
@@ -191,8 +191,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Completion ledger",
     "owner": "Eng C",
     "priority": "P2",
-    "status": "backlog",
-    "notes": "",
+    "status": "in_progress",
+    "notes": "Claimed 2026-02-18. useCompletionLedger hook: track completed modules/lessons, derives badge eligibility.",
     "order": 19
   },
   {
@@ -200,8 +200,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Proficiency validator",
     "owner": "Eng C",
     "priority": "P1",
-    "status": "backlog",
-    "notes": "",
+    "status": "in_progress",
+    "notes": "Claimed 2026-02-18. Pure scoring fn + useProficiencyValidator hook. Stub-based, no sandbox dep.",
     "order": 20
   },
   {

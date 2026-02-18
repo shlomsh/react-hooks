@@ -7,9 +7,11 @@ import { CodeEditor } from "./editor/CodeEditor";
 import { PreviewPanel } from "./editor/PreviewPanel";
 import { useEditorState } from "../hooks/useEditorState";
 import { useSandbox } from "../hooks/useSandbox";
+import { useLessonLoader } from "../hooks/useLessonLoader";
 import styles from "./LessonPlayer.module.css";
 
 export function LessonPlayer() {
+  const { lesson, files: lessonFiles } = useLessonLoader();
   const {
     files,
     activeIndex,
@@ -18,7 +20,8 @@ export function LessonPlayer() {
     setActiveFile,
     updateContent,
     setHasErrors,
-  } = useEditorState();
+    resetFiles,
+  } = useEditorState(lessonFiles);
   const sandbox = useSandbox();
 
   const handleContentChange = useCallback(
@@ -32,9 +35,14 @@ export function LessonPlayer() {
     void sandbox.run(activeFile.content, activeFile.filename);
   }, [activeFile.content, activeFile.filename, sandbox]);
 
+  const handleReset = useCallback(() => {
+    resetFiles(lessonFiles);
+    sandbox.reset();
+  }, [lessonFiles, resetFiles, sandbox]);
+
   return (
     <div className={styles.player}>
-      <ConceptPanel />
+      <ConceptPanel lesson={lesson} />
 
       <div className={styles.editorArea}>
         <EditorTabs
@@ -57,7 +65,13 @@ export function LessonPlayer() {
       <VisualizerPanel />
 
       <div className={styles.controlBar}>
-        <ControlBar hasErrors={hasErrors} onRun={handleRun} />
+        <ControlBar
+          hasErrors={hasErrors}
+          runStatus={sandbox.state.status}
+          checkLabels={lesson.checks.map((check) => check.failMessage)}
+          onRun={handleRun}
+          onReset={handleReset}
+        />
       </div>
     </div>
   );

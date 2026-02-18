@@ -76,4 +76,20 @@ describe("ST-005: useEditorState", () => {
       expect(file.content.length).toBeGreaterThan(0);
     }
   });
+
+  it("resets files back to starter snapshot", () => {
+    const { result } = renderHook(() => useEditorState());
+    const original = result.current.files[0].content;
+
+    act(() => {
+      result.current.updateContent(0, "// changed");
+    });
+    expect(result.current.files[0].content).toBe("// changed");
+
+    act(() => {
+      result.current.resetFiles();
+    });
+    expect(result.current.files[0].content).toBe(original);
+    expect(result.current.activeIndex).toBe(0);
+  });
 });

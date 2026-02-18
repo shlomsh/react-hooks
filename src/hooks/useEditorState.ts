@@ -15,7 +15,8 @@ interface EditorState {
 type EditorAction =
   | { type: "SET_ACTIVE"; index: number }
   | { type: "UPDATE_CONTENT"; index: number; content: string }
-  | { type: "SET_HAS_ERRORS"; hasErrors: boolean };
+  | { type: "SET_HAS_ERRORS"; hasErrors: boolean }
+  | { type: "RESET_FILES"; files: EditorFile[] };
 
 const STARTER_FILES: EditorFile[] = [
   {
@@ -146,14 +147,21 @@ function editorReducer(state: EditorState, action: EditorAction): EditorState {
       };
     case "SET_HAS_ERRORS":
       return { ...state, hasErrors: action.hasErrors };
+    case "RESET_FILES":
+      return {
+        files: action.files,
+        activeIndex: 0,
+        hasErrors: false,
+      };
     default:
       return state;
   }
 }
 
-export function useEditorState() {
+export function useEditorState(initialFiles?: EditorFile[]) {
+  const starterFiles = initialFiles && initialFiles.length > 0 ? initialFiles : STARTER_FILES;
   const [state, dispatch] = useReducer(editorReducer, {
-    files: STARTER_FILES,
+    files: starterFiles,
     activeIndex: 0,
     hasErrors: false,
   });
@@ -170,6 +178,13 @@ export function useEditorState() {
     dispatch({ type: "SET_HAS_ERRORS", hasErrors });
   }, []);
 
+  const resetFiles = useCallback(
+    (files?: EditorFile[]) => {
+      dispatch({ type: "RESET_FILES", files: files ?? starterFiles });
+    },
+    [starterFiles]
+  );
+
   return {
     files: state.files,
     activeIndex: state.activeIndex,
@@ -178,5 +193,6 @@ export function useEditorState() {
     setActiveFile,
     updateContent,
     setHasErrors,
+    resetFiles,
   };
 }
