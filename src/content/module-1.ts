@@ -21,50 +21,54 @@ export const module1: Lesson = {
     unlocksModule: 2,
   },
 
-  title: "Your First useState Win",
+  title: "Fix the Counter Bug",
   description:
-    "Fix one intentional bug in the counter: the Increment button currently adds 2. Change it to add 1, then Run and Submit Gate.",
+    "The Increment button is buggy: it adds 2. Your mission is to change it to +1, verify with Run, then submit the gate.",
   constraints: [
-    "Use exactly one useState for count",
-    "Keep count as a number",
-    "Increment button must add exactly 1",
+    "Edit only the Increment handler line",
+    "Keep Decrement and Reset behavior unchanged",
+    "Pass Run validation before Submit Gate",
   ],
 
   conceptPanel: {
-    title: "useState in 60 seconds",
+    title: "Bug-Fix Mission",
     content: `
-### What you are learning
+### Mission
 
-\`useState\` stores a value for your component.
-When you call its setter, React re-renders with the new value.
+Find and fix one bug in the counter:
+the Increment button currently uses \`c + 2\` but should use \`c + 1\`.
 
-### Counter mental model
+### Learning outcome
 
-1. \`count\` is the current value.
-2. \`setCount\` schedules the next value.
-3. Clicking a button triggers \`setCount\`.
+You will practice the core \`useState\` update pattern:
+\`setCount((c) => c + 1)\`
 
-This lesson is intentionally small so you can get a quick first win.
+### Done criteria
+
+1. Increment uses \`+1\`.
+2. Decrement still uses \`-1\`.
+3. Reset still sets count to \`0\`.
     `.trim(),
     keyPoints: [
-      "State lives in the component via useState",
-      "Setter functions trigger re-render",
-      "Small edits and fast feedback build confidence",
+      "Read the TODO comment to locate the bug quickly",
+      "Use updater form: setCount((c) => ...)",
+      "Fix one thing at a time, then run",
     ],
     commonFailures: [
-      "Forgetting to call setCount in the click handler",
-      "Using a string for count instead of a number",
-      "Updating the wrong variable in the handler",
+      "Editing Decrement or Reset by mistake instead of Increment",
+      "Changing +2 to another wrong value",
+      "Skipping Run and trying Submit Gate immediately",
     ],
   },
 
   guidance: {
     firstStepPrompt:
       "Step 1: in CounterIntro.tsx, change Increment from c + 2 to c + 1.",
-    runStepPrompt: "Step 2: click Run to validate your change.",
-    retryPrompt: "Almost there. Fix the failed check, then submit gate again.",
+    runStepPrompt: "Step 2: click Run. It validates both the bug fix and unchanged buttons.",
+    retryPrompt:
+      "Not passed yet. Compare Increment/Decrement/Reset handlers with the mission criteria, then run again.",
     successPrompt:
-      "Nice work - your first gate passed. You are ready for the next challenge.",
+      "Great work - you fixed the bug and preserved the rest of the component.",
   },
 
   files: [
@@ -114,9 +118,9 @@ export default function App() {
     {
       id: "increment-handler",
       type: "behavioral",
-      weight: 1,
+      weight: 0.7,
       stimulus: "Click Increment once",
-      expectedOutcome: "Count increases by 1",
+      expectedOutcome: "Count increases by exactly 1",
       testCode: `
         const source = files["CounterIntro.tsx"];
         if (!/setCount\\s*\\(\\s*\\(c\\)\\s*=>\\s*c\\s*\\+\\s*1\\s*\\)/.test(source)) {
@@ -126,29 +130,45 @@ export default function App() {
       failMessage: "Step 2: make Increment add 1.",
       successMessage: "Increment logic looks correct.",
     },
+    {
+      id: "preserve-other-buttons",
+      type: "functional",
+      weight: 0.3,
+      testCode: `
+        const source = files["CounterIntro.tsx"];
+        if (!/setCount\\s*\\(\\s*\\(c\\)\\s*=>\\s*c\\s*-\\s*1\\s*\\)/.test(source)) {
+          throw new Error("Decrement behavior should stay as c - 1");
+        }
+        if (!/setCount\\s*\\(\\s*0\\s*\\)/.test(source)) {
+          throw new Error("Reset behavior should stay setCount(0)");
+        }
+      `,
+      failMessage: "Keep Decrement and Reset unchanged.",
+      successMessage: "Decrement and Reset still behave correctly.",
+    },
   ],
 
   hintLadder: [
     {
       tier: 1,
       unlocksAfterFails: 1,
-      text: "Look for `const [count, setCount] = useState(0)` at the top of the component.",
+      text: "Only one line is wrong: the Increment button handler still uses +2.",
     },
     {
       tier: 2,
       unlocksAfterFails: 2,
-      text: "Inside Increment button, call setCount with previous value + 1.",
+      text: "Set Increment to: setCount((c) => c + 1). Leave the other two buttons unchanged.",
       focusArea: "Increment click handler",
       codeSnippet: `onClick={() => setCount((c) => c + 1)}`,
     },
     {
       tier: 3,
       unlocksAfterFails: 3,
-      text: "Copy this baseline counter pattern, then tweak one line at a time.",
+      text: "Use this exact handler set to pass the lesson checks.",
       steps: [
-        "Keep count state: useState(0)",
         "Increment: setCount((c) => c + 1)",
-        "Run after each small edit",
+        "Decrement: setCount((c) => c - 1)",
+        "Reset: setCount(0)",
       ],
       pseudoCode: `const [count, setCount] = useState(0);
 <button onClick={() => setCount((c) => c + 1)}>Increment</button>`,
@@ -164,8 +184,8 @@ export default function App() {
     },
     {
       id: "design",
-      label: "Simplicity",
-      description: "Solution stays small and clear for beginners",
+      label: "Task Focus",
+      description: "Only the intended bug was changed",
       weight: 0.3,
     },
     {
