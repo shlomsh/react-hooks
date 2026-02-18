@@ -75,7 +75,7 @@ This file is the source of truth for the daily kanban board.
     "owner": "Eng B",
     "priority": "P1",
     "status": "done",
-    "notes": "Completed 2026-02-18. useSandbox hook (Function-constructor executor, console capture), PreviewPanel + ConsoleOutput wired to sandbox state, safety limits: 200-event cap + truncated flag + 5s timeout + static preflight for infinite loops and module syntax. 5 tests (98 unit total), build clean. Unblocks ST-007, ST-013.",
+    "notes": "Completed 2026-02-18. useSandbox executor now transpiles TS/TSX to CJS, resolves local relative imports, provides react/jsx-runtime stubs for execution, captures console output, and enforces 5s timeout + 200-event cap. Wired to PreviewPanel run status/output. Unblocks ST-007 and ST-013 contract wiring.",
     "order": 8
   },
   {
@@ -83,8 +83,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Run/reset flow",
     "owner": "Eng B",
     "priority": "P2",
-    "status": "in_progress",
-    "notes": "Active 2026-02-18. Run flow wired through sandbox status (idle/running/success/error/timeout) and Reset action restores lesson files + clears output state from LessonPlayer.",
+    "status": "done",
+    "notes": "Completed 2026-02-18. Run action executes active editor file through sandbox runtime, button reflects running state, and Reset restores lesson starter files while clearing runtime output/status.",
     "order": 9
   },
   {
@@ -92,8 +92,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Lesson schema loader",
     "owner": "Eng B",
     "priority": "P1",
-    "status": "in_progress",
-    "notes": "Active 2026-02-18. Added useLessonLoader to map ST-038 schema (module1) into editor files and drive ConceptPanel/ControlBar content from lesson contract. Next: multi-module source selection + progression wiring.",
+    "status": "done",
+    "notes": "Completed 2026-02-18. Added useLessonLoader to map ST-038 lesson schema into editor files and bind ConceptPanel/ControlBar content from lesson contract for Module 1 demo path.",
     "order": 10
   },
   {

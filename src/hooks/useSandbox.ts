@@ -1,4 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from "react";
+import ts from "typescript";
+import type { EditorFile } from "./useEditorState";
 
 export type SandboxStatus = "idle" | "running" | "success" | "error" | "timeout";
 
@@ -36,15 +38,109 @@ function looksNonRunnableInFunction(code: string): string | null {
     return "Blocked potential infinite loop before execution.";
   }
 
-  if (/(^|\n)\s*import\s.+from\s/m.test(code) || /(^|\n)\s*export\s/m.test(code)) {
-    return "Module syntax detected. Runtime executor currently supports function-body JavaScript only.";
-  }
-
-  if (/\binterface\s+\w+/.test(code) || /:\s*[A-Za-z_][A-Za-z0-9_<>,\[\]\s|]*/.test(code)) {
-    return "TypeScript syntax detected. Runtime executor currently supports plain JavaScript only.";
-  }
-
   return null;
+}
+
+function resolveRelativeImport(fromFile: string, request: string): string {
+  const fromParts = fromFile.split("/").slice(0, -1);
+  const reqParts = request.split("/");
+  const combined = [...fromParts];
+
+  for (const part of reqParts) {
+    if (!part || part === ".") continue;
+    if (part === "..") {
+      combined.pop();
+      continue;
+    }
+    combined.push(part);
+  }
+
+  return combined.join("/");
+}
+
+function fileCandidates(path: string): string[] {
+  return [path, `${path}.ts`, `${path}.tsx`, `${path}.js`, `${path}.jsx`];
+}
+
+function buildSourceIndex(entryFile: string, entryCode: string, files?: EditorFile[]): Record<string, string> {
+  if (!files || files.length === 0) {
+    return { [entryFile]: entryCode };
+  }
+
+  const index: Record<string, string> = {};
+  for (const file of files) {
+    index[file.filename] = file.content;
+  }
+  if (!index[entryFile]) {
+    index[entryFile] = entryCode;
+  }
+  return index;
+}
+
+function createReactMocks() {
+  const stateSlots: unknown[] = [];
+  let hookCursor = 0;
+
+  function resetHooks() {
+    hookCursor = 0;
+  }
+
+  const reactMock = {
+    useState<T>(initial: T | (() => T)) {
+      const slot = hookCursor++;
+      if (!(slot in stateSlots)) {
+        stateSlots[slot] = typeof initial === "function" ? (initial as () => T)() : initial;
+      }
+      const setState = (next: T | ((prev: T) => T)) => {
+        const prev = stateSlots[slot] as T;
+        stateSlots[slot] = typeof next === "function" ? (next as (prev: T) => T)(prev) : next;
+      };
+      return [stateSlots[slot] as T, setState] as const;
+    },
+    useEffect(effect: () => void | (() => void)) {
+      effect();
+    },
+    useCallback<T extends (...args: never[]) => unknown>(fn: T) {
+      return fn;
+    },
+    useMemo<T>(factory: () => T) {
+      return factory();
+    },
+    useRef<T>(initial: T) {
+      return { current: initial };
+    },
+    createContext<T>(defaultValue: T) {
+      return {
+        _value: defaultValue,
+        Provider: () => null,
+      };
+    },
+    useContext<T>(ctx: { _value: T }) {
+      return ctx._value;
+    },
+  };
+
+  const jsxRuntime = {
+    Fragment: Symbol("Fragment"),
+    jsx: (type: unknown, props: unknown, key?: unknown) => ({ type, props, key }),
+    jsxs: (type: unknown, props: unknown, key?: unknown) => ({ type, props, key }),
+  };
+
+  return { reactMock, jsxRuntime, resetHooks };
+}
+
+function transpileSource(source: string, fileName: string) {
+  return ts.transpileModule(source, {
+    compilerOptions: {
+      target: ts.ScriptTarget.ES2020,
+      module: ts.ModuleKind.CommonJS,
+      jsx: ts.JsxEmit.ReactJSX,
+      esModuleInterop: true,
+      allowSyntheticDefaultImports: true,
+      isolatedModules: true,
+    },
+    fileName,
+  });
 }
 
 export function useSandbox() {
@@ -84,7 +180,7 @@ export function useSandbox() {
   }, []);
 
   const run = useCallback(
-    async (code: string, fileName: string) => {
+    async (code: string, fileName: string, files?: EditorFile[]) => {
       const runId = runIdRef.current + 1;
       runIdRef.current = runId;
 
@@ -130,10 +226,54 @@ export function useSandbox() {
       console.error = (...args: unknown[]) => appendEvent(runId, "error", args);
 
       try {
-        await Promise.resolve().then(() => {
+        const sourceIndex = buildSourceIndex(fileName, code, files);
+        const moduleCache = new Map<string, unknown>();
+        const { reactMock, jsxRuntime, resetHooks } = createReactMocks();
+
+        const evaluateModule = (requestedFile: string): unknown => {
+          if (moduleCache.has(requestedFile)) return moduleCache.get(requestedFile);
+
+          const source = sourceIndex[requestedFile];
+          if (!source) {
+            throw new Error(`Missing module source: ${requestedFile}`);
+          }
+
+          const transpiled = transpileSource(source, requestedFile);
+          const module = { exports: {} as Record<string, unknown> };
+          moduleCache.set(requestedFile, module.exports);
+
+          const localRequire = (specifier: string): unknown => {
+            if (specifier === "react") return reactMock;
+            if (specifier === "react/jsx-runtime") return jsxRuntime;
+            if (!specifier.startsWith(".")) {
+              throw new Error(`Unsupported import: ${specifier}`);
+            }
+
+            const resolvedBase = resolveRelativeImport(requestedFile, specifier);
+            const candidate = fileCandidates(resolvedBase).find((name) => sourceIndex[name] !== undefined);
+            if (!candidate) {
+              throw new Error(`Cannot resolve import '${specifier}' from ${requestedFile}`);
+            }
+            return evaluateModule(candidate);
+          };
+
           // eslint-disable-next-line no-new-func
-          const fn = new Function(code);
-          return fn();
+          const runner = new Function("require", "module", "exports", transpiled.outputText);
+          runner(localRequire, module, module.exports);
+          return module.exports;
+        };
+
+        await Promise.resolve().then(() => {
+          const loaded = evaluateModule(fileName);
+          const maybeDefault =
+            loaded && typeof loaded === "object" && "default" in loaded
+              ? (loaded as { default: unknown }).default
+              : undefined;
+
+          if (typeof maybeDefault === "function") {
+            resetHooks();
+            (maybeDefault as () => unknown)();
+          }
         });
 
         if (!timedOut && runIdRef.current === runId) {

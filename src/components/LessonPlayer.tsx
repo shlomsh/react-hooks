@@ -32,8 +32,8 @@ export function LessonPlayer() {
   );
 
   const handleRun = useCallback(() => {
-    void sandbox.run(activeFile.content, activeFile.filename);
-  }, [activeFile.content, activeFile.filename, sandbox]);
+    void sandbox.run(activeFile.content, activeFile.filename, files);
+  }, [activeFile.content, activeFile.filename, files, sandbox]);
 
   const handleReset = useCallback(() => {
     resetFiles(lessonFiles);

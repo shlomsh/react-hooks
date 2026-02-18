@@ -33,15 +33,34 @@ describe("useSandbox", () => {
     expect(result.current.state.truncated).toBe(true);
   });
 
-  it("fails fast on unsupported module syntax", async () => {
+  it("executes transpiled TS module syntax", async () => {
     const { result } = renderHook(() => useSandbox());
 
     await act(async () => {
-      await result.current.run('import x from "y";\nconsole.log(x);', "module.ts");
+      await result.current.run(
+        'import { useEffect } from "react"; export default function Demo(){ console.log("render"); useEffect(()=>{ console.log("effect"); }); return <div />; }',
+        "module.tsx"
+      );
     });
 
-    expect(result.current.state.status).toBe("error");
-    expect(result.current.state.errorMessage).toContain("Module syntax");
+    expect(result.current.state.status).toBe("success");
+    expect(result.current.state.events.some((event) => event.message.includes("render"))).toBe(true);
+    expect(result.current.state.events.some((event) => event.message.includes("effect"))).toBe(true);
+  });
+
+  it("resolves relative imports from provided file map", async () => {
+    const { result } = renderHook(() => useSandbox());
+    const files = [
+      { filename: "App.ts", language: "typescript", content: 'import { value } from "./dep"; console.log("v", value);' },
+      { filename: "dep.ts", language: "typescript", content: "export const value = 7;" },
+    ];
+
+    await act(async () => {
+      await result.current.run(files[0].content, "App.ts", files);
+    });
+
+    expect(result.current.state.status).toBe("success");
+    expect(result.current.state.events[0]?.message).toContain("v 7");
   });
 
   it("times out on obvious infinite loop patterns", async () => {
