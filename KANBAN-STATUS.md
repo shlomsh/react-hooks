@@ -352,27 +352,27 @@ This file is the source of truth for the daily kanban board.
     "id": "ST-039",
     "title": "Playwright baseline setup",
     "owner": "Shared",
-    "priority": "P1",
-    "status": "in_progress",
-    "notes": "Picked up 2026-02-18 for tomorrow continuation. Plan: install @playwright/test, add playwright.config.ts, and scripts for local/CI runs without replacing existing Vitest test:e2e gate.",
+    "priority": "P3",
+    "status": "backlog",
+    "notes": "Deferred to post-Demo 1 focus shift. Keep current Vitest gates; resume Playwright baseline after ST-006/ST-007/ST-008 demo path is delivered.",
     "order": 37
   },
   {
     "id": "ST-040",
     "title": "Browser smoke flow spec",
     "owner": "Shared",
-    "priority": "P1",
+    "priority": "P3",
     "status": "backlog",
-    "notes": "Tomorrow: add first Playwright smoke spec for desktop gate + core lesson shell render and wire stable selectors.",
+    "notes": "Deferred to post-Demo 1. Target after runtime + run flow are demo-ready.",
     "order": 38
   },
   {
     "id": "ST-041",
     "title": "CI Playwright job",
     "owner": "Shared",
-    "priority": "P1",
+    "priority": "P3",
     "status": "backlog",
-    "notes": "Tomorrow: add GitHub Actions browser E2E job (playwright install + run) and keep current unit/e2e vitest gate intact.",
+    "notes": "Deferred to post-Demo 1. CI browser E2E will be added after core demo path ships.",
     "order": 39
   }
 ]
