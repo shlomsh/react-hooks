@@ -72,7 +72,7 @@ describe("ST-005: useEditorState", () => {
 
     for (const file of result.current.files) {
       expect(file.filename).toBeTruthy();
-      expect(file.language).toBe("typescript");
+      expect(["typescript", "typescriptreact"]).toContain(file.language);
       expect(file.content.length).toBeGreaterThan(0);
     }
   });

@@ -2,7 +2,7 @@ import { useCallback, useReducer } from "react";
 
 export interface EditorFile {
   filename: string;
-  language: string;
+  language: "typescript" | "typescriptreact";
   content: string;
 }
 
@@ -81,7 +81,7 @@ export function usePaginatedQuery<T>(
   },
   {
     filename: "App.tsx",
-    language: "typescript",
+    language: "typescriptreact",
     content: `import { useState } from "react";
 import { usePaginatedQuery } from "./usePaginatedQuery";
 

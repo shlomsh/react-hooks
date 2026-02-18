@@ -13,7 +13,7 @@ function mapLessonFilesToEditorFiles(lesson: Lesson): EditorFile[] {
     .filter((file) => !file.hidden)
     .map((file) => ({
       filename: file.fileName,
-      language: file.language === "typescriptreact" ? "typescript" : file.language,
+      language: file.language,
       content: file.starterCode,
     }));
 }
