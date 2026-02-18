@@ -45,10 +45,10 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-037",
     "title": "Context provider scaffolding",
-    "owner": "Shared",
+    "owner": "Claude",
     "priority": "P1",
-    "status": "backlog",
-    "notes": "Progress, gate/assessment, editor, visualizer providers",
+    "status": "done",
+    "notes": "Completed 2026-02-19. ProgressContext (wraps useProgress + localStorage), EditorContext (wraps useEditorState), VisualizerContext (event buffer, MAX=200, useReducer), GateProvider (existing ST-014). AppShellProviders composes all 4 in correct nesting order. Wired into main.tsx. 37 new tests (providers + integration), 259 unit + 2 e2e passing. Branch: codex/st-037-context-providers.",
     "order": 5
   },
   {
