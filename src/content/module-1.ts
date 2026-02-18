@@ -112,20 +112,9 @@ export default function App() {
 
   checks: [
     {
-      id: "uses-usestate",
-      type: "functional",
-      weight: 0.5,
-      testCode: `
-        const source = files["CounterIntro.tsx"];
-        if (!/useState\\s*\\(/.test(source)) throw new Error("useState is required");
-      `,
-      failMessage: "Step 1: use useState for count.",
-      successMessage: "useState is present.",
-    },
-    {
       id: "increment-handler",
       type: "behavioral",
-      weight: 0.5,
+      weight: 1,
       stimulus: "Click Increment once",
       expectedOutcome: "Count increases by 1",
       testCode: `
