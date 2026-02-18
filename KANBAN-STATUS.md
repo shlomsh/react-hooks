@@ -9,7 +9,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-001",
     "title": "App shell layout",
-    "owner": "Eng A",
+    "owner": "Shared",
     "priority": "P1",
     "status": "done",
     "notes": "QA pass complete: persistent header, route container, and status rail behavior verified.",
@@ -18,7 +18,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-002",
     "title": "Theme tokens + primitives",
-    "owner": "Eng A",
+    "owner": "Shared",
     "priority": "P1",
     "status": "backlog",
     "notes": "Queued next after CI/testing guardrails are in place.",
@@ -27,7 +27,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-003",
     "title": "Desktop navigation model",
-    "owner": "Eng A",
+    "owner": "Shared",
     "priority": "P1",
     "status": "backlog",
     "notes": "Desktop-only (mobile deferred to v2)",
@@ -36,7 +36,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-004",
     "title": "Accessibility baseline",
-    "owner": "Eng A",
+    "owner": "Shared",
     "priority": "P2",
     "status": "in_progress",
     "notes": "Implementing show-stopper test gates: unit + e2e in CI, pre-commit test pass requirement, and TDD enforcement.",
@@ -45,7 +45,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-037",
     "title": "Context provider scaffolding",
-    "owner": "Eng A",
+    "owner": "Shared",
     "priority": "P1",
     "status": "backlog",
     "notes": "Progress, gate/assessment, editor, visualizer providers",
@@ -54,7 +54,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-038",
     "title": "Lesson/exercise schema contract",
-    "owner": "Eng B",
+    "owner": "Shared",
     "priority": "P0",
     "status": "done",
     "notes": "Completed 2026-02-18. Types in src/types/lesson-schema.ts. Sample Module 1 content in src/content/module-1.ts validates the schema. Unblocks ST-008, ST-013, ST-022–ST-028. Ready for Eng C review.",
@@ -63,7 +63,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-005",
     "title": "Monaco editor integration",
-    "owner": "Eng B",
+    "owner": "Shared",
     "priority": "P1",
     "status": "done",
     "notes": "Completed 2026-02-17. Monaco w/ blueprint-lab theme, TS compiler options, React type stubs, multi-file tabs, diagnostics-driven Run button. Includes minimal ST-001 app shell (header + 3-panel layout).",
@@ -72,7 +72,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-006",
     "title": "Sandbox runtime executor",
-    "owner": "Eng B",
+    "owner": "Shared",
     "priority": "P1",
     "status": "done",
     "notes": "Completed 2026-02-18. useSandbox executor now transpiles TS/TSX to CJS, resolves local relative imports, provides react/jsx-runtime stubs for execution, captures console output, and enforces 5s timeout + 200-event cap. Wired to PreviewPanel run status/output. Unblocks ST-007 and ST-013 contract wiring.",
@@ -81,7 +81,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-007",
     "title": "Run/reset flow",
-    "owner": "Eng B",
+    "owner": "Shared",
     "priority": "P2",
     "status": "done",
     "notes": "Completed 2026-02-18. Run action executes active editor file through sandbox runtime, button reflects running state, and Reset restores lesson starter files while clearing runtime output/status.",
@@ -90,7 +90,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-008",
     "title": "Lesson schema loader",
-    "owner": "Eng B",
+    "owner": "Shared",
     "priority": "P1",
     "status": "done",
     "notes": "Completed 2026-02-18. Added useLessonLoader to map ST-038 lesson schema into editor files and bind ConceptPanel/ControlBar content from lesson contract for Module 1 demo path.",
@@ -99,7 +99,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-009",
     "title": "Render timeline component",
-    "owner": "Eng D",
+    "owner": "Shared",
     "priority": "P1",
     "status": "backlog",
     "notes": "",
@@ -108,7 +108,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-010",
     "title": "Dependency diff inspector",
-    "owner": "Eng D",
+    "owner": "Shared",
     "priority": "P1",
     "status": "backlog",
     "notes": "",
@@ -117,7 +117,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-011",
     "title": "Hook call-order tracker",
-    "owner": "Eng D",
+    "owner": "Shared",
     "priority": "P2",
     "status": "backlog",
     "notes": "",
@@ -126,7 +126,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-012",
     "title": "Visualizer adapter API",
-    "owner": "Eng D",
+    "owner": "Shared",
     "priority": "P1",
     "status": "backlog",
     "notes": "",
@@ -135,7 +135,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-014",
     "title": "Gate state machine",
-    "owner": "Eng C",
+    "owner": "Shared",
     "priority": "P1",
     "status": "done",
     "notes": "Completed 2026-02-18. Pure reducer (idle/attempting/passed/failed/soft-blocked) + GateContext provider + useGate hook. 34 tests passing. Branch: st-014-gate-state-machine. Unblocks ST-016, ST-015.",
@@ -144,7 +144,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-016",
     "title": "Hint ladder unlock",
-    "owner": "Eng C",
+    "owner": "Shared",
     "priority": "P1",
     "status": "done",
     "notes": "Completed 2026-02-18. Pure fns (getUnlockedHints, getHighestUnlockedTier, isHintTierUnlocked) + useHintLadder hook consuming GateContext. 32 tests passing (82 total). Branch: st-016-hint-ladder. Unblocks ST-015.",
@@ -153,7 +153,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-013",
     "title": "Check runner contract",
-    "owner": "Eng C",
+    "owner": "Shared",
     "priority": "P1",
     "status": "backlog",
     "notes": "Depends on ST-006 + ST-038. Week 2.",
@@ -162,7 +162,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-015",
     "title": "Retry policy",
-    "owner": "Eng C",
+    "owner": "Shared",
     "priority": "P1",
     "status": "done",
     "notes": "Completed 2026-02-18. useRetryPolicy hook: canSubmit, isSoftBlocked, softBlockMessage, attemptLabel, attemptsUsed, attemptsRemaining, isPassed. 30 tests (116 total). Branch: st-015-retry-policy.",
@@ -171,7 +171,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-017",
     "title": "Multiple valid solutions rules",
-    "owner": "Eng C",
+    "owner": "Shared",
     "priority": "P2",
     "status": "backlog",
     "notes": "",
@@ -180,7 +180,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-018",
     "title": "Progress local persistence",
-    "owner": "Eng C",
+    "owner": "Shared",
     "priority": "P2",
     "status": "in_progress",
     "notes": "Claimed 2026-02-18. useProgressPersistence hook: save/load lesson progress to localStorage.",
@@ -189,7 +189,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-019",
     "title": "Completion ledger",
-    "owner": "Eng C",
+    "owner": "Shared",
     "priority": "P2",
     "status": "in_progress",
     "notes": "Claimed 2026-02-18. useCompletionLedger hook: track completed modules/lessons, derives badge eligibility.",
@@ -198,7 +198,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-020",
     "title": "Proficiency validator",
-    "owner": "Eng C",
+    "owner": "Shared",
     "priority": "P1",
     "status": "in_progress",
     "notes": "Claimed 2026-02-18. Pure scoring fn + useProficiencyValidator hook. Stub-based, no sandbox dep.",
@@ -207,7 +207,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-021",
     "title": "Badge issuance UI",
-    "owner": "Eng C/A",
+    "owner": "Shared",
     "priority": "P2",
     "status": "backlog",
     "notes": "",
@@ -216,7 +216,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-022",
     "title": "Module 1 content + gate",
-    "owner": "Eng B",
+    "owner": "Shared",
     "priority": "P2",
     "status": "backlog",
     "notes": "",
@@ -225,7 +225,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-023",
     "title": "Module 2 content + gate",
-    "owner": "Eng B",
+    "owner": "Shared",
     "priority": "P2",
     "status": "backlog",
     "notes": "",
@@ -234,7 +234,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-024",
     "title": "Module 3 content + gate",
-    "owner": "Eng B",
+    "owner": "Shared",
     "priority": "P1",
     "status": "backlog",
     "notes": "",
@@ -243,7 +243,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-025",
     "title": "Module 4 content + gate",
-    "owner": "Eng B",
+    "owner": "Shared",
     "priority": "P2",
     "status": "backlog",
     "notes": "",
@@ -252,7 +252,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-026",
     "title": "Debug labs content",
-    "owner": "Eng B",
+    "owner": "Shared",
     "priority": "P1",
     "status": "backlog",
     "notes": "",
@@ -261,7 +261,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-027",
     "title": "Capstone rubric + tests",
-    "owner": "Eng C/B",
+    "owner": "Shared",
     "priority": "P1",
     "status": "backlog",
     "notes": "",
@@ -270,7 +270,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-028",
     "title": "Final assessment flow",
-    "owner": "Eng B",
+    "owner": "Shared",
     "priority": "P1",
     "status": "backlog",
     "notes": "",
@@ -279,7 +279,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-029",
     "title": "Telemetry schema",
-    "owner": "Eng D",
+    "owner": "Shared",
     "priority": "P2",
     "status": "backlog",
     "notes": "",
@@ -288,7 +288,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-030",
     "title": "Telemetry dispatcher",
-    "owner": "Eng D",
+    "owner": "Shared",
     "priority": "P2",
     "status": "backlog",
     "notes": "",
@@ -297,7 +297,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-031",
     "title": "Analytics adapters",
-    "owner": "Eng D",
+    "owner": "Shared",
     "priority": "P3",
     "status": "backlog",
     "notes": "",
@@ -306,7 +306,7 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-032",
     "title": "Failure classifier",
-    "owner": "Eng D",
+    "owner": "Shared",
     "priority": "P3",
     "status": "backlog",
     "notes": "",
