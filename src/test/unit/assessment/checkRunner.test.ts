@@ -276,5 +276,6 @@ describe("checkRunner — module6 capstone rubric threshold", () => {
     const result = runLessonChecks(lesson6, files, []);
     expect(result.score).toBeGreaterThanOrEqual(80);
     expect(result.passed).toBe(true);
+    expect(result.checks.some((check) => check.passed === false)).toBe(true);
   });
 });

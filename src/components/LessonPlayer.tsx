@@ -95,6 +95,8 @@ export function LessonPlayer() {
     return baseline ? baseline.content !== file.content : false;
   });
   const hasValidationPass = validationResult?.passed ?? false;
+  const isRubricGate = lesson.gate.passCondition === "rubric-score";
+  const rubricThreshold = lesson.gate.scoreThreshold ?? 100;
   const awaitingGateSubmit = hasValidationPass && !gateSubmitted;
   const editableFileName =
     lesson.files.find((file) => file.editable && !file.hidden)?.fileName ??
@@ -106,21 +108,30 @@ export function LessonPlayer() {
     successPrompt:
       "Nice work - your first gate passed. You are ready for the next challenge.",
   };
+  const score = validationResult?.score ?? 0;
+  const scoreShortfall = Math.max(0, rubricThreshold - score);
+
   const coachMessage = hasErrors
     ? "Step 1: fix TypeScript errors, then click Run."
     : gateSubmitted && hasValidationPass
       ? guidance.successPrompt
       : validationResult && !validationResult.passed
-        ? guidance.retryPrompt
+        ? isRubricGate
+          ? `Score ${score}/100 is ${scoreShortfall} below the ${rubricThreshold} threshold. Fix one more criterion and run again.`
+          : guidance.retryPrompt
         : sandbox.state.status === "error" || sandbox.state.status === "timeout"
           ? "Good attempt. Use the console hint, make one small fix, and run again."
           : hasEditedSomething
             ? guidance.runStepPrompt
             : guidance.firstStepPrompt;
   const statusNote = awaitingGateSubmit
-    ? "All validations passed on Run. Click Submit Gate to finish."
+    ? isRubricGate
+      ? `Rubric threshold met (${score}/100, need ${rubricThreshold}). Click Submit Gate to finish.`
+      : "All validations passed on Run. Click Submit Gate to finish."
     : hasEditedSomething && !validationResult
-      ? "Run validates checks. Submit Gate unlocks only after validations pass."
+      ? isRubricGate
+        ? `Run computes rubric score. Submit Gate unlocks at ${rubricThreshold}+ points.`
+        : "Run validates checks. Submit Gate unlocks only after validations pass."
       : null;
   const submitLabel = gateSubmitted
     ? "Gate Submitted"
@@ -151,7 +162,12 @@ export function LessonPlayer() {
   );
   const passedChecksCount = checkItems.filter((check) => check.pass === true).length;
   const totalChecksCount = checkItems.length;
-  const progressLabel = `${passedChecksCount}/${totalChecksCount} checks passed`;
+  const progressLabel = isRubricGate
+    ? `Score ${score}/100 (need ${rubricThreshold})`
+    : `${passedChecksCount}/${totalChecksCount} checks passed`;
+  const checksTabBadge = isRubricGate
+    ? `${score}/${rubricThreshold}`
+    : `${passedChecksCount}/${totalChecksCount}`;
   const primaryActionLabel = gateSubmitted
     ? "Gate Submitted"
     : awaitingGateSubmit
@@ -323,7 +339,7 @@ export function LessonPlayer() {
             >
               Checks
               <span className={styles.checkCountBadge}>
-                {passedChecksCount}/{totalChecksCount}
+                {checksTabBadge}
               </span>
             </button>
             <button
@@ -340,6 +356,11 @@ export function LessonPlayer() {
           {activeBottomTab === "checks" ? (
             <div className={styles.checksPanel}>
               <p className={styles.checksTitle}>Gate checks</p>
+              {isRubricGate ? (
+                <p className={styles.checksScore}>
+                  Score {score}/100 • Threshold {rubricThreshold}
+                </p>
+              ) : null}
               <div className={styles.checkRows}>
                 {checkItems.map((check) => {
                   const statusLabel = check.pass === null ? "Pending" : check.pass ? "Passed" : "Failed";
