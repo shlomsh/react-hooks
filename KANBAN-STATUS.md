@@ -146,8 +146,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Hint ladder unlock",
     "owner": "Eng C",
     "priority": "P1",
-    "status": "in_progress",
-    "notes": "Claimed 2026-02-18. Progressive unlock tied to GateState.unlockedHintTiers from ST-014. Stub-based, no sandbox dep.",
+    "status": "done",
+    "notes": "Completed 2026-02-18. Pure fns (getUnlockedHints, getHighestUnlockedTier, isHintTierUnlocked) + useHintLadder hook consuming GateContext. 32 tests passing (82 total). Branch: st-016-hint-ladder. Unblocks ST-015.",
     "order": 14
   },
   {
