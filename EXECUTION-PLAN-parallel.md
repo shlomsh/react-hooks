@@ -184,8 +184,8 @@ Use this table during execution updates.
 | Story | Owner | Status | Start Date | End Date | Blocking On | Notes |
 |---|---|---|---|---|---|---|
 | ST-001 | Eng A | DONE |  |  |  |  |
-| ST-002 | Eng A | BACKLOG |  |  |  |  |
-| ST-003 | Eng A | BACKLOG |  |  |  | Desktop nav only |
+| ST-002 | Eng A | DONE |  |  |  |  |
+| ST-003 | Eng A | DONE |  |  |  | Desktop nav only |
 | ST-004 | Eng A | BACKLOG |  |  |  |  |
 | ST-037 | Eng A | BACKLOG |  |  |  | Context provider scaffolding |
 | ST-038 | Eng B | DONE |  |  |  | Lesson schema contract (Week 1) |

@@ -129,6 +129,81 @@
   overflow: hidden;
 }
 
+.dashboardRoute {
+  height: 100%;
+  overflow: auto;
+  padding: 1.25rem;
+  background: var(--bg-panel);
+}
+
+.dashboardTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--text-primary);
+}
+
+.dashboardBody {
+  margin: 0.6rem 0 1rem;
+  color: var(--text-secondary);
+}
+
+.dashboardList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.dashboardCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--border-dim);
+  border-radius: 0.55rem;
+  background: rgba(22, 39, 78, 0.48);
+}
+
+.dashboardMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.dashboardModule {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--cyan);
+  opacity: 0.82;
+}
+
+.dashboardName {
+  font-size: 0.86rem;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dashboardOpen {
+  height: 2rem;
+  padding: 0 0.8rem;
+  border-radius: 0.45rem;
+  border: 1px solid var(--border-med);
+  color: var(--text-primary);
+  background: rgba(20, 34, 70, 0.7);
+  font-size: 0.8rem;
+}
+
+.dashboardOpen:hover {
+  border-color: var(--cyan-dim);
+}
+
 .viewportBlock {
   height: 100%;
   display: flex;
@@ -150,4 +225,10 @@
   margin: 0.75rem 0 0;
   max-width: 56ch;
   color: var(--text-secondary);
+}
+
+@media (max-width: 1480px) {
+  .dashboardList {
+    grid-template-columns: 1fr;
+  }
 }

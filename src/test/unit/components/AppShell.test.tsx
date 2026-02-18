@@ -1,5 +1,5 @@
-import { act, render, screen, waitFor } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { beforeEach, describe, expect, it } from "vitest";
 import { AppShell } from "../../../components/AppShell";
 
 function setViewportWidth(width: number) {
@@ -12,6 +12,10 @@ function setViewportWidth(width: number) {
 }
 
 describe("AppShell viewport gate", () => {
+  beforeEach(() => {
+    window.history.replaceState({}, "", "/");
+  });
+
   it.each([375, 768, 1024, 1279])(
     "blocks lesson player for viewport width %ipx",
     (width) => {
@@ -58,5 +62,30 @@ describe("AppShell viewport gate", () => {
     await waitFor(() =>
       expect(screen.getByText("Desktop viewport required")).toBeInTheDocument()
     );
+  });
+
+  it("switches between lesson and dashboard tabs on desktop", () => {
+    setViewportWidth(1440);
+    render(<AppShell />);
+
+    expect(screen.getByRole("button", { name: "Run" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Dashboard" }));
+    expect(screen.getByRole("heading", { name: "Track Dashboard" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Run" })).not.toBeInTheDocument();
+    expect(window.location.search).toContain("view=dashboard");
+
+    fireEvent.click(screen.getByRole("button", { name: "Lesson" }));
+    expect(screen.getByRole("button", { name: "Run" })).toBeInTheDocument();
+    expect(window.location.search).not.toContain("view=dashboard");
+  });
+
+  it("supports dashboard deep link via URL", () => {
+    setViewportWidth(1440);
+    window.history.replaceState({}, "", "/?view=dashboard");
+    render(<AppShell />);
+
+    expect(screen.getByRole("heading", { name: "Track Dashboard" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Run" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Dashboard" })).toHaveAttribute("aria-current", "page");
   });
 });
