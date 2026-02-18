@@ -146,8 +146,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Hint ladder unlock",
     "owner": "Eng C",
     "priority": "P1",
-    "status": "backlog",
-    "notes": "Week 1 stub-based start (mock interfaces, no sandbox dep)",
+    "status": "in_progress",
+    "notes": "Claimed 2026-02-18. Progressive unlock tied to GateState.unlockedHintTiers from ST-014. Stub-based, no sandbox dep.",
     "order": 14
   },
   {
