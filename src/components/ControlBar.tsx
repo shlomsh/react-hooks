@@ -12,6 +12,7 @@ interface ControlBarProps {
   canUnlockHint: boolean;
   stepStates: boolean[];
   submitLabel: string;
+  submitDisabled: boolean;
   onRun: () => void;
   onReset: () => void;
   onUnlockHint: () => void;
@@ -29,6 +30,7 @@ export function ControlBar({
   canUnlockHint,
   stepStates,
   submitLabel,
+  submitDisabled,
   onRun,
   onReset,
   onUnlockHint,
@@ -74,9 +76,16 @@ export function ControlBar({
           >
             Unlock Hint
           </button>
-          <button className={styles.btnAmber} onClick={onSubmitGate}>{submitLabel}</button>
+          <button
+            className={styles.btnAmber}
+            onClick={onSubmitGate}
+            disabled={submitDisabled}
+          >
+            {submitLabel}
+          </button>
         </div>
       </div>
+      <div className={styles.checksTitle}>Gate Checks</div>
       <div className={styles.checks}>
         {checkItems.map((check) => (
           <CheckItem key={check.id} label={check.label} pass={check.pass} />

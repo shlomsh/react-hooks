@@ -89,6 +89,13 @@
   padding-bottom: 0.1rem;
 }
 
+.checksTitle {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
 .checkItem {
   flex: 0 0 auto;
   display: flex;
@@ -180,4 +187,11 @@
 .btnAmber:hover {
   box-shadow: 0 0 20px var(--amber-glow);
   transform: translateY(-1px);
+}
+
+.btnAmber:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
 }

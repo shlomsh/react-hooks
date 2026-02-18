@@ -180,7 +180,7 @@ export function useSandbox() {
   }, []);
 
   const run = useCallback(
-    async (code: string, fileName: string, files?: EditorFile[]) => {
+    async (code: string, fileName: string, files?: EditorFile[]): Promise<SandboxStatus> => {
       const runId = runIdRef.current + 1;
       runIdRef.current = runId;
 
@@ -201,7 +201,7 @@ export function useSandbox() {
           errorMessage: preflightIssue,
           truncated: false,
         });
-        return;
+        return "error";
       }
 
       let timedOut = false;
@@ -278,6 +278,7 @@ export function useSandbox() {
 
         if (!timedOut && runIdRef.current === runId) {
           setState((prev) => ({ ...prev, status: "success" }));
+          return "success";
         }
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
@@ -292,12 +293,14 @@ export function useSandbox() {
                 : prev.events,
           }));
         }
+        return "error";
       } finally {
         window.clearTimeout(timeoutId);
         console.log = originalConsole.log;
         console.warn = originalConsole.warn;
         console.error = originalConsole.error;
       }
+      return timedOut ? "timeout" : "error";
     },
     [appendEvent]
   );

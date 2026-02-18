@@ -114,7 +114,7 @@ export default function App() {
     {
       id: "uses-usestate",
       type: "functional",
-      weight: 0.34,
+      weight: 0.5,
       testCode: `
         const source = files["CounterIntro.tsx"];
         if (!/useState\\s*\\(/.test(source)) throw new Error("useState is required");
@@ -125,7 +125,7 @@ export default function App() {
     {
       id: "increment-handler",
       type: "behavioral",
-      weight: 0.33,
+      weight: 0.5,
       stimulus: "Click Increment once",
       expectedOutcome: "Count increases by 1",
       testCode: `
@@ -136,17 +136,6 @@ export default function App() {
       `,
       failMessage: "Step 2: make Increment add 1.",
       successMessage: "Increment logic looks correct.",
-    },
-    {
-      id: "count-is-number",
-      type: "functional",
-      weight: 0.33,
-      testCode: `
-        const source = files["CounterIntro.tsx"];
-        if (!/useState\\s*\\(\\s*0\\s*\\)/.test(source)) throw new Error("Count should start at 0");
-      `,
-      failMessage: "Step 3: keep count numeric (start at 0).",
-      successMessage: "Count is numeric.",
     },
   ],
 

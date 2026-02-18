@@ -24,7 +24,8 @@ export function LessonPlayer() {
     resetFiles,
   } = useEditorState(lessonFiles);
   const sandbox = useSandbox();
-  const [gateResult, setGateResult] = useState<LessonRunResult | null>(null);
+  const [validationResult, setValidationResult] = useState<LessonRunResult | null>(null);
+  const [gateSubmitted, setGateSubmitted] = useState(false);
   const [unlockedHintTier, setUnlockedHintTier] = useState(0);
 
   const handleContentChange = useCallback(
@@ -35,13 +36,24 @@ export function LessonPlayer() {
   );
 
   const handleRun = useCallback(() => {
-    void sandbox.run(activeFile.content, activeFile.filename, files);
-  }, [activeFile.content, activeFile.filename, files, sandbox]);
+    void (async () => {
+      const status = await sandbox.run(activeFile.content, activeFile.filename, files);
+      if (status !== "success") {
+        setValidationResult(null);
+        setGateSubmitted(false);
+        return;
+      }
+      const result = runLessonChecks(lesson, files, []);
+      setValidationResult(result);
+      setGateSubmitted(false);
+    })();
+  }, [activeFile.content, activeFile.filename, files, lesson, sandbox]);
 
   const handleReset = useCallback(() => {
     resetFiles(lessonFiles);
     sandbox.reset();
-    setGateResult(null);
+    setValidationResult(null);
+    setGateSubmitted(false);
     setUnlockedHintTier(0);
   }, [lessonFiles, resetFiles, sandbox]);
 
@@ -50,22 +62,20 @@ export function LessonPlayer() {
   }, [lesson.hintLadder.length]);
 
   const handleSubmitGate = useCallback(() => {
-    const capturedConsole = sandbox.state.events.map((event) => event.message);
-    const result = runLessonChecks(lesson, files, capturedConsole);
-    setGateResult(result);
-  }, [files, lesson, sandbox.state.events]);
+    if (validationResult?.passed) {
+      setGateSubmitted(true);
+    }
+  }, [validationResult?.passed]);
 
   const hasEditedSomething = files.some((file) => {
     const baseline = lessonFiles.find((seed) => seed.filename === file.filename);
     return baseline ? baseline.content !== file.content : false;
   });
-  const hasRun = sandbox.state.status !== "idle";
-  const hasGatePass = gateResult?.passed ?? false;
-  const hasSubmittedGate = gateResult !== null;
-  const stepStates = [hasEditedSomething, hasRun, hasSubmittedGate && hasGatePass];
-  const awaitingGateSubmit = hasRun && !hasSubmittedGate;
+  const hasValidationPass = validationResult?.passed ?? false;
+  const stepStates = [hasEditedSomething, hasValidationPass];
+  const awaitingGateSubmit = hasValidationPass && !gateSubmitted;
   const completedSteps = stepStates.filter(Boolean).length;
-  const progressLabel = `${completedSteps}/3 complete`;
+  const progressLabel = `${completedSteps}/2 complete`;
   const editableFileName =
     lesson.files.find((file) => file.editable && !file.hidden)?.fileName ??
     activeFile.filename;
@@ -78,21 +88,26 @@ export function LessonPlayer() {
   };
   const coachMessage = hasErrors
     ? "Step 1: fix TypeScript errors, then click Run."
-    : hasGatePass
+    : gateSubmitted && hasValidationPass
       ? guidance.successPrompt
-      : gateResult && !gateResult.passed
+      : validationResult && !validationResult.passed
         ? guidance.retryPrompt
         : sandbox.state.status === "error" || sandbox.state.status === "timeout"
           ? "Good attempt. Use the console hint, make one small fix, and run again."
-          : hasRun
-            ? "Step 3: click Submit Gate to check your solution."
           : hasEditedSomething
             ? guidance.runStepPrompt
             : guidance.firstStepPrompt;
   const statusNote = awaitingGateSubmit
-    ? "You are not stuck: Run only executes code. Submit Gate is required to complete Step 3."
-    : null;
-  const submitLabel = awaitingGateSubmit ? "Submit Gate (Step 3)" : "Submit Gate";
+    ? "All validations passed on Run. Click Submit Gate to finish."
+    : hasEditedSomething && !validationResult
+      ? "Run validates checks. Submit Gate unlocks only after validations pass."
+      : null;
+  const submitLabel = gateSubmitted
+    ? "Gate Submitted"
+    : awaitingGateSubmit
+      ? "Submit Gate"
+      : "Submit Gate";
+  const submitDisabled = !validationResult?.passed || gateSubmitted;
   const activeHint = unlockedHintTier > 0
     ? lesson.hintLadder[unlockedHintTier - 1]
     : null;
@@ -105,14 +120,14 @@ export function LessonPlayer() {
   const checkItems = useMemo(
     () =>
       lesson.checks.map((check) => {
-        const result = gateResult?.checks.find((item) => item.id === check.id);
+        const result = validationResult?.checks.find((item) => item.id === check.id);
         return {
           id: check.id,
           label: result?.message ?? check.successMessage,
           pass: result ? result.passed : null,
         };
       }),
-    [gateResult?.checks, lesson.checks]
+    [lesson.checks, validationResult?.checks]
   );
 
   return (
@@ -151,6 +166,7 @@ export function LessonPlayer() {
           canUnlockHint={unlockedHintTier < lesson.hintLadder.length}
           stepStates={stepStates}
           submitLabel={submitLabel}
+          submitDisabled={submitDisabled}
           onRun={handleRun}
           onReset={handleReset}
           onUnlockHint={handleUnlockHint}
