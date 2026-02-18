@@ -326,8 +326,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Desktop viewport QA",
     "owner": "Shared",
     "priority": "P1",
-    "status": "in_progress",
-    "notes": "Started 2026-02-18. Added runtime desktop viewport gate (min 1280) in AppShell and automated coverage in src/components/AppShell.test.tsx for >=1280 and <1280 behavior.",
+    "status": "done",
+    "notes": "Completed 2026-02-18. Desktop-only runtime gate enforced in AppShell at min width 1280 with QA matrix tests for 375/768/1024/1279 blocked and 1280/1440 allowed, plus resize transition tests in src/components/AppShell.test.tsx.",
     "order": 34
   },
   {

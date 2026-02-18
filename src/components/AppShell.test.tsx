@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { AppShell } from "./AppShell";
 
@@ -12,19 +12,51 @@ function setViewportWidth(width: number) {
 }
 
 describe("AppShell viewport gate", () => {
-  it("renders lesson player when viewport is at least 1280px", () => {
-    setViewportWidth(1280);
-    render(<AppShell />);
+  it.each([375, 768, 1024, 1279])(
+    "blocks lesson player for viewport width %ipx",
+    (width) => {
+      setViewportWidth(width);
+      render(<AppShell />);
 
-    expect(screen.getByText("Submit Gate")).toBeInTheDocument();
-    expect(screen.queryByText("Desktop viewport required")).not.toBeInTheDocument();
-  });
+      expect(screen.getByText("Desktop viewport required")).toBeInTheDocument();
+      expect(screen.queryByText("Submit Gate")).not.toBeInTheDocument();
+    }
+  );
 
-  it("blocks lesson player when viewport is below 1280px", () => {
-    setViewportWidth(1279);
+  it.each([1280, 1440])(
+    "renders lesson player for viewport width %ipx",
+    (width) => {
+      setViewportWidth(width);
+      render(<AppShell />);
+
+      expect(screen.getByText("Submit Gate")).toBeInTheDocument();
+      expect(screen.queryByText("Desktop viewport required")).not.toBeInTheDocument();
+    }
+  );
+
+  it("switches from blocked to lesson view on resize to desktop", async () => {
+    setViewportWidth(1024);
     render(<AppShell />);
 
     expect(screen.getByText("Desktop viewport required")).toBeInTheDocument();
-    expect(screen.queryByText("Submit Gate")).not.toBeInTheDocument();
+    act(() => {
+      setViewportWidth(1280);
+    });
+    await waitFor(() =>
+      expect(screen.getByText("Submit Gate")).toBeInTheDocument()
+    );
+  });
+
+  it("switches from lesson view to blocked on resize below desktop width", async () => {
+    setViewportWidth(1440);
+    render(<AppShell />);
+
+    expect(screen.getByText("Submit Gate")).toBeInTheDocument();
+    act(() => {
+      setViewportWidth(1279);
+    });
+    await waitFor(() =>
+      expect(screen.getByText("Desktop viewport required")).toBeInTheDocument()
+    );
   });
 });
