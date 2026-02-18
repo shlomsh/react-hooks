@@ -27,6 +27,11 @@
   user-select: none;
 }
 
+.runStatus {
+  margin-left: auto;
+  color: var(--text-secondary);
+}
+
 .canvas {
   flex: 1;
   padding: 1rem;
@@ -82,4 +87,43 @@
   border-radius: 2px;
   background: var(--cyan);
   width: 65%;
+}
+
+.consoleCard {
+  padding: 0.8rem 1rem;
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-dim);
+}
+
+.consoleTitle {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.45rem;
+}
+
+.consoleLog {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  max-height: 140px;
+  overflow: auto;
+}
+
+.consoleLine {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-secondary);
+  white-space: pre-wrap;
+}
+
+.consoleLineMuted {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-dim);
+}
+
+.consoleLevel {
+  color: var(--cyan);
 }

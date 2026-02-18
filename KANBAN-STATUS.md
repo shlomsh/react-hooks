@@ -75,7 +75,7 @@ This file is the source of truth for the daily kanban board.
     "owner": "Eng B",
     "priority": "P1",
     "status": "in_progress",
-    "notes": "Active 2026-02-18. Implementing ST-006a (useSandbox hook TDD), ST-006b (PreviewPanel + ConsoleOutput), ST-006c (safety limits: 5s timeout, 200-event cap). No Sandpack dep available — using iframe + esbuild-wasm approach. Tests written first per TDD mandate.",
+    "notes": "Active 2026-02-18. ST-006a/006b landed: useSandbox hook with TDD, 5s timeout guard, 200-event output cap, Run wiring in LessonPlayer, and PreviewPanel console output/status. Next: ST-006c harden execution backend (iframe/worker isolation + TS/module transpile path) for Demo 1 runtime parity.",
     "order": 8
   },
   {

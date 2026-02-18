@@ -6,6 +6,7 @@ import { EditorTabs } from "./editor/EditorTabs";
 import { CodeEditor } from "./editor/CodeEditor";
 import { PreviewPanel } from "./editor/PreviewPanel";
 import { useEditorState } from "../hooks/useEditorState";
+import { useSandbox } from "../hooks/useSandbox";
 import styles from "./LessonPlayer.module.css";
 
 export function LessonPlayer() {
@@ -18,6 +19,7 @@ export function LessonPlayer() {
     updateContent,
     setHasErrors,
   } = useEditorState();
+  const sandbox = useSandbox();
 
   const handleContentChange = useCallback(
     (content: string) => {
@@ -27,9 +29,8 @@ export function LessonPlayer() {
   );
 
   const handleRun = useCallback(() => {
-    // Will be wired to sandbox runtime in ST-006
-    console.log("Run:", activeFile.filename);
-  }, [activeFile.filename]);
+    void sandbox.run(activeFile.content, activeFile.filename);
+  }, [activeFile.content, activeFile.filename, sandbox]);
 
   return (
     <div className={styles.player}>
@@ -50,7 +51,7 @@ export function LessonPlayer() {
       </div>
 
       <div className={styles.previewArea}>
-        <PreviewPanel />
+        <PreviewPanel sandbox={sandbox.state} />
       </div>
 
       <VisualizerPanel />
