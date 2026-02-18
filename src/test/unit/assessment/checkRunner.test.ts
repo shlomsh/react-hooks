@@ -279,3 +279,43 @@ describe("checkRunner — module6 capstone rubric threshold", () => {
     expect(result.checks.some((check) => check.passed === false)).toBe(true);
   });
 });
+
+describe("checkRunner — module7 final assessment", () => {
+  const lesson7 = getLessonByIndex(7);
+
+  it("fails starter until all final-assessment fixes are applied", () => {
+    const files = lesson7.files
+      .filter((file) => !file.hidden)
+      .map((file) => ({
+        filename: file.fileName,
+        language: file.language,
+        content: file.starterCode,
+      }));
+
+    const starter = runLessonChecks(lesson7, files, []);
+    expect(lesson7.module.type).toBe("final-assessment");
+    expect(starter.passed).toBe(false);
+    expect(starter.score).toBeLessThan(100);
+  });
+
+  it("passes final assessment after all required fixes", () => {
+    const files = lesson7.files
+      .filter((file) => !file.hidden)
+      .map((file) => ({
+        filename: file.fileName,
+        language: file.language,
+        content: file.starterCode,
+      }));
+
+    files[0].content = files[0].content
+      .replace("c + 2", "c + 1")
+      .replace("p + 2", "p + 1")
+      .replace("[query]);", "[query, page]);")
+      .replace("setPage(0);", "setPage(1);");
+
+    const result = runLessonChecks(lesson7, files, []);
+    expect(result.score).toBe(100);
+    expect(result.passed).toBe(true);
+    expect(result.checks.every((check) => check.passed)).toBe(true);
+  });
+});

@@ -14,7 +14,7 @@ import type {
 
 describe("ST-038: Lesson schema contract", () => {
   it("all discovered lessons validate against schema requirements", () => {
-    expect(lessons.length).toBeGreaterThanOrEqual(7);
+    expect(lessons.length).toBeGreaterThanOrEqual(8);
 
     const ids = new Set<string>();
     for (const lesson of lessons as Lesson[]) {
@@ -25,7 +25,7 @@ describe("ST-038: Lesson schema contract", () => {
 
       const m: ModuleMetadata = lesson.module;
       expect(m.order).toBeGreaterThan(0);
-      expect(["concept-gate", "debug-lab", "capstone"]).toContain(m.type);
+      expect(["concept-gate", "debug-lab", "capstone", "final-assessment"]).toContain(m.type);
       expect(m.estimatedMinutes).toBeGreaterThan(0);
       expect(m.concepts.length).toBeGreaterThan(0);
       expect(m.tags.length).toBeGreaterThan(0);
@@ -113,6 +113,7 @@ describe("ST-038: Lesson schema contract", () => {
     const module5a = getLessonByIndex(4);
     const module5b = getLessonByIndex(5);
     const module6 = getLessonByIndex(6);
+    const module7 = getLessonByIndex(7);
 
     expect(module1.module.moduleId).toBe(1);
     expect(module1.module.order).toBe(1);
@@ -154,5 +155,12 @@ describe("ST-038: Lesson schema contract", () => {
     expect(module6.gate.passCondition).toBe("rubric-score");
     expect(module6.gate.scoreThreshold).toBeDefined();
     expect(module6.gate.scoreThreshold).toBeGreaterThanOrEqual(80);
+
+    expect(module7.module.moduleId).toBe(7);
+    expect(module7.module.order).toBe(8);
+    expect(module7.module.type).toBe("final-assessment");
+    expect(module7.module.lockedUntilPrevious).toBe(true);
+    expect(module7.module.unlocksModule).toBeUndefined();
+    expect(module7.gate.passCondition).toBe("all-checks");
   });
 });

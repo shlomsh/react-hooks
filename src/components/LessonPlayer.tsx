@@ -96,8 +96,10 @@ export function LessonPlayer() {
   });
   const hasValidationPass = validationResult?.passed ?? false;
   const isRubricGate = lesson.gate.passCondition === "rubric-score";
+  const isFinalAssessment = lesson.module.type === "final-assessment";
   const rubricThreshold = lesson.gate.scoreThreshold ?? 100;
   const awaitingGateSubmit = hasValidationPass && !gateSubmitted;
+  const isTrackComplete = isFinalAssessment && gateSubmitted && hasValidationPass;
   const editableFileName =
     lesson.files.find((file) => file.editable && !file.hidden)?.fileName ??
     activeFile.filename;
@@ -127,7 +129,9 @@ export function LessonPlayer() {
   const statusNote = awaitingGateSubmit
     ? isRubricGate
       ? `Rubric threshold met (${score}/100, need ${rubricThreshold}). Click Submit Gate to finish.`
-      : "All validations passed on Run. Click Submit Gate to finish."
+      : isFinalAssessment
+        ? "All final checks passed on Run. Click Submit Gate to complete the track."
+        : "All validations passed on Run. Click Submit Gate to finish."
     : hasEditedSomething && !validationResult
       ? isRubricGate
         ? `Run computes rubric score. Submit Gate unlocks at ${rubricThreshold}+ points.`
@@ -181,6 +185,13 @@ export function LessonPlayer() {
       ? submitDisabled
       : hasErrors || sandbox.state.status === "running";
   const onPrimaryAction = awaitingGateSubmit ? handleSubmitGate : handleRun;
+  const handleGoToDashboard = useCallback(() => {
+    const url = new URL(window.location.href);
+    url.searchParams.set("view", "dashboard");
+    url.searchParams.set("complete", "1");
+    window.history.pushState({}, "", `${url.pathname}${url.search}${url.hash}`);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }, []);
   const clampLeftPanelWidth = useCallback(
     (requestedWidth: number) => {
       const reservedForInternals = showInternals ? INTERNALS_PANEL_WIDTH : 0;
@@ -391,6 +402,21 @@ export function LessonPlayer() {
         </div>
 
         <div className={styles.controlBar} ref={controlBarRef}>
+          {isTrackComplete ? (
+            <section className={styles.completionBanner} aria-label="Track completion">
+              <h3 className={styles.completionTitle}>Track Completed</h3>
+              <p className={styles.completionBody}>
+                Final assessment passed and submitted. Open Dashboard to review the full module path.
+              </p>
+              <button
+                type="button"
+                className={styles.completionAction}
+                onClick={handleGoToDashboard}
+              >
+                Open Dashboard
+              </button>
+            </section>
+          ) : null}
           <ControlBar
             hasErrors={hasErrors}
             runStatus={sandbox.state.status}

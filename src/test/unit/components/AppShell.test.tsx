@@ -88,4 +88,12 @@ describe("AppShell viewport gate", () => {
     expect(screen.queryByRole("button", { name: "Run" })).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Dashboard" })).toHaveAttribute("aria-current", "page");
   });
+
+  it("shows completion banner on dashboard when complete flag is present", () => {
+    setViewportWidth(1440);
+    window.history.replaceState({}, "", "/?view=dashboard&complete=1");
+    render(<AppShell />);
+
+    expect(screen.getByText("Final assessment complete. Track progression is now fully passed.")).toBeInTheDocument();
+  });
 });

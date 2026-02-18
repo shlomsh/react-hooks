@@ -12,12 +12,20 @@ function resolveRouteFromQuery(): AppRoute {
   return params.get("view") === "dashboard" ? "dashboard" : "lesson";
 }
 
+function hasCompletionFlag(): boolean {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("complete") === "1";
+}
+
 export function AppShell() {
   const { lesson } = useLessonLoader();
   const [isDesktopViewport, setIsDesktopViewport] = useState(
     () => window.innerWidth >= MIN_DESKTOP_WIDTH
   );
   const [route, setRoute] = useState<AppRoute>(() => resolveRouteFromQuery());
+  const [showCompletionToast, setShowCompletionToast] = useState<boolean>(
+    () => hasCompletionFlag()
+  );
 
   useEffect(() => {
     const onResize = () => {
@@ -29,7 +37,10 @@ export function AppShell() {
   }, []);
 
   useEffect(() => {
-    const onPopState = () => setRoute(resolveRouteFromQuery());
+    const onPopState = () => {
+      setRoute(resolveRouteFromQuery());
+      setShowCompletionToast(hasCompletionFlag());
+    };
     window.addEventListener("popstate", onPopState);
     return () => window.removeEventListener("popstate", onPopState);
   }, []);
@@ -42,6 +53,7 @@ export function AppShell() {
       url.searchParams.set("view", "dashboard");
     } else {
       url.searchParams.delete("view");
+      url.searchParams.delete("complete");
     }
 
     if (typeof lessonNumber === "number") {
@@ -50,6 +62,9 @@ export function AppShell() {
 
     window.history.pushState({}, "", `${url.pathname}${url.search}${url.hash}`);
     setRoute(nextRoute);
+    if (nextRoute !== "dashboard") {
+      setShowCompletionToast(false);
+    }
   };
 
   const isLessonRoute = route === "lesson";
@@ -95,6 +110,11 @@ export function AppShell() {
           ) : (
             <section className={styles.dashboardRoute} aria-label="Track dashboard">
               <h1 className={styles.dashboardTitle}>Track Dashboard</h1>
+              {showCompletionToast ? (
+                <p className={styles.dashboardComplete}>
+                  Final assessment complete. Track progression is now fully passed.
+                </p>
+              ) : null}
               <p className={styles.dashboardBody}>
                 Pick a lesson to continue. Navigation is URL-backed for desktop workflow.
               </p>
