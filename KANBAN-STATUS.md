@@ -1,6 +1,6 @@
 # Kanban Status
 
-Last updated: 2026-02-18T21:42:00.000Z
+Last updated: 2026-02-18T20:14:50.000Z
 
 This file is the source of truth for the daily kanban board.
 
@@ -281,8 +281,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Telemetry schema",
     "owner": "Shared",
     "priority": "P2",
-    "status": "backlog",
-    "notes": "",
+    "status": "in_progress",
+    "notes": "Started 2026-02-18. Defining event schema for module start/end, pass/fail, hint unlocks, and retry counters.",
     "order": 29
   },
   {
