@@ -20,8 +20,8 @@
 import { describe, it, expect } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import type { ReactNode } from "react";
-import { GateProvider, useGate } from "./GateContext";
-import { useRetryPolicy } from "./useRetryPolicy";
+import { GateProvider, useGate } from "../../../assessment/GateContext";
+import { useRetryPolicy } from "../../../assessment/useRetryPolicy";
 
 // ---------------------------------------------------------------------------
 // Wrappers

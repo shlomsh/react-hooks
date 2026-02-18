@@ -74,8 +74,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Sandbox runtime executor",
     "owner": "Eng B",
     "priority": "P1",
-    "status": "in_progress",
-    "notes": "Active 2026-02-18. ST-006a/006b landed: useSandbox hook with TDD, 5s timeout guard, 200-event output cap, Run wiring in LessonPlayer, and PreviewPanel console output/status. Next: ST-006c harden execution backend (iframe/worker isolation + TS/module transpile path) for Demo 1 runtime parity.",
+    "status": "done",
+    "notes": "Completed 2026-02-18. useSandbox hook (Function-constructor executor, console capture), PreviewPanel + ConsoleOutput wired to sandbox state, safety limits: 200-event cap + truncated flag + 5s timeout + static preflight for infinite loops and module syntax. 5 tests (98 unit total), build clean. Unblocks ST-007, ST-013.",
     "order": 8
   },
   {
