@@ -32,11 +32,17 @@ export function PreviewPanel({ sandbox, awaitingGateSubmit }: PreviewPanelProps)
           ? styles.statusError
           : styles.statusIdle;
   const hasRuntimeEvents = sandbox.events.length > 0;
+  const dotClass =
+    sandbox.status === "running"
+      ? `${styles.dot} ${styles.dotRunning}`
+      : sandbox.status === "error" || sandbox.status === "timeout"
+        ? `${styles.dot} ${styles.dotError}`
+        : styles.dot;
 
   return (
     <div className={styles.preview}>
       <div className={styles.bar}>
-        <span className={styles.dot} />
+        <span className={dotClass} />
         <span className={styles.barText}>Console</span>
         <span className={`${styles.runStatus} ${statusClass}`}>{statusLabel}</span>
       </div>
@@ -56,11 +62,13 @@ export function PreviewPanel({ sandbox, awaitingGateSubmit }: PreviewPanelProps)
                     <span className={styles.consolePrompt}>
                       {event.level === "error" ? "!" : ">"}
                     </span>
-                    <span
-                      className={`${styles.consoleLevel} ${event.level === "error" ? styles.levelError : event.level === "warn" ? styles.levelWarn : styles.levelLog}`}
-                    >
-                      [{event.level}]
-                    </span>{" "}
+                    {event.level !== "log" ? (
+                      <span
+                        className={`${styles.consoleLevel} ${event.level === "error" ? styles.levelError : styles.levelWarn}`}
+                      >
+                        [{event.level}]
+                      </span>
+                    ) : null}
                     <span>{event.message}</span>
                   </div>
                 ))

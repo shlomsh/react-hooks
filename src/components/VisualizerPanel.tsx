@@ -6,6 +6,7 @@ export function VisualizerPanel() {
       <div className={styles.header}>
         <span className={styles.statusDot} />
         <span className={styles.headerText}>Internals</span>
+        <span className={styles.headerLive}>live</span>
       </div>
 
       <div className={styles.section}>

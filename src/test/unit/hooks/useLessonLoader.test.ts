@@ -33,4 +33,13 @@ describe("useLessonLoader", () => {
     expect(result.current.lesson.module.moduleId).toBe(2);
     expect(result.current.files[0].filename).toBe("SearchPaging.tsx");
   });
+
+  it("loads module-3 when lesson query param is provided", () => {
+    window.history.replaceState({}, "", "/?lesson=3");
+    const { result } = renderHook(() => useLessonLoader());
+
+    expect(result.current.lesson.exerciseId).toBe("mod-3-hooks-custom-step-counter");
+    expect(result.current.lesson.module.moduleId).toBe(3);
+    expect(result.current.files[0].filename).toBe("useStepCounter.ts");
+  });
 });

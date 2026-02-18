@@ -1,6 +1,6 @@
 # Kanban Status
 
-Last updated: 2026-02-18T10:06:26Z
+Last updated: 2026-02-18T12:40:46.404Z
 
 This file is the source of truth for the daily kanban board.
 
@@ -57,7 +57,7 @@ This file is the source of truth for the daily kanban board.
     "owner": "Shared",
     "priority": "P0",
     "status": "done",
-    "notes": "Completed 2026-02-18. Types in src/types/lesson-schema.ts. Sample Module 1 content in src/content/module-1.ts validates the schema. Unblocks ST-008, ST-013, ST-022–ST-028. Ready for Eng C review.",
+    "notes": "Completed 2026-02-18. Schema contract in src/types/lesson-schema.ts is now exercised by file-backed lesson manifests under src/content/lessons/*/lesson.ts, with starter code in sibling files/ folders. Unblocks ST-008, ST-013, ST-022-ST-028.",
     "order": 6
   },
   {
@@ -93,7 +93,7 @@ This file is the source of truth for the daily kanban board.
     "owner": "Shared",
     "priority": "P1",
     "status": "done",
-    "notes": "Completed 2026-02-18. Added useLessonLoader to map ST-038 lesson schema into editor files and bind ConceptPanel/ControlBar content from lesson contract for Module 1 demo path.",
+    "notes": "Completed 2026-02-18. useLessonLoader now resolves lessons from auto-discovered content packs via src/content/lessons.ts (import.meta.glob), supports ?lesson=N selection, and maps hidden/editor files without manual loader edits for new lessons.",
     "order": 10
   },
   {
@@ -155,8 +155,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Check runner contract",
     "owner": "Shared",
     "priority": "P1",
-    "status": "in_progress",
-    "notes": "Demo 1 focus: implement minimal check runner against lesson schema checks and wire pass/fail output to gate submit.",
+    "status": "done",
+    "notes": "Completed 2026-02-18. Check runner contract is fully wired for behavioral/functional checks with weighted scoring and gate pass criteria. Live check outcomes feed lesson UI (Checks tab with pass counter) and gate submit flow. Unit coverage updated and passing.",
     "order": 15
   },
   {
@@ -218,8 +218,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Module 1 content + gate",
     "owner": "Shared",
     "priority": "P2",
-    "status": "in_progress",
-    "notes": "Demo 1 focus: simplified beginner useState lesson shipped; next close-out is wiring actual gate submit pass/fail from check runner.",
+    "status": "done",
+    "notes": "Completed 2026-02-18. Module 1 shipped as Counter Intro with simplified educational layout, progressive lesson guidance, stable run/submit flow, and validated gate checks.",
     "order": 22
   },
   {
@@ -227,8 +227,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Module 2 content + gate",
     "owner": "Shared",
     "priority": "P2",
-    "status": "backlog",
-    "notes": "",
+    "status": "done",
+    "notes": "Completed 2026-02-18. Module 2 (Search Paging Sync) finalized with dual-bug gate (Next + useEffect deps), runtime console logs, and check-runner QA coverage including dependency-order variant acceptance.",
     "order": 23
   },
   {
@@ -236,8 +236,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Module 3 content + gate",
     "owner": "Shared",
     "priority": "P1",
-    "status": "backlog",
-    "notes": "",
+    "status": "in_progress",
+    "notes": "In progress 2026-02-18. Module 3 lesson pack started: Step Counter Hook (custom hook extraction) added under src/content/lessons/03-step-counter-hook with starter files, checks, hints, and loader/test wiring via ?lesson=3.",
     "order": 24
   },
   {

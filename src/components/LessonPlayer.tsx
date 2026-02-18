@@ -287,10 +287,10 @@ export function LessonPlayer() {
             />
             <button
               type="button"
-              className={styles.internalsToggle}
+              className={`${styles.internalsToggle}${showInternals ? ` ${styles.internalsToggleActive}` : ""}`}
               onClick={() => setShowInternals((prev) => !prev)}
             >
-              {showInternals ? "Hide internals" : "Show internals"}
+              Internals
             </button>
           </div>
           <CodeEditor
@@ -383,6 +383,7 @@ export function LessonPlayer() {
             stepStates={stepStates}
             primaryActionLabel={primaryActionLabel}
             primaryActionDisabled={primaryActionDisabled}
+            awaitingGateSubmit={awaitingGateSubmit}
             onPrimaryAction={onPrimaryAction}
             onReset={handleReset}
             onUnlockHint={handleUnlockHint}

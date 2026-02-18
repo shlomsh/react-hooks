@@ -23,14 +23,20 @@ export function AppShell() {
       <header className={styles.header}>
         <div className={styles.logo}>
           <span className={styles.logoDot} />
-          <span className={styles.logoText}>HOOKS PRO TRACK</span>
+          <span className={styles.logoText}>Hooks Pro Track</span>
         </div>
+        <span className={styles.divider} />
         <nav className={styles.nav}>
           <button className={`${styles.navTab} ${styles.active}`}>
             Lesson
           </button>
           <button className={styles.navTab}>Dashboard</button>
         </nav>
+        <div className={styles.breadcrumb}>
+          <span className={styles.breadcrumbModule}>M1</span>
+          <span className={styles.breadcrumbSep}>·</span>
+          <span className={styles.breadcrumbLesson}>Counter Intro</span>
+        </div>
       </header>
       <main className={styles.main}>
         {isDesktopViewport ? (

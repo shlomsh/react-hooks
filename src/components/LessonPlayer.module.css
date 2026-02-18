@@ -49,16 +49,44 @@
 .internalsToggle {
   border-left: 1px solid var(--border-dim);
   border-bottom: 1px solid var(--border-dim);
-  padding: 0 0.85rem;
-  font-size: 0.72rem;
-  color: var(--text-secondary);
+  padding: 0 0.9rem;
+  font-family: var(--font-mono);
+  font-size: 0.63rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-dim);
   white-space: nowrap;
-  transition: color 0.2s, background 0.2s;
+  transition: color 0.2s, background 0.2s, border-color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.internalsToggle::before {
+  content: "⚛";
+  font-size: 0.72rem;
+  opacity: 0.55;
+  transition: opacity 0.2s;
 }
 
 .internalsToggle:hover {
-  color: var(--text-primary);
-  background: var(--bg-surface);
+  color: var(--cyan);
+  background: rgba(0, 229, 255, 0.05);
+}
+
+.internalsToggle:hover::before {
+  opacity: 0.85;
+}
+
+.internalsToggleActive {
+  color: var(--cyan) !important;
+  background: rgba(0, 229, 255, 0.07) !important;
+  border-left-color: rgba(0, 229, 255, 0.25) !important;
+}
+
+.internalsToggleActive::before {
+  opacity: 1 !important;
 }
 
 .bottomPanel {
@@ -84,16 +112,21 @@
 .bottomTabs {
   display: flex;
   border-bottom: 1px solid var(--border-dim);
+  background: var(--bg-deep);
 }
 
 .bottomTab {
-  padding: 0.5rem 0.9rem;
-  font-size: 0.72rem;
+  padding: 0.45rem 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
   color: var(--text-dim);
   border-bottom: 2px solid transparent;
   display: inline-flex;
   align-items: center;
   gap: 0.38rem;
+  transition: color 0.15s;
 }
 
 .bottomTab:hover {
@@ -109,80 +142,138 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 2.2rem;
-  padding: 0.06rem 0.34rem;
+  min-width: 2rem;
+  padding: 0.05rem 0.3rem;
   border-radius: 999px;
-  border: 1px solid var(--border-med);
+  border: 1px solid var(--border-soft);
   font-family: var(--font-mono);
-  font-size: 0.62rem;
+  font-size: 0.6rem;
   line-height: 1.1;
-  color: var(--text-secondary);
-  background: rgba(159, 179, 221, 0.08);
+  color: var(--text-dim);
+  background: rgba(159, 179, 221, 0.06);
+}
+
+/* when all checks pass, badge turns lime */
+.checkCountBadgeAll {
+  border-color: rgba(118, 224, 0, 0.45);
+  color: var(--lime);
+  background: var(--lime-dim);
 }
 
 .checksPanel,
 .searchPanel {
   flex: 1;
-  padding: 0.9rem 1rem;
+  padding: 0.75rem 0.9rem;
   overflow: auto;
 }
 
 .checksTitle,
 .searchTitle {
-  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
   color: var(--text-dim);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  margin-bottom: 0.7rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* the title line with a count */
+.checksTitle::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border-dim);
 }
 
 .checkRows {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
 
 .checkRow {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.55rem;
   background: var(--bg-surface);
   border: 1px solid var(--border-dim);
+  border-left-width: 3px;
   border-radius: var(--radius-sm);
-  padding: 0.5rem 0.6rem;
+  padding: 0.45rem 0.55rem;
+  transition: border-color 0.3s, background 0.3s;
 }
 
 .checkState {
-  width: 56px;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
   flex-shrink: 0;
-  text-align: center;
   font-family: var(--font-mono);
-  font-size: 0.62rem;
+  font-size: 0.6rem;
   text-transform: uppercase;
-  border-radius: 999px;
-  border: 1px solid var(--border-med);
-  padding: 0.1rem 0.25rem;
+  letter-spacing: 0.05em;
+}
+
+/* status dot indicator */
+.checkState::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
 
 .checkPending {
   color: var(--text-dim);
 }
 
+.checkPending::before {
+  background: var(--border-med);
+}
+
 .checkPass {
-  border-color: var(--lime);
   color: var(--lime);
-  background: var(--lime-dim);
+}
+
+.checkPass::before {
+  background: var(--lime);
+  box-shadow: 0 0 5px var(--lime-glow);
+}
+
+/* the whole row when passed */
+.checkRow:has(.checkPass) {
+  border-left-color: var(--lime);
+  background: rgba(118, 224, 0, 0.04);
+  animation: check-pass-flash 0.6s ease-out;
+}
+
+/* the whole row when failed */
+.checkRow:has(.checkFail) {
+  border-left-color: var(--red);
+  background: rgba(255, 64, 96, 0.04);
+}
+
+/* the whole row when pending */
+.checkRow:has(.checkPending) {
+  border-left-color: var(--border-soft);
 }
 
 .checkFail {
-  border-color: var(--red);
   color: var(--red);
-  background: var(--red-dim);
+}
+
+.checkFail::before {
+  background: var(--red);
+  box-shadow: 0 0 4px var(--red-glow);
 }
 
 .checkText {
-  font-size: 0.76rem;
+  font-size: 0.77rem;
   color: var(--text-secondary);
+  line-height: 1.35;
 }
 
 .searchText {

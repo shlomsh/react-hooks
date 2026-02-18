@@ -1,6 +1,6 @@
 # React Hooks Pro Track: Parallel Execution Plan
 
-Last updated: 2026-02-17  
+Last updated: 2026-02-18
 Source PRD: `/Users/sh/work/react-hooks/PRD-v2-react-hooks-pro-track.md`  
 UI baseline: `/Users/sh/work/react-hooks/pro-track-app.html`
 
@@ -183,44 +183,44 @@ Use this table during execution updates.
 
 | Story | Owner | Status | Start Date | End Date | Blocking On | Notes |
 |---|---|---|---|---|---|---|
-| ST-001 | Eng A | TODO |  |  |  |  |
-| ST-002 | Eng A | TODO |  |  |  |  |
-| ST-003 | Eng A | TODO |  |  |  | Desktop nav only |
-| ST-004 | Eng A | TODO |  |  |  |  |
-| ST-037 | Eng A | TODO |  |  |  | Context provider scaffolding |
-| ST-038 | Eng B | TODO |  |  |  | Lesson schema contract (Week 1) |
-| ST-005 | Eng B | TODO |  |  | ST-001 |  |
-| ST-006 | Eng B | TODO |  |  | ST-001, Spike pass |  |
-| ST-007 | Eng B | TODO |  |  | ST-006 |  |
-| ST-008 | Eng B | TODO |  |  | ST-006, ST-038 |  |
-| ST-009 | Eng D | TODO |  |  | ST-012 |  |
-| ST-010 | Eng D | TODO |  |  | ST-012 |  |
-| ST-011 | Eng D | TODO |  |  | ST-012 |  |
-| ST-012 | Eng D | TODO |  |  | ST-006 |  |
-| ST-013 | Eng C | TODO |  |  | ST-006, ST-038 |  |
-| ST-014 | Eng C | TODO |  |  |  | Stub-based, Week 1 |
-| ST-015 | Eng C | TODO |  |  | ST-013 | Soft block + reset |
-| ST-016 | Eng C | TODO |  |  |  | Stub-based, Week 1 |
-| ST-017 | Eng C | TODO |  |  | ST-013 |  |
-| ST-018 | Eng C | TODO |  |  | ST-014 |  |
-| ST-019 | Eng C | TODO |  |  | ST-018 |  |
-| ST-020 | Eng C | TODO |  |  | ST-019 |  |
-| ST-021 | Eng C/A | TODO |  |  | ST-020 |  |
-| ST-022 | Eng B | TODO |  |  | ST-008, ST-013 |  |
-| ST-023 | Eng B | TODO |  |  | ST-008, ST-013 |  |
-| ST-024 | Eng B | TODO |  |  | ST-008, ST-013 |  |
-| ST-025 | Eng B | TODO |  |  | ST-008, ST-013 |  |
-| ST-026 | Eng B | TODO |  |  | ST-008, ST-013 |  |
-| ST-027 | Eng C/B | TODO |  |  | ST-013, ST-026 |  |
-| ST-028 | Eng B | TODO |  |  | ST-022..ST-027 |  |
-| ST-029 | Eng D | TODO |  |  |  |  |
-| ST-030 | Eng D | TODO |  |  | ST-029 |  |
-| ST-031 | Eng D | TODO |  |  | ST-019, ST-030 |  |
-| ST-032 | Eng D | TODO |  |  | ST-030 |  |
-| ST-033 | Shared | TODO |  |  | Core epics complete |  |
-| ST-034 | Shared | TODO |  |  | Core epics complete | Desktop-only QA |
-| ST-035 | Shared | TODO |  |  | Core epics complete |  |
-| ST-036 | Shared | TODO |  |  | ST-033, ST-034, ST-035 |  |
+| ST-001 | Eng A | DONE |  |  |  |  |
+| ST-002 | Eng A | BACKLOG |  |  |  |  |
+| ST-003 | Eng A | BACKLOG |  |  |  | Desktop nav only |
+| ST-004 | Eng A | BACKLOG |  |  |  |  |
+| ST-037 | Eng A | BACKLOG |  |  |  | Context provider scaffolding |
+| ST-038 | Eng B | DONE |  |  |  | Lesson schema contract (Week 1) |
+| ST-005 | Eng B | DONE |  |  | ST-001 |  |
+| ST-006 | Eng B | DONE |  |  | ST-001, Spike pass |  |
+| ST-007 | Eng B | DONE |  |  | ST-006 |  |
+| ST-008 | Eng B | DONE |  |  | ST-006, ST-038 |  |
+| ST-009 | Eng D | BACKLOG |  |  | ST-012 |  |
+| ST-010 | Eng D | BACKLOG |  |  | ST-012 |  |
+| ST-011 | Eng D | BACKLOG |  |  | ST-012 |  |
+| ST-012 | Eng D | BACKLOG |  |  | ST-006 |  |
+| ST-013 | Eng C | DONE |  |  | ST-006, ST-038 |  |
+| ST-014 | Eng C | DONE |  |  |  | Stub-based, Week 1 |
+| ST-015 | Eng C | DONE |  |  | ST-013 | Soft block + reset |
+| ST-016 | Eng C | DONE |  |  |  | Stub-based, Week 1 |
+| ST-017 | Eng C | BACKLOG |  |  | ST-013 |  |
+| ST-018 | Eng C | BACKLOG |  |  | ST-014 |  |
+| ST-019 | Eng C | BACKLOG |  |  | ST-018 |  |
+| ST-020 | Eng C | BACKLOG |  |  | ST-019 |  |
+| ST-021 | Eng C/A | BACKLOG |  |  | ST-020 |  |
+| ST-022 | Eng B | DONE |  |  | ST-008, ST-013 |  |
+| ST-023 | Eng B | DONE |  |  | ST-008, ST-013 |  |
+| ST-024 | Eng B | IN PROGRESS |  |  | ST-008, ST-013 |  |
+| ST-025 | Eng B | BACKLOG |  |  | ST-008, ST-013 |  |
+| ST-026 | Eng B | BACKLOG |  |  | ST-008, ST-013 |  |
+| ST-027 | Eng C/B | BACKLOG |  |  | ST-013, ST-026 |  |
+| ST-028 | Eng B | BACKLOG |  |  | ST-022..ST-027 |  |
+| ST-029 | Eng D | BACKLOG |  |  |  |  |
+| ST-030 | Eng D | BACKLOG |  |  | ST-029 |  |
+| ST-031 | Eng D | BACKLOG |  |  | ST-019, ST-030 |  |
+| ST-032 | Eng D | BACKLOG |  |  | ST-030 |  |
+| ST-033 | Shared | DONE |  |  | Core epics complete |  |
+| ST-034 | Shared | DONE |  |  | Core epics complete | Desktop-only QA |
+| ST-035 | Shared | BACKLOG |  |  | Core epics complete |  |
+| ST-036 | Shared | BACKLOG |  |  | ST-033, ST-034, ST-035 |  |
 
 ## 8. Demo Milestones
 
@@ -230,12 +230,12 @@ Use this table during execution updates.
 **Required stories (critical path):**
 | Story | Title | Status | Blocker |
 |-------|-------|--------|---------|
-| ST-001 | App shell layout | In Review | — |
-| ST-005 | Monaco editor integration | **Done** | — |
-| ST-038 | Lesson/exercise schema contract | In Progress | — |
-| ST-006 | Sandbox runtime executor | Backlog | ST-001, Sandpack spike |
-| ST-007 | Run/reset flow + output panel | Backlog | ST-006 |
-| ST-008 | Lesson schema loader | Backlog | ST-006, ST-038 |
+| ST-001 | App shell layout | DONE | — |
+| ST-005 | Monaco editor integration | DONE | — |
+| ST-038 | Lesson/exercise schema contract | DONE | — |
+| ST-006 | Sandbox runtime executor | DONE | — |
+| ST-007 | Run/reset flow + output panel | DONE | — |
+| ST-008 | Lesson schema loader | DONE | — |
 
 ### Demo 2: "Gated Progression" (Target: End of Week 4)
 **Narrative:** Learner completes Module 1, passes the gate, unlocks Module 2. Failed attempts trigger hints and remediation flow.
@@ -250,6 +250,6 @@ Use this table during execution updates.
 ## 9. Immediate Next Actions
 1. ~~Confirm engineer-to-lane assignments (A/B/C/D names).~~
 2. ~~Create repo issues from ST-001 to ST-036.~~
-3. Ship ST-038 (schema contract) — highest priority unblocked item, blocks entire content pipeline.
-4. Land Sandpack spike to unblock ST-006.
+3. Continue content expansion: finalize ST-023 QA/tuning and start ST-024.
+4. Integrate true internals data pipeline to unblock ST-009-ST-012.
 5. Track progress in KANBAN-STATUS.md after every task.

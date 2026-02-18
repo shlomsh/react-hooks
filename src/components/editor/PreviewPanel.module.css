@@ -6,16 +6,18 @@
   height: 100%;
 }
 
+/* ── Console top bar ──────────────────────────── */
 .bar {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.4rem 0.75rem;
+  gap: 0.45rem;
+  padding: 0.38rem 0.75rem;
   background: var(--bg-deep);
   border-bottom: 1px solid var(--border-dim);
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: 0.63rem;
   color: var(--text-dim);
+  flex-shrink: 0;
 }
 
 .dot {
@@ -23,20 +25,36 @@
   height: 6px;
   border-radius: 50%;
   background: var(--lime);
+  box-shadow: 0 0 5px var(--lime-glow);
+  flex-shrink: 0;
+}
+
+.dotRunning {
+  background: var(--cyan);
+  box-shadow: 0 0 5px var(--cyan-glow);
+  animation: pulse-dot 0.9s ease-in-out infinite;
+}
+
+.dotError {
+  background: var(--red);
+  box-shadow: 0 0 5px var(--red-glow);
 }
 
 .barText {
   user-select: none;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 0.6rem;
 }
 
 .runStatus {
   margin-left: auto;
-  border: 1px solid var(--border-med);
-  border-radius: 999px;
-  padding: 0.1rem 0.45rem;
-  font-size: 0.62rem;
+  border: 1px solid var(--border-soft);
+  border-radius: 3px;
+  padding: 0.08rem 0.42rem;
+  font-size: 0.6rem;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
 }
 
 .statusIdle {
@@ -45,25 +63,26 @@
 
 .statusRunning {
   color: var(--cyan);
-  border-color: rgba(34, 211, 238, 0.45);
-  background: rgba(34, 211, 238, 0.1);
+  border-color: rgba(0, 229, 255, 0.35);
+  background: rgba(0, 229, 255, 0.07);
 }
 
 .statusSuccess {
   color: var(--lime);
-  border-color: rgba(132, 204, 22, 0.45);
-  background: rgba(132, 204, 22, 0.1);
+  border-color: rgba(118, 224, 0, 0.4);
+  background: rgba(118, 224, 0, 0.07);
 }
 
 .statusError {
   color: var(--red);
-  border-color: rgba(239, 68, 68, 0.45);
-  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(255, 64, 96, 0.4);
+  background: rgba(255, 64, 96, 0.07);
 }
 
+/* ── Console canvas ───────────────────────────── */
 .canvas {
   flex: 1;
-  padding: 0.65rem 0.7rem;
+  padding: 0.5rem;
   background: var(--bg-panel);
   overflow: auto;
   min-height: 120px;
@@ -73,78 +92,84 @@
 .placeholder {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0;
   min-height: 0;
   height: 100%;
 }
 
 .consoleCard {
-  padding: 0.25rem;
   border-radius: var(--radius-sm);
-  background: #0a1226;
+  background: #05090f;
   min-height: 0;
   height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .consoleLog {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  gap: 0.18rem;
   flex: 1;
   min-height: 0;
   overflow: auto;
-  background: #060d1d;
-  border: 1px solid rgba(148, 180, 240, 0.18);
+  background: #040810;
+  border: 1px solid rgba(0, 229, 255, 0.09);
   border-radius: var(--radius-sm);
-  padding: 0.5rem 0.55rem;
+  padding: 0.55rem 0.65rem;
 }
 
 .consoleLine {
   font-family: var(--font-mono);
   font-size: 0.7rem;
-  color: #c5d6ff;
+  color: #c5d8ff;
   white-space: pre-wrap;
-  line-height: 1.45;
+  line-height: 1.5;
   display: flex;
   align-items: flex-start;
-  gap: 0.35rem;
+  gap: 0.38rem;
+  animation: slide-in-up 0.15s ease-out;
 }
 
 .consoleLineMuted {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
-  color: #6f83ab;
-  line-height: 1.4;
-  padding-left: 1.15rem;
+  font-size: 0.67rem;
+  color: #4e6080;
+  line-height: 1.45;
+  padding-left: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* blinking cursor after the muted waiting message */
+.consoleLineMuted::after {
+  content: "\25ae";
+  font-size: 0.65rem;
+  color: #4e6080;
+  animation: cursor-blink 1.1s step-end infinite;
 }
 
 .consoleLevel {
-  font-size: 0.65rem;
+  font-size: 0.62rem;
+  letter-spacing: 0.02em;
 }
 
-.levelLog {
-  color: var(--cyan);
-}
-
-.levelWarn {
-  color: var(--amber);
-}
-
-.levelError {
-  color: var(--red);
-}
+.levelLog   { color: var(--cyan); }
+.levelWarn  { color: var(--amber); }
+.levelError { color: var(--red); }
 
 .consolePrompt {
   display: inline-block;
-  width: 0.8rem;
+  width: 0.85rem;
   flex-shrink: 0;
-  color: #6f83ab;
+  color: rgba(0, 229, 255, 0.4);
+  font-weight: 700;
 }
 
 .consoleSystemLine {
-  color: #9fb3dd;
+  color: #8faad4;
 }
 
 @media (max-width: 1280px) {

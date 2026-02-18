@@ -19,12 +19,12 @@ export function ConceptPanel({ lesson }: ConceptPanelProps) {
     <aside className={styles.panel}>
       <h3 className={styles.title}>{lesson.title}</h3>
 
-      <section className={styles.card}>
+      <section className={`${styles.card} ${styles.cardMission}`}>
         <h4 className={styles.cardTitle}>Mission</h4>
         <p className={styles.missionText}>{lesson.description}</p>
       </section>
 
-      <section className={styles.card}>
+      <section className={`${styles.card} ${styles.cardActions}`}>
         <h4 className={styles.cardTitle}>Do This Now</h4>
         <ul className={styles.actionList}>
           {immediateActions.map((action) => (
@@ -33,7 +33,7 @@ export function ConceptPanel({ lesson }: ConceptPanelProps) {
         </ul>
       </section>
 
-      <section className={styles.card}>
+      <section className={`${styles.card} ${styles.cardCriteria}`}>
         <h4 className={styles.cardTitle}>Success Criteria</h4>
         <ul className={styles.criteriaList}>
           {successCriteria.map((check, index) => (
@@ -45,7 +45,7 @@ export function ConceptPanel({ lesson }: ConceptPanelProps) {
         </ul>
       </section>
 
-      <section className={styles.card}>
+      <section className={`${styles.card} ${styles.cardWhy}`}>
         <h4 className={styles.cardTitle}>Why It Matters</h4>
         <div className={styles.highlightList}>
           {conceptHighlights.map((highlight) => (

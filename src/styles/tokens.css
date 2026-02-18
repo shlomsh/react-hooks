@@ -1,40 +1,46 @@
 :root {
   /* Backgrounds */
-  --bg-abyss: #070b16;
-  --bg-deep: #0b1020;
-  --bg-panel: #121a31;
-  --bg-surface: #1a2644;
-  --bg-raised: #1a2644;
-  --bg-hover: #22335d;
+  --bg-abyss: #060912;
+  --bg-deep: #090e1c;
+  --bg-panel: #0f1628;
+  --bg-surface: #172039;
+  --bg-raised: #172039;
+  --bg-hover: #1e2d4f;
 
   /* Borders */
-  --border-dim: rgba(148, 180, 240, 0.14);
-  --border-soft: rgba(148, 180, 240, 0.18);
-  --border-med: rgba(148, 180, 240, 0.32);
+  --border-dim: rgba(148, 180, 240, 0.10);
+  --border-soft: rgba(148, 180, 240, 0.16);
+  --border-med: rgba(148, 180, 240, 0.28);
 
   /* Text */
-  --text-primary: #e9f0ff;
+  --text-primary: #eaf1ff;
   --text-secondary: #9fb3dd;
-  --text-dim: #7f95ba;
+  --text-dim: #6a82a8;
 
   /* Accent: Cyan */
-  --cyan: #22d3ee;
-  --cyan-dim: rgba(34, 211, 238, 0.12);
-  --cyan-glow: rgba(34, 211, 238, 0.35);
+  --cyan: #00e5ff;
+  --cyan-dim: rgba(0, 229, 255, 0.10);
+  --cyan-glow: rgba(0, 229, 255, 0.40);
 
   /* Accent: Amber */
-  --amber: #f59e0b;
-  --amber-dim: rgba(245, 158, 11, 0.1);
-  --amber-glow: rgba(245, 158, 11, 0.3);
+  --amber: #ffb300;
+  --amber-dim: rgba(255, 179, 0, 0.10);
+  --amber-glow: rgba(255, 179, 0, 0.35);
 
   /* Accent: Lime */
-  --lime: #84cc16;
-  --lime-dim: rgba(132, 204, 22, 0.08);
-  --lime-glow: rgba(132, 204, 22, 0.3);
+  --lime: #76e000;
+  --lime-dim: rgba(118, 224, 0, 0.08);
+  --lime-glow: rgba(118, 224, 0, 0.35);
 
   /* Accent: Red */
-  --red: #ef4444;
-  --red-dim: rgba(239, 68, 68, 0.1);
+  --red: #ff4060;
+  --red-dim: rgba(255, 64, 96, 0.10);
+  --red-glow: rgba(255, 64, 96, 0.30);
+
+  /* Accent: Violet (WHY IT MATTERS / conceptual depth) */
+  --violet: #a78bfa;
+  --violet-dim: rgba(167, 139, 250, 0.10);
+  --violet-glow: rgba(167, 139, 250, 0.30);
 
   /* Typography */
   --font-display: "Space Grotesk", sans-serif;
@@ -42,12 +48,13 @@
   --font-mono: "IBM Plex Mono", monospace;
 
   /* Radius */
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
+  --radius-sm: 5px;
+  --radius-md: 9px;
+  --radius-lg: 14px;
+  --radius-xl: 22px;
 
   /* Easing */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }

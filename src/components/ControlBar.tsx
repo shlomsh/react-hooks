@@ -12,6 +12,7 @@ interface ControlBarProps {
   stepStates: boolean[];
   primaryActionLabel: string;
   primaryActionDisabled: boolean;
+  awaitingGateSubmit?: boolean;
   onPrimaryAction: () => void;
   onReset: () => void;
   onUnlockHint: () => void;
@@ -28,6 +29,7 @@ export function ControlBar({
   stepStates,
   primaryActionLabel,
   primaryActionDisabled,
+  awaitingGateSubmit,
   onPrimaryAction,
   onReset,
   onUnlockHint,
@@ -65,7 +67,7 @@ export function ControlBar({
             Unlock Hint
           </button>
           <button
-            className={styles.btnAmber}
+            className={`${styles.btnAmber}${awaitingGateSubmit ? ` ${styles.btnAmberPulse}` : ""}`}
             onClick={onPrimaryAction}
             disabled={primaryActionDisabled}
             title={hasErrors ? "Fix TypeScript errors before running" : undefined}

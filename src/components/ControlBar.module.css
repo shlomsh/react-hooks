@@ -1,9 +1,30 @@
 .bar {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
-  padding: 0.65rem 1rem 0.75rem;
+  gap: 0;
+  padding: 0.6rem 1rem 0.7rem;
   background: var(--bg-deep);
+  position: relative;
+}
+
+/* amber-to-cyan gradient top separator — the "instrument cluster" dividing line */
+.bar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 179, 0, 0.15) 20%,
+    rgba(255, 179, 0, 0.35) 45%,
+    rgba(0, 229, 255, 0.25) 65%,
+    var(--cyan-dim) 85%,
+    transparent 100%
+  );
+  pointer-events: none;
 }
 
 .topRow {
@@ -19,31 +40,36 @@
   flex: 1 1 440px;
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.28rem;
+  padding-top: 0.05rem;
 }
 
 .progressRow {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.45rem;
 }
 
 .progressLabel {
-  font-size: 0.72rem;
-  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  color: var(--text-dim);
+  letter-spacing: 0.04em;
 }
 
 .stepChip {
-  min-width: 18px;
-  height: 18px;
-  border-radius: 9px;
-  padding: 0 0.35rem;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  padding: 0 0.38rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.65rem;
+  font-size: 0.63rem;
   font-family: var(--font-mono);
+  font-weight: 600;
   border: 1px solid var(--border-med);
+  transition: all 0.3s var(--ease-out-back);
 }
 
 .stepTodo {
@@ -54,27 +80,42 @@
   color: var(--lime);
   border-color: var(--lime);
   background: var(--lime-dim);
+  animation: step-chip-pop 0.45s var(--ease-out-back);
 }
 
+/* ── Coach message: the most important text on screen ── */
 .coachMessage {
-  font-size: 0.74rem;
-  color: var(--text-dim);
+  font-size: 0.84rem;
+  font-weight: 500;
+  color: var(--text-primary);
   white-space: normal;
-  line-height: 1.4;
+  line-height: 1.45;
 }
 
 .statusNote {
-  font-size: 0.72rem;
+  font-size: 0.73rem;
   color: var(--cyan);
   white-space: normal;
   line-height: 1.35;
+  display: flex;
+  align-items: baseline;
+  gap: 0.3rem;
+}
+
+.statusNote::before {
+  content: "▶";
+  font-size: 0.55rem;
+  opacity: 0.7;
 }
 
 .hintMessage {
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   color: var(--amber);
   white-space: normal;
-  line-height: 1.35;
+  line-height: 1.4;
+  border-left: 2px solid rgba(255, 179, 0, 0.35);
+  padding-left: 0.55rem;
+  font-family: var(--font-mono);
 }
 
 .actions {
@@ -88,46 +129,52 @@
 }
 
 .btnGhost {
-  padding: 0.4rem 0.85rem;
+  padding: 0.38rem 0.8rem;
   border-radius: var(--radius-sm);
-  font-size: 0.74rem;
+  font-size: 0.73rem;
   font-weight: 500;
   background: transparent;
-  border: 1px solid var(--border-med);
-  color: var(--text-secondary);
-  transition: all 0.2s;
+  border: 1px solid var(--border-soft);
+  color: var(--text-dim);
+  transition: all 0.18s;
 }
 
 .btnGhost:hover:not(:disabled) {
   background: var(--bg-surface);
-  color: var(--text-primary);
-  border-color: var(--border-soft);
+  color: var(--text-secondary);
+  border-color: var(--border-med);
 }
 
 .btnGhost:disabled {
-  opacity: 0.4;
+  opacity: 0.35;
   cursor: not-allowed;
 }
 
 .btnAmber {
-  padding: 0.5rem 1.15rem;
+  padding: 0.48rem 1.2rem;
   border-radius: var(--radius-sm);
   font-size: 0.8rem;
-  font-weight: 600;
+  font-weight: 700;
   background: var(--amber);
   color: var(--bg-abyss);
   border: none;
-  box-shadow: 0 2px 12px rgba(255, 179, 0, 0.2);
-  transition: all 0.25s var(--ease-out-expo);
+  box-shadow: 0 2px 14px rgba(255, 179, 0, 0.22);
+  transition: all 0.22s var(--ease-out-expo);
+  letter-spacing: 0.01em;
 }
 
-.btnAmber:hover {
-  box-shadow: 0 0 20px var(--amber-glow);
+.btnAmber:hover:not(:disabled) {
+  box-shadow: 0 0 22px var(--amber-glow), 0 3px 16px rgba(255, 179, 0, 0.28);
   transform: translateY(-1px);
 }
 
+/* pulse when it's the submit gate CTA */
+.btnAmberPulse {
+  animation: pulse-amber 2s ease-in-out infinite;
+}
+
 .btnAmber:disabled {
-  opacity: 0.45;
+  opacity: 0.4;
   cursor: not-allowed;
   box-shadow: none;
   transform: none;

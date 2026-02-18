@@ -8,6 +8,46 @@
   padding: 0;
 }
 
+/* ── Flight-sim keyframes ─────────────────────────────────── */
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; box-shadow: 0 0 6px var(--cyan-glow); }
+  50%       { opacity: 0.4; box-shadow: none; }
+}
+
+@keyframes pulse-lime {
+  0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--lime-glow); }
+  50%       { opacity: 0.5; box-shadow: 0 0 2px var(--lime-glow); }
+}
+
+@keyframes pulse-amber {
+  0%, 100% { box-shadow: 0 0 16px var(--amber-glow), 0 2px 12px rgba(255,179,0,0.25); }
+  50%       { box-shadow: 0 0 6px rgba(255,179,0,0.15), 0 1px 4px rgba(255,179,0,0.1); }
+}
+
+@keyframes check-pass-flash {
+  0%   { background: var(--lime-dim); box-shadow: 0 0 0 0 var(--lime-glow); }
+  40%  { background: rgba(118, 224, 0, 0.22); box-shadow: 0 0 0 4px rgba(118,224,0,0.12); }
+  100% { background: var(--lime-dim); box-shadow: none; }
+}
+
+@keyframes step-chip-pop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.35); }
+  70%  { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+@keyframes slide-in-up {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 html, body, #root {
   height: 100%;
   overflow: hidden;
