@@ -1,6 +1,6 @@
 # Kanban Status
 
-Last updated: 2026-02-18T10:00:00Z
+Last updated: 2026-02-18T08:58:10Z
 
 This file is the source of truth for the daily kanban board.
 
@@ -347,6 +347,33 @@ This file is the source of truth for the daily kanban board.
     "status": "backlog",
     "notes": "",
     "order": 36
+  },
+  {
+    "id": "ST-039",
+    "title": "Playwright baseline setup",
+    "owner": "Shared",
+    "priority": "P1",
+    "status": "backlog",
+    "notes": "Tomorrow: install @playwright/test, add playwright.config.ts, and scripts for local/CI runs without replacing existing Vitest test:e2e gate.",
+    "order": 37
+  },
+  {
+    "id": "ST-040",
+    "title": "Browser smoke flow spec",
+    "owner": "Shared",
+    "priority": "P1",
+    "status": "backlog",
+    "notes": "Tomorrow: add first Playwright smoke spec for desktop gate + core lesson shell render and wire stable selectors.",
+    "order": 38
+  },
+  {
+    "id": "ST-041",
+    "title": "CI Playwright job",
+    "owner": "Shared",
+    "priority": "P1",
+    "status": "backlog",
+    "notes": "Tomorrow: add GitHub Actions browser E2E job (playwright install + run) and keep current unit/e2e vitest gate intact.",
+    "order": 39
   }
 ]
 ```
