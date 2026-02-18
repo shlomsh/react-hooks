@@ -22,6 +22,7 @@ export interface Lesson {
   constraints: string[];
 
   conceptPanel: ConceptPanel;
+  guidance?: LessonGuidance;
   files: ExerciseFile[];
   checks: Check[];
   hintLadder: [HintTier1, HintTier2, HintTier3];
@@ -30,6 +31,13 @@ export interface Lesson {
 
   /** Optional sandbox test harness configuration */
   testHarness?: TestHarness;
+}
+
+export interface LessonGuidance {
+  firstStepPrompt: string;
+  runStepPrompt: string;
+  retryPrompt: string;
+  successPrompt: string;
 }
 
 // ---------------------------------------------------------------------------

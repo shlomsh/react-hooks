@@ -58,6 +58,15 @@ This lesson is intentionally small so you can get a quick first win.
     ],
   },
 
+  guidance: {
+    firstStepPrompt:
+      "Step 1: in CounterIntro.tsx, change Increment from c + 2 to c + 1.",
+    runStepPrompt: "Step 2: click Run to validate your change.",
+    retryPrompt: "Almost there. Fix the failed check, then submit gate again.",
+    successPrompt:
+      "Nice work - your first gate passed. You are ready for the next challenge.",
+  },
+
   files: [
     {
       fileName: "CounterIntro.tsx",

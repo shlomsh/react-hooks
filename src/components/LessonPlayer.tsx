@@ -58,17 +58,27 @@ export function LessonPlayer() {
   const stepStates = [hasEditedSomething, hasRun, hasGatePass];
   const completedSteps = stepStates.filter(Boolean).length;
   const progressLabel = `${completedSteps}/3 complete`;
+  const editableFileName =
+    lesson.files.find((file) => file.editable && !file.hidden)?.fileName ??
+    activeFile.filename;
+  const guidance = lesson.guidance ?? {
+    firstStepPrompt: `Step 1: edit one line in ${editableFileName} for a quick win.`,
+    runStepPrompt: "Step 2: click Run to validate your change.",
+    retryPrompt: "Almost there. Fix the failed check, then submit gate again.",
+    successPrompt:
+      "Nice work - your first gate passed. You are ready for the next challenge.",
+  };
   const coachMessage = hasErrors
     ? "Step 1: fix TypeScript errors, then click Run."
     : hasGatePass
-      ? "Nice work - your first gate passed. You are ready for the next challenge."
+      ? guidance.successPrompt
       : gateResult && !gateResult.passed
-        ? "Almost there. Fix the failed check, then submit gate again."
-      : sandbox.state.status === "error" || sandbox.state.status === "timeout"
-        ? "Good attempt. Use the console hint, make one small fix, and run again."
-        : hasEditedSomething
-          ? "Step 2: click Run to validate your change."
-          : "Step 1: in CounterIntro.tsx, change Increment from c + 2 to c + 1.";
+        ? guidance.retryPrompt
+        : sandbox.state.status === "error" || sandbox.state.status === "timeout"
+          ? "Good attempt. Use the console hint, make one small fix, and run again."
+          : hasEditedSomething
+            ? guidance.runStepPrompt
+            : guidance.firstStepPrompt;
 
   const checkItems = useMemo(
     () =>
