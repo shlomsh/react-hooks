@@ -1,6 +1,6 @@
 # Kanban Status
 
-Last updated: 2026-02-18T19:35:50.000Z
+Last updated: 2026-02-18T21:42:00.000Z
 
 This file is the source of truth for the daily kanban board.
 
@@ -180,37 +180,37 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-018",
     "title": "Progress local persistence",
-    "owner": "Shared",
+    "owner": "Claude",
     "priority": "P2",
-    "status": "backlog",
-    "notes": "Deferred to keep minimal Demo 1 path focused.",
+    "status": "done",
+    "notes": "Completed 2026-02-18. progressModel.ts: pure immutable ProgressState (7 modules, locked/unlocked/in-progress/passed), createProgressState, markModuleStarted, markModulePassed, recordAttempt, getModuleProgress, serialize/deserializeProgress, PROGRESS_STORAGE_KEY. useProgress.ts: useReducer + localStorage persistence (init + effect). 20 model tests + 6 hook tests passing. Branch: codex/st-018-021-progress-badge.",
     "order": 18
   },
   {
     "id": "ST-019",
     "title": "Completion ledger",
-    "owner": "Shared",
+    "owner": "Claude",
     "priority": "P2",
-    "status": "backlog",
-    "notes": "Deferred to keep minimal Demo 1 path focused.",
+    "status": "done",
+    "notes": "Completed 2026-02-18. completionLedger.ts: buildLedger, getCompletedModuleCount, getTotalAttempts, getModuleAttempts, isTrackComplete, getNextUnlockedModule — all pure queries over ProgressState. 13 tests passing. Branch: codex/st-018-021-progress-badge.",
     "order": 19
   },
   {
     "id": "ST-020",
     "title": "Proficiency validator",
-    "owner": "Shared",
+    "owner": "Claude",
     "priority": "P1",
-    "status": "backlog",
-    "notes": "Deferred to keep minimal Demo 1 path focused.",
+    "status": "done",
+    "notes": "Completed 2026-02-18. proficiencyValidator.ts: validateProficiency checks all 6 PRD Section 4 criteria (all gates, 3 custom-hook labs, 2 debug labs, capstone>=85, capstone<=3 retries, final assessment>=80 without final hint). Returns {proficient, failedCriteria[]}. 13 tests passing. Branch: codex/st-018-021-progress-badge.",
     "order": 20
   },
   {
     "id": "ST-021",
     "title": "Badge issuance UI",
-    "owner": "Shared",
+    "owner": "Claude",
     "priority": "P2",
-    "status": "backlog",
-    "notes": "",
+    "status": "done",
+    "notes": "Completed 2026-02-18. BadgeScreen.tsx: full-page badge screen with animated badge ring, 'React Hooks Pro' heading, proficiency confirmed subtitle, earned date, 6-criterion checklist, Download Badge button, Share Achievement CTA. Blueprint Lab dark theme. 8 component tests passing. Branch: codex/st-018-021-progress-badge.",
     "order": 21
   },
   {

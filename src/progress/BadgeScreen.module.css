@@ -1,0 +1,160 @@
+/* ── Badge Screen ─────────────────────────────────────────────────────── */
+
+.screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 3rem 2rem;
+  background: var(--bg-abyss);
+  text-align: center;
+  gap: 0;
+}
+
+/* ── Badge graphic ──────────────────────────────────────────────────────── */
+
+.badgeWrap {
+  margin-bottom: 2rem;
+}
+
+.badgeRing {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 2px solid var(--lime);
+  box-shadow:
+    0 0 20px var(--lime-glow),
+    inset 0 0 20px rgba(118, 224, 0, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: badge-pulse 3s ease-in-out infinite;
+}
+
+.badgeInner {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, rgba(118, 224, 0, 0.18), transparent 70%);
+  border: 1px solid var(--lime-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badgeIcon {
+  font-size: 2.4rem;
+  color: var(--lime);
+  filter: drop-shadow(0 0 8px var(--lime-glow));
+}
+
+@keyframes badge-pulse {
+  0%, 100% { box-shadow: 0 0 20px var(--lime-glow), inset 0 0 20px rgba(118, 224, 0, 0.06); }
+  50%       { box-shadow: 0 0 36px var(--lime-glow), inset 0 0 28px rgba(118, 224, 0, 0.1); }
+}
+
+/* ── Typography ─────────────────────────────────────────────────────────── */
+
+.heading {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 0.4rem;
+  letter-spacing: -0.01em;
+}
+
+.subtitle {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--lime);
+  margin: 0 0 0.6rem;
+}
+
+.date {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  margin: 0 0 2rem;
+}
+
+/* ── Criteria list ──────────────────────────────────────────────────────── */
+
+.criteriaList {
+  list-style: none;
+  margin: 0 0 2.5rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 520px;
+  width: 100%;
+  text-align: left;
+}
+
+.criterionItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  background: var(--bg-panel);
+  border: 1px solid var(--border-dim);
+  border-left: 2px solid var(--lime-dim);
+  border-radius: var(--radius-sm);
+  padding: 0.45rem 0.7rem;
+}
+
+.checkmark {
+  color: var(--lime);
+  font-size: 0.72rem;
+  flex-shrink: 0;
+  margin-top: 0.05rem;
+}
+
+/* ── Actions ────────────────────────────────────────────────────────────── */
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.downloadBtn {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.6rem 1.4rem;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--lime);
+  background: rgba(118, 224, 0, 0.1);
+  color: var(--lime);
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s;
+}
+
+.downloadBtn:hover {
+  background: rgba(118, 224, 0, 0.18);
+  box-shadow: 0 0 12px var(--lime-glow);
+}
+
+.continueBtn {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.6rem 1.4rem;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border-med);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.continueBtn:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
