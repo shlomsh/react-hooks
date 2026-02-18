@@ -26,37 +26,39 @@ export function ControlBar({
 }: ControlBarProps) {
   return (
     <div className={styles.bar}>
-      <div className={styles.left}>
-        <div className={styles.progressRow}>
-          <span className={styles.progressLabel}>{progressLabel}</span>
-          {stepStates.map((done, index) => (
-            <span
-              key={index + 1}
-              className={`${styles.stepChip} ${done ? styles.stepDone : styles.stepTodo}`}
-            >
-              {done ? "\u2713" : index + 1}
-            </span>
-          ))}
+      <div className={styles.topRow}>
+        <div className={styles.left}>
+          <div className={styles.progressRow}>
+            <span className={styles.progressLabel}>{progressLabel}</span>
+            {stepStates.map((done, index) => (
+              <span
+                key={index + 1}
+                className={`${styles.stepChip} ${done ? styles.stepDone : styles.stepTodo}`}
+              >
+                {done ? "\u2713" : index + 1}
+              </span>
+            ))}
+          </div>
+          <div className={styles.coachMessage}>{coachMessage}</div>
         </div>
-        <div className={styles.coachMessage}>{coachMessage}</div>
+        <div className={styles.actions}>
+          <button
+            className={styles.btnGhost}
+            disabled={hasErrors || runStatus === "running"}
+            onClick={onRun}
+            title={hasErrors ? "Fix TypeScript errors before running" : "Run code"}
+          >
+            {runStatus === "running" ? "Running..." : "Run"}
+          </button>
+          <button className={styles.btnGhost} onClick={onReset}>Reset</button>
+          <button className={styles.btnGhost}>Unlock Hint</button>
+          <button className={styles.btnAmber} onClick={onSubmitGate}>Submit Gate</button>
+        </div>
       </div>
       <div className={styles.checks}>
         {checkItems.map((check) => (
           <CheckItem key={check.id} label={check.label} pass={check.pass} />
         ))}
-      </div>
-      <div className={styles.actions}>
-        <button
-          className={styles.btnGhost}
-          disabled={hasErrors || runStatus === "running"}
-          onClick={onRun}
-          title={hasErrors ? "Fix TypeScript errors before running" : "Run code"}
-        >
-          {runStatus === "running" ? "Running..." : "Run"}
-        </button>
-        <button className={styles.btnGhost} onClick={onReset}>Reset</button>
-        <button className={styles.btnGhost}>Unlock Hint</button>
-        <button className={styles.btnAmber} onClick={onSubmitGate}>Submit Gate</button>
       </div>
     </div>
   );
