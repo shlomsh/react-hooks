@@ -295,6 +295,45 @@
   border-top: 1px solid var(--border-dim);
 }
 
+.completionBanner {
+  margin: 0.65rem 0.75rem 0;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid rgba(118, 224, 0, 0.35);
+  border-radius: var(--radius-sm);
+  background: rgba(118, 224, 0, 0.07);
+}
+
+.completionTitle {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--lime);
+}
+
+.completionBody {
+  margin: 0.45rem 0 0.65rem;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+.completionAction {
+  height: 1.9rem;
+  padding: 0 0.8rem;
+  border-radius: 0.45rem;
+  border: 1px solid rgba(118, 224, 0, 0.45);
+  background: rgba(12, 32, 21, 0.7);
+  color: var(--lime);
+  font-size: 0.74rem;
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+}
+
+.completionAction:hover {
+  border-color: var(--lime);
+}
+
 .internalsArea {
   min-width: 0;
   min-height: 0;

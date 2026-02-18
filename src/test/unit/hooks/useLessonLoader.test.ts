@@ -79,4 +79,15 @@ describe("useLessonLoader", () => {
     expect(result.current.lesson.gate.passCondition).toBe("rubric-score");
     expect(result.current.files[0].filename).toBe("useStableWorkspace.ts");
   });
+
+  it("loads module-7 final assessment when lesson query param is 8", () => {
+    window.history.replaceState({}, "", "/?lesson=8");
+    const { result } = renderHook(() => useLessonLoader());
+
+    expect(result.current.lesson.exerciseId).toBe("mod-7-final-assessment-track-complete");
+    expect(result.current.lesson.module.moduleId).toBe(7);
+    expect(result.current.lesson.module.type).toBe("final-assessment");
+    expect(result.current.lesson.gate.passCondition).toBe("all-checks");
+    expect(result.current.files[0].filename).toBe("FinalAssessment.tsx");
+  });
 });

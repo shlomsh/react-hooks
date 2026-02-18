@@ -212,7 +212,7 @@ Use this table during execution updates.
 | ST-025 | Eng B | DONE |  |  | ST-008, ST-013 |  |
 | ST-026 | Eng B | DONE |  |  | ST-008, ST-013 |  |
 | ST-027 | Eng C/B | DONE |  |  | ST-013, ST-026 |  |
-| ST-028 | Eng B | BACKLOG |  |  | ST-022..ST-027 |  |
+| ST-028 | Eng B | DONE |  |  | ST-022..ST-027 |  |
 | ST-029 | Eng D | BACKLOG |  |  |  |  |
 | ST-030 | Eng D | BACKLOG |  |  | ST-029 |  |
 | ST-031 | Eng D | BACKLOG |  |  | ST-019, ST-030 |  |
@@ -250,6 +250,6 @@ Use this table during execution updates.
 ## 9. Immediate Next Actions
 1. ~~Confirm engineer-to-lane assignments (A/B/C/D names).~~
 2. ~~Create repo issues from ST-001 to ST-036.~~
-3. Start ST-028 final assessment flow (module 7 completion path).
-4. Implement ST-011 hook call-order tracker to complete the visualizer core set.
+3. Implement ST-011 hook call-order tracker to complete the visualizer core set.
+4. Begin ST-035 performance budget checks.
 5. Keep KANBAN-STATUS.md and this tracker synchronized after each story close.
