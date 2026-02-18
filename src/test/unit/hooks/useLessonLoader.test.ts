@@ -6,10 +6,10 @@ describe("useLessonLoader", () => {
   it("loads module-1 lesson metadata and editor files", () => {
     const { result } = renderHook(() => useLessonLoader());
 
-    expect(result.current.lesson.exerciseId).toBe("mod-1-internals-primer");
+    expect(result.current.lesson.exerciseId).toBe("mod-1-hooks-intro-counter");
     expect(result.current.lesson.module.moduleId).toBe(1);
     expect(result.current.files.length).toBeGreaterThan(0);
-    expect(result.current.files[0].filename).toBe("LifecycleLogger.tsx");
+    expect(result.current.files[0].filename).toBe("CounterIntro.tsx");
   });
 
   it("filters hidden files from editor tabs", () => {

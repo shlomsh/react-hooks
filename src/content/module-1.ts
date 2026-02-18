@@ -1,95 +1,85 @@
 import type { Lesson } from "../types/lesson-schema";
 
 /**
- * Module 1: Internals Primer — "Diagnose the Lifecycle"
+ * Module 1: Intro to React Hooks — "Your First useState Win"
  *
- * Concept-gate exercise. Learner reads about React's render cycle,
- * state snapshots, closures, and effect setup/cleanup, then fixes
- * a buggy component that logs lifecycle events in the wrong order.
+ * Beginner-friendly entry lesson focused on one concept:
+ * useState updates UI state in response to user actions.
  */
 export const module1: Lesson = {
-  exerciseId: "mod-1-internals-primer",
+  exerciseId: "mod-1-hooks-intro-counter",
   module: {
     moduleId: 1,
-    moduleName: "Internals Primer",
+    moduleName: "Hooks Intro",
     order: 1,
     type: "concept-gate",
-    estimatedMinutes: 20,
+    estimatedMinutes: 10,
     difficulty: "intro",
-    concepts: [
-      "Render cycle",
-      "State snapshots",
-      "Closures over stale state",
-      "Effect setup and cleanup ordering",
-    ],
-    tags: ["useEffect", "lifecycle", "closures", "cleanup"],
+    concepts: ["useState basics", "state updates", "event handlers"],
+    tags: ["useState", "counter", "intro"],
     lockedUntilPrevious: false,
     unlocksModule: 2,
   },
 
-  title: "Diagnose the Lifecycle",
+  title: "Your First useState Win",
   description:
-    "A component logs lifecycle events but the order is wrong. Fix the useEffect to ensure cleanup runs before re-setup on dependency change.",
+    "Build a tiny counter with React useState. You will make one small code change, click Run, and see your first success.",
   constraints: [
-    "Do not add new state variables",
-    "Do not remove the console.log calls",
-    "Effect must clean up before re-running",
+    "Use exactly one useState for count",
+    "Keep count as a number",
+    "Increment button must add 1",
   ],
 
   conceptPanel: {
-    title: "React Render Cycle",
+    title: "useState in 60 seconds",
     content: `
-### How React renders
+### What you are learning
 
-1. **Trigger** — state change via \`setState\` or parent re-render.
-2. **Render** — React calls your component function. This is a *snapshot*: every value captured by closures reflects state at this render.
-3. **Commit** — React updates the DOM.
-4. **Effects** — \`useEffect\` callbacks run *after* paint. Cleanup from the *previous* render runs first.
+\`useState\` stores a value for your component.
+When you call its setter, React re-renders with the new value.
 
-### Closures & stale state
+### Counter mental model
 
-Each render creates a closure. If an effect references \`count\`, it sees the value from *that* render, not the latest. This is why dependency arrays matter.
+1. \`count\` is the current value.
+2. \`setCount\` schedules the next value.
+3. Clicking a button triggers \`setCount\`.
 
-### Cleanup ordering
-
-When deps change: **cleanup(prev)** → **setup(next)**. Cleanup always runs with the values from its *own* render.
+This lesson is intentionally small so you can get a quick first win.
     `.trim(),
     keyPoints: [
-      "Render is a snapshot — closures capture values at render time",
-      "Effects run after paint, not during render",
-      "Cleanup runs before the next setup when deps change",
-      "Cleanup runs with values from its own render, not the current one",
+      "State lives in the component via useState",
+      "Setter functions trigger re-render",
+      "Small edits and fast feedback build confidence",
     ],
     commonFailures: [
-      "Assuming cleanup sees the latest state (it sees its own render's state)",
-      "Forgetting that effects are deferred — they don't block paint",
-      "Missing dependency array causes effect to run every render",
+      "Forgetting to call setCount in the click handler",
+      "Using a string for count instead of a number",
+      "Updating the wrong variable in the handler",
     ],
   },
 
   files: [
     {
-      fileName: "LifecycleLogger.tsx",
+      fileName: "CounterIntro.tsx",
       language: "typescriptreact",
       editable: true,
       category: "component",
-      starterCode: `import { useState, useEffect } from "react";
+      starterCode: `import { useState } from "react";
 
-export default function LifecycleLogger() {
+export default function CounterIntro() {
   const [count, setCount] = useState(0);
 
-  // BUG: cleanup is missing — effect re-runs without cleaning up first
-  useEffect(() => {
-    console.log(\`[Effect] setup for count=\${count}\`);
-    // TODO: return a cleanup function that logs the cleanup
-  }, [count]);
-
-  console.log(\`[Render] count=\${count}\`);
-
   return (
-    <div>
+    <div style={{ padding: "1rem", fontFamily: "sans-serif" }}>
+      <h2>Counter Intro</h2>
       <p>Count: {count}</p>
       <button onClick={() => setCount((c) => c + 1)}>Increment</button>
+      <button onClick={() => setCount((c) => c - 1)} style={{ marginLeft: "0.5rem" }}>
+        Decrement
+      </button>
+      <button onClick={() => setCount(0)} style={{ marginLeft: "0.5rem" }}>
+        Reset
+      </button>
     </div>
   );
 }
@@ -101,10 +91,10 @@ export default function LifecycleLogger() {
       editable: false,
       hidden: false,
       category: "component",
-      starterCode: `import LifecycleLogger from "./LifecycleLogger";
+      starterCode: `import CounterIntro from "./CounterIntro";
 
 export default function App() {
-  return <LifecycleLogger />;
+  return <CounterIntro />;
 }
 `,
     },
@@ -112,50 +102,41 @@ export default function App() {
 
   checks: [
     {
-      id: "cleanup-exists",
+      id: "uses-usestate",
       type: "functional",
-      weight: 0.4,
+      weight: 0.34,
       testCode: `
-        // Verify the effect returns a cleanup function
-        const source = files["LifecycleLogger.tsx"];
-        if (!/return\\s*\\(\\)\\s*=>/.test(source) && !/return\\s+function/.test(source)) {
-          throw new Error("Effect must return a cleanup function");
+        const source = files["CounterIntro.tsx"];
+        if (!/useState\\s*\\(/.test(source)) throw new Error("useState is required");
+      `,
+      failMessage: "Step 1: use useState for count.",
+      successMessage: "useState is present.",
+    },
+    {
+      id: "increment-handler",
+      type: "behavioral",
+      weight: 0.33,
+      stimulus: "Click Increment once",
+      expectedOutcome: "Count increases by 1",
+      testCode: `
+        const source = files["CounterIntro.tsx"];
+        if (!/setCount\\s*\\(\\s*\\(c\\)\\s*=>\\s*c\\s*\\+\\s*1\\s*\\)/.test(source)) {
+          throw new Error("Increment handler must add 1");
         }
       `,
-      failMessage: "Your useEffect must return a cleanup function.",
-      successMessage: "Cleanup function detected.",
+      failMessage: "Step 2: make Increment add 1.",
+      successMessage: "Increment logic looks correct.",
     },
     {
-      id: "cleanup-logs",
-      type: "behavioral",
-      weight: 0.3,
-      stimulus: "Click increment once (count 0 → 1)",
-      expectedOutcome:
-        'Console shows cleanup log for count=0 before setup log for count=1',
-      testCode: `
-        // Check console output ordering after a state change
-        const logs = capturedConsole.filter(l => l.includes("[Effect]") || l.includes("[Cleanup]"));
-        const cleanupIdx = logs.findIndex(l => l.includes("cleanup") && l.includes("count=0"));
-        const setupIdx = logs.findIndex(l => l.includes("setup") && l.includes("count=1"));
-        if (cleanupIdx === -1) throw new Error("No cleanup log found for count=0");
-        if (setupIdx === -1) throw new Error("No setup log found for count=1");
-        if (cleanupIdx > setupIdx) throw new Error("Cleanup must run before next setup");
-      `,
-      failMessage:
-        "Cleanup for the previous render must log before setup for the new render.",
-      successMessage: "Lifecycle ordering is correct.",
-    },
-    {
-      id: "no-extra-state",
+      id: "count-is-number",
       type: "functional",
-      weight: 0.3,
+      weight: 0.33,
       testCode: `
-        const source = files["LifecycleLogger.tsx"];
-        const stateCount = (source.match(/useState/g) || []).length;
-        if (stateCount > 1) throw new Error("Only one useState allowed");
+        const source = files["CounterIntro.tsx"];
+        if (!/useState\\s*\\(\\s*0\\s*\\)/.test(source)) throw new Error("Count should start at 0");
       `,
-      failMessage: "Do not add new state variables — only one useState is allowed.",
-      successMessage: "State constraint satisfied.",
+      failMessage: "Step 3: keep count numeric (start at 0).",
+      successMessage: "Count is numeric.",
     },
   ],
 
@@ -163,33 +144,26 @@ export default function App() {
     {
       tier: 1,
       unlocksAfterFails: 1,
-      text: "useEffect can return a function. React calls that function to clean up before re-running the effect. What should it log?",
+      text: "Look for `const [count, setCount] = useState(0)` at the top of the component.",
     },
     {
       tier: 2,
       unlocksAfterFails: 2,
-      text: 'The cleanup function closes over the same `count` value as the setup. Return an arrow function from your effect that logs `[Cleanup] count=${count}`.',
-      focusArea: "effect cleanup return value",
-      codeSnippet:
-        "useEffect(() => { /* setup */ return () => { /* cleanup */ }; }, [dep]);",
+      text: "Inside Increment button, call setCount with previous value + 1.",
+      focusArea: "Increment click handler",
+      codeSnippet: `onClick={() => setCount((c) => c + 1)}`,
     },
     {
       tier: 3,
       unlocksAfterFails: 3,
-      text: "Add a return statement at the end of your useEffect callback that returns an arrow function logging the cleanup message.",
+      text: "Copy this baseline counter pattern, then tweak one line at a time.",
       steps: [
-        "Inside the useEffect callback, after the setup log, add a return statement",
-        "Return an arrow function: () => { ... }",
-        'Inside that arrow, log: console.log(`[Cleanup] count=${count}`)',
-        "The `count` in the cleanup will be the value from this render (closure)",
-        "React will call this cleanup before the next setup runs",
+        "Keep count state: useState(0)",
+        "Increment: setCount((c) => c + 1)",
+        "Run after each small edit",
       ],
-      pseudoCode: `useEffect(() => {
-  console.log(\`[Effect] setup for count=\${count}\`);
-  return () => {
-    console.log(\`[Cleanup] count=\${count}\`);
-  };
-}, [count]);`,
+      pseudoCode: `const [count, setCount] = useState(0);
+<button onClick={() => setCount((c) => c + 1)}>Increment</button>`,
     },
   ],
 
@@ -197,19 +171,19 @@ export default function App() {
     {
       id: "correctness",
       label: "Correctness",
-      description: "Cleanup runs in the correct lifecycle position",
+      description: "Counter state updates as expected",
       weight: 0.5,
     },
     {
-      id: "lifecycle",
-      label: "Lifecycle Safety",
-      description: "Effect dependencies are correct and cleanup uses proper closure values",
+      id: "design",
+      label: "Simplicity",
+      description: "Solution stays small and clear for beginners",
       weight: 0.3,
     },
     {
       id: "ts-quality",
       label: "TypeScript Quality",
-      description: "No type errors, no suppressions",
+      description: "No obvious type issues in starter flow",
       weight: 0.2,
     },
   ],
@@ -218,6 +192,6 @@ export default function App() {
     passCondition: "all-checks",
     maxAttempts: 3,
     retryPolicy: "soft-block",
-    allowMultipleSolutions: false,
+    allowMultipleSolutions: true,
   },
 };
