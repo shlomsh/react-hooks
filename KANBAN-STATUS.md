@@ -1,6 +1,6 @@
 # Kanban Status
 
-Last updated: 2026-02-18T21:27:00.000Z
+Last updated: 2026-02-18T19:32:36.000Z
 
 This file is the source of truth for the daily kanban board.
 
@@ -263,8 +263,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Capstone rubric + tests",
     "owner": "Codex",
     "priority": "P1",
-    "status": "in_progress",
-    "notes": "Re-opened 2026-02-18 for follow-up iteration and validation pass on Module 6 capstone behavior and rubric checks.",
+    "status": "done",
+    "notes": "Completed 2026-02-18. Module 6 capstone follow-up shipped with rubric-aware score UX: checks badge/progress now reflect score thresholds for rubric gates, coach/status messages explain shortfall vs threshold, and tests verify threshold pass semantics (can pass >=80 with one check still failing).",
     "order": 27
   },
   {
