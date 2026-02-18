@@ -25,6 +25,7 @@ export function LessonPlayer() {
   } = useEditorState(lessonFiles);
   const sandbox = useSandbox();
   const [gateResult, setGateResult] = useState<LessonRunResult | null>(null);
+  const [unlockedHintTier, setUnlockedHintTier] = useState(0);
 
   const handleContentChange = useCallback(
     (content: string) => {
@@ -43,6 +44,10 @@ export function LessonPlayer() {
     setGateResult(null);
   }, [lessonFiles, resetFiles, sandbox]);
 
+  const handleUnlockHint = useCallback(() => {
+    setUnlockedHintTier((prev) => Math.min(prev + 1, lesson.hintLadder.length));
+  }, [lesson.hintLadder.length]);
+
   const handleSubmitGate = useCallback(() => {
     const capturedConsole = sandbox.state.events.map((event) => event.message);
     const result = runLessonChecks(lesson, files, capturedConsole);
@@ -55,7 +60,8 @@ export function LessonPlayer() {
   });
   const hasRun = sandbox.state.status !== "idle";
   const hasGatePass = gateResult?.passed ?? false;
-  const stepStates = [hasEditedSomething, hasRun, hasGatePass];
+  const hasSubmittedGate = gateResult !== null;
+  const stepStates = [hasEditedSomething, hasRun, hasSubmittedGate && hasGatePass];
   const completedSteps = stepStates.filter(Boolean).length;
   const progressLabel = `${completedSteps}/3 complete`;
   const editableFileName =
@@ -76,9 +82,19 @@ export function LessonPlayer() {
         ? guidance.retryPrompt
         : sandbox.state.status === "error" || sandbox.state.status === "timeout"
           ? "Good attempt. Use the console hint, make one small fix, and run again."
+          : hasRun
+            ? "Step 3: click Submit Gate to check your solution."
           : hasEditedSomething
             ? guidance.runStepPrompt
             : guidance.firstStepPrompt;
+  const activeHint = unlockedHintTier > 0
+    ? lesson.hintLadder[unlockedHintTier - 1]
+    : null;
+  const hintText = activeHint
+    ? activeHint.tier === 3
+      ? `${activeHint.text} ${activeHint.steps[0]}`
+      : activeHint.text
+    : null;
 
   const checkItems = useMemo(
     () =>
@@ -124,9 +140,12 @@ export function LessonPlayer() {
           checkItems={checkItems}
           progressLabel={progressLabel}
           coachMessage={coachMessage}
+          hintText={hintText}
+          canUnlockHint={unlockedHintTier < lesson.hintLadder.length}
           stepStates={stepStates}
           onRun={handleRun}
           onReset={handleReset}
+          onUnlockHint={handleUnlockHint}
           onSubmitGate={handleSubmitGate}
         />
       </div>

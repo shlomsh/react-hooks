@@ -64,6 +64,14 @@
   text-overflow: ellipsis;
 }
 
+.hintMessage {
+  font-size: 0.68rem;
+  color: var(--amber);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .checks {
   display: flex;
   gap: 0.5rem;
