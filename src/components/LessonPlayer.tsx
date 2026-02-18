@@ -68,7 +68,7 @@ export function LessonPlayer() {
         ? "Good attempt. Use the console hint, make one small fix, and run again."
         : hasEditedSomething
           ? "Step 2: click Run to validate your change."
-          : "Step 1: edit one line in CounterIntro.tsx for a quick win.";
+          : "Step 1: in CounterIntro.tsx, change Increment from c + 2 to c + 1.";
 
   const checkItems = useMemo(
     () =>

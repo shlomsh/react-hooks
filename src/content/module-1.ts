@@ -23,11 +23,11 @@ export const module1: Lesson = {
 
   title: "Your First useState Win",
   description:
-    "Build a tiny counter with React useState. You will make one small code change, click Run, and see your first success.",
+    "Fix one intentional bug in the counter: the Increment button currently adds 2. Change it to add 1, then Run and Submit Gate.",
   constraints: [
     "Use exactly one useState for count",
     "Keep count as a number",
-    "Increment button must add 1",
+    "Increment button must add exactly 1",
   ],
 
   conceptPanel: {
@@ -73,7 +73,8 @@ export default function CounterIntro() {
     <div style={{ padding: "1rem", fontFamily: "sans-serif" }}>
       <h2>Counter Intro</h2>
       <p>Count: {count}</p>
-      <button onClick={() => setCount((c) => c + 1)}>Increment</button>
+      {/* TODO: fix this bug: Increment should add 1, not 2 */}
+      <button onClick={() => setCount((c) => c + 2)}>Increment</button>
       <button onClick={() => setCount((c) => c - 1)} style={{ marginLeft: "0.5rem" }}>
         Decrement
       </button>
