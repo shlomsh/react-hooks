@@ -922,15 +922,15 @@ body::after{
 <aside class="status-rail" aria-label="status rail">
   <section class="status-card">
     <h3>Track Status</h3>
-    <div class="status-line"><span>Current Module</span><span class="cyan mono">M3</span></div>
-    <div class="status-line"><span>Attempts</span><span class="mono">1/3</span></div>
-    <div class="status-line"><span>Hint Tier</span><span class="amber mono">Locked</span></div>
+    <div class="status-line"><span>Current Module</span><span class="cyan mono" id="status-module">M0</span></div>
+    <div class="status-line"><span>Attempts</span><span class="mono" id="status-attempts">-</span></div>
+    <div class="status-line"><span>Hint Tier</span><span class="amber mono" id="status-hints">-</span></div>
   </section>
   <section class="status-card">
     <h3>Completion</h3>
-    <div class="status-line"><span>Modules Passed</span><span class="mono">2/7</span></div>
-    <div class="status-track"><span></span></div>
-    <div class="status-line" style="margin-top:.45rem"><span>Time Remaining</span><span class="mono">~2h 40m</span></div>
+    <div class="status-line"><span>Modules Passed</span><span class="mono" id="status-passed">0/7</span></div>
+    <div class="status-track"><span id="status-progress"></span></div>
+    <div class="status-line" style="margin-top:.45rem"><span>Time Remaining</span><span class="mono" id="status-time">~3h 40m</span></div>
   </section>
   <section class="status-card">
     <h3>Gate Policy</h3>
@@ -1496,6 +1496,26 @@ body::after{
 </div>
 
 <script>
+const statusByScreen = {
+  launch: { module: "M0", attempts: "-", hints: "-", passed: "0/7", progress: "0%", time: "~3h 40m" },
+  dashboard: { module: "M3", attempts: "1/3", hints: "Locked", passed: "2/7", progress: "29%", time: "~2h 40m" },
+  player: { module: "M3", attempts: "1/3", hints: "Locked", passed: "2/7", progress: "29%", time: "~2h 20m" },
+  debug: { module: "M5", attempts: "1/3", hints: "Tier 1", passed: "4/7", progress: "57%", time: "~1h 20m" },
+  capstone: { module: "M6", attempts: "2/3", hints: "Tier 2", passed: "5/7", progress: "71%", time: "~55m" },
+  badge: { module: "M7", attempts: "Pass", hints: "0 Final", passed: "7/7", progress: "100%", time: "Completed" }
+};
+
+function renderStatusRail(id) {
+  const state = statusByScreen[id] || statusByScreen.launch;
+  const progress = document.getElementById("status-progress");
+  document.getElementById("status-module").textContent = state.module;
+  document.getElementById("status-attempts").textContent = state.attempts;
+  document.getElementById("status-hints").textContent = state.hints;
+  document.getElementById("status-passed").textContent = state.passed;
+  document.getElementById("status-time").textContent = state.time;
+  progress.style.width = state.progress;
+}
+
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => {
     s.hidden = true;
@@ -1511,11 +1531,14 @@ function showScreen(id) {
   document.querySelectorAll('.nav-tab').forEach(t => {
     t.classList.toggle('active', t.dataset.screen === id);
   });
+  renderStatusRail(id);
 }
 
 document.querySelectorAll('.nav-tab').forEach(tab => {
   tab.addEventListener('click', () => showScreen(tab.dataset.screen));
 });
+
+renderStatusRail("launch");
 </script>
 </body>
 </html>

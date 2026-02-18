@@ -1,6 +1,6 @@
 # Kanban Status
 
-Last updated: 2026-02-17T13:52:28.977Z
+Last updated: 2026-02-18T07:58:30Z
 
 This file is the source of truth for the daily kanban board.
 
@@ -11,9 +11,9 @@ This file is the source of truth for the daily kanban board.
     "title": "App shell layout",
     "owner": "Eng A",
     "priority": "P1",
-    "status": "in_progress",
-    "notes": "Kickoff complete: persistent header + route container + status rail scaffolded in pro-track-app.html; ready for QA/integration.",
-    "order": 1
+    "status": "review",
+    "notes": "Kickoff complete: persistent header + route container + status rail scaffolded in pro-track-app.html. Integration added: status rail now updates by active route/module. Ready for QA signoff.",
+    "order": 1771401419039
   },
   {
     "id": "ST-002",
@@ -65,8 +65,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Monaco editor integration",
     "owner": "Eng B",
     "priority": "P1",
-    "status": "in_progress",
-    "notes": "",
+    "status": "done",
+    "notes": "Completed 2026-02-17. Monaco w/ blueprint-lab theme, TS compiler options, React type stubs, multi-file tabs, diagnostics-driven Run button. Includes minimal ST-001 app shell (header + 3-panel layout).",
     "order": 7
   },
   {
