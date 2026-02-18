@@ -13,7 +13,18 @@
 2. Open board and click `Pull from Repo`
 3. Update tasks during standup (drag cards, notes, add cards)
 4. Click `Save to Repo`
-5. Commit `KANBAN-STATUS.md` and push
+5. Run required test gates:
+   - `npm run test:unit`
+   - `npm run test:e2e`
+6. Commit `KANBAN-STATUS.md` and push
+
+## Task branch workflow (required)
+1. Use a dedicated worktree and branch per task:
+   - `git worktree add ../react-hooks-stXXX -b codex/st-XXX-name`
+2. Implement with TDD (tests first).
+3. Rebase on latest `main` before merge:
+   - `git fetch origin && git rebase origin/main`
+4. Merge only after tests pass.
 
 ## Notes
 - If the server is not running, the board falls back to local browser storage.

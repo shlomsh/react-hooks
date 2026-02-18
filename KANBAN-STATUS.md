@@ -1,6 +1,6 @@
 # Kanban Status
 
-Last updated: 2026-02-18T08:28:15Z
+Last updated: 2026-02-18T08:37:22Z
 
 This file is the source of truth for the daily kanban board.
 
@@ -74,8 +74,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Sandbox runtime executor",
     "owner": "Eng B",
     "priority": "P1",
-    "status": "backlog",
-    "notes": "",
+    "status": "in_progress",
+    "notes": "Project rules revised for enterprise flow: mandatory unit+e2e gates, no commit before tests pass, worktree-per-task, rebase-on-main before merge.",
     "order": 8
   },
   {
@@ -317,8 +317,8 @@ This file is the source of truth for the daily kanban board.
     "title": "E2E gate tests",
     "owner": "Shared",
     "priority": "P1",
-    "status": "backlog",
-    "notes": "",
+    "status": "in_progress",
+    "notes": "Project rules revised for enterprise flow: mandatory unit+e2e gates, no commit before tests pass, worktree-per-task, rebase-on-main before merge.",
     "order": 33
   },
   {

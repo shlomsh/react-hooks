@@ -12,6 +12,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 npm run dev        # Start Vite dev server (http://localhost:5173)
 npm run build      # Type-check (tsc -b) then Vite production build
 npm run lint       # ESLint (flat config, v9)
+npm run test:unit  # Vitest unit/integration suite
+npm run test:e2e   # E2E suite
+npm run test:all   # Required gate: unit + e2e
 npm run preview    # Preview production build locally
 npx tsc --noEmit   # Type-check only (no build output)
 ```
@@ -74,16 +77,23 @@ The core UI is a 3-panel grid (`280px | 1fr | 300px`):
 
 ## Working Agreement
 
-**TDD is mandatory. Commit after every story. No exceptions.**
+**TDD and CI test gates are mandatory. No exceptions.**
 
 1. **Write tests first** — before implementing any story, write failing tests that define the expected behavior. Tests pass = story works.
-2. **Run the full test suite** (`npm test`) before declaring any story done. All tests must pass.
-3. **Commit to main** after each completed story. Every story gets its own commit with passing tests as evidence.
-4. **Update `KANBAN-STATUS.md`** with current status and notes before reporting completion.
+2. **Use enterprise test gates** — unit/integration + e2e. Do not rely on ad-hoc markup regex scripts as primary quality gates.
+3. **No commit before tests pass** — required commands:
+   - `npm run test:unit`
+   - `npm run test:e2e`
+4. **Worktree-first workflow is required**:
+   - task-specific branch/worktree
+   - rebase on latest `main` before merge
+   - no direct feature commits to `main`
+5. **Update `KANBAN-STATUS.md`** with status/notes before reporting completion.
 
-A story is **not done** until: tests written, tests passing, code committed, kanban updated.
+A story is **not done** until: tests written first, tests passing, branch rebased on `main`, merged, kanban updated.
 
 ```bash
-npm test           # Run Vitest test suite
-npm run test:watch # Vitest in watch mode
+git worktree add ../react-hooks-stXXX -b codex/st-XXX-name
+git fetch origin && git rebase origin/main
+npm run test:unit && npm run test:e2e
 ```
