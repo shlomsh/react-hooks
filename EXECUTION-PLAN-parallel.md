@@ -213,7 +213,7 @@ Use this table during execution updates.
 | ST-026 | Eng B | DONE |  |  | ST-008, ST-013 |  |
 | ST-027 | Eng C/B | DONE |  |  | ST-013, ST-026 |  |
 | ST-028 | Eng B | DONE |  |  | ST-022..ST-027 |  |
-| ST-029 | Eng D | BACKLOG |  |  |  |  |
+| ST-029 | Eng D | DONE |  |  |  |  |
 | ST-030 | Eng D | BACKLOG |  |  | ST-029 |  |
 | ST-031 | Eng D | BACKLOG |  |  | ST-019, ST-030 |  |
 | ST-032 | Eng D | BACKLOG |  |  | ST-030 |  |

@@ -1,6 +1,6 @@
 # Kanban Status
 
-Last updated: 2026-02-18T20:14:50.000Z
+Last updated: 2026-02-18T20:17:05.000Z
 
 This file is the source of truth for the daily kanban board.
 
@@ -281,8 +281,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Telemetry schema",
     "owner": "Shared",
     "priority": "P2",
-    "status": "in_progress",
-    "notes": "Started 2026-02-18. Defining event schema for module start/end, pass/fail, hint unlocks, and retry counters.",
+    "status": "done",
+    "notes": "Completed 2026-02-18. Added typed telemetry event schema (v1.0) with module start/end, gate pass/fail, hint tier unlock, and retry count events, plus runtime guard and serialize/parse helpers in src/telemetry/eventSchema.ts. Added comprehensive unit coverage in src/test/unit/telemetry/eventSchema.test.ts.",
     "order": 29
   },
   {
