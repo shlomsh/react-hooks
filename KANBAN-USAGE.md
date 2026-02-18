@@ -16,7 +16,15 @@
 5. Run required test gates:
    - `npm run test:unit`
    - `npm run test:e2e`
+   - `npm run test:all` (preferred before commit/push)
 6. Commit `KANBAN-STATUS.md` and push
+
+## Testing structure status
+- Unit/integration tests are organized under `src/test/unit/`.
+- Flow-level e2e tests are organized under `src/test/e2e/`.
+- Playwright browser-e2e rollout is tracked in kanban:
+  - `ST-039` in progress
+  - `ST-040`, `ST-041` backlog
 
 ## Task branch workflow (required)
 1. Use a dedicated worktree and branch per task:

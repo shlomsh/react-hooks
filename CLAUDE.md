@@ -13,7 +13,7 @@ npm run dev        # Start Vite dev server (http://localhost:5173)
 npm run build      # Type-check (tsc -b) then Vite production build
 npm run lint       # ESLint (flat config, v9)
 npm run test:unit  # Vitest unit/integration suite
-npm run test:e2e   # E2E suite
+npm run test:e2e   # Vitest flow-level e2e suite
 npm run test:all   # Required gate: unit + e2e
 npm run preview    # Preview production build locally
 npx tsc --noEmit   # Type-check only (no build output)
@@ -97,3 +97,13 @@ git worktree add ../react-hooks-stXXX -b codex/st-XXX-name
 git fetch origin && git rebase origin/main
 npm run test:unit && npm run test:e2e
 ```
+
+## Test Organization (Current)
+
+- Unit/integration tests live in `src/test/unit/**`.
+- Flow-level e2e tests (Vitest) live in `src/test/e2e/**`.
+- Current gate commands map to those folders:
+  - `npm run test:unit` → `vitest run test/unit`
+  - `npm run test:e2e` → `vitest run test/e2e`
+  - `npm run test:all` → both gates
+- Browser automation with Playwright is tracked as `ST-039` (`in_progress`) plus `ST-040`/`ST-041` in the kanban.
