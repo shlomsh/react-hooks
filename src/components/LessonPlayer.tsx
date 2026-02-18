@@ -42,6 +42,7 @@ export function LessonPlayer() {
     resetFiles(lessonFiles);
     sandbox.reset();
     setGateResult(null);
+    setUnlockedHintTier(0);
   }, [lessonFiles, resetFiles, sandbox]);
 
   const handleUnlockHint = useCallback(() => {
