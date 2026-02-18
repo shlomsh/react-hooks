@@ -1,6 +1,6 @@
 # Kanban Status
 
-Last updated: 2026-02-19T00:12:00.000Z
+Last updated: 2026-02-19T00:19:00.000Z
 
 This file is the source of truth for the daily kanban board.
 
@@ -308,8 +308,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Failure classifier",
     "owner": "Shared",
     "priority": "P3",
-    "status": "in_progress",
-    "notes": "Started 2026-02-19. Implementing a telemetry-driven common-failure classifier for dependency issues, stale closures, and cleanup errors.",
+    "status": "done",
+    "notes": "Completed 2026-02-19. Added src/analytics/failureClassifier.ts with rule-based classification of gate_failed telemetry into dependency-issues, stale-closures, cleanup-errors, and other. Includes per-failure categorization, aggregate summary counts, soft-block frequency, unique-module counts, and dominant-category detection. Added coverage in src/test/unit/analytics/failureClassifier.test.ts. All 243 unit tests passing.",
     "order": 32
   },
   {
