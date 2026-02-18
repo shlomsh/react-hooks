@@ -4,8 +4,7 @@ Last updated: 2026-02-18T17:18:28.000Z
 
 This file is the source of truth for the daily kanban board.
 
-```json
-[
+```json[
   {
     "id": "ST-001",
     "title": "App shell layout",
@@ -18,19 +17,19 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-002",
     "title": "Theme tokens + primitives",
-    "owner": "Shared",
+    "owner": "Claude",
     "priority": "P1",
-    "status": "backlog",
-    "notes": "Queued next after CI/testing guardrails are in place.",
+    "status": "in_progress",
+    "notes": "In progress 2026-02-18. Branch: codex/st-002-003-tokens-nav.",
     "order": 2
   },
   {
     "id": "ST-003",
     "title": "Desktop navigation model",
-    "owner": "Shared",
+    "owner": "Claude",
     "priority": "P1",
-    "status": "backlog",
-    "notes": "Desktop-only (mobile deferred to v2)",
+    "status": "in_progress",
+    "notes": "In progress 2026-02-18. Branch: codex/st-002-003-tokens-nav.",
     "order": 3
   },
   {
@@ -111,7 +110,7 @@ This file is the source of truth for the daily kanban board.
     "owner": "Claude",
     "priority": "P1",
     "status": "done",
-    "notes": "Completed 2026-02-18. Displays latest DepSnapshot from most recent EffectEvent with per-dep rows showing changed (amber) vs stable distinction and prevValue → value transitions. Empty state when no deps captured. Wired to live sandbox telemetry. All 168 tests passing. Branch: codex/st-012-009-010-visualizer-adapter.",
+    "notes": "Completed 2026-02-18. Displays latest DepSnapshot from most recent EffectEvent with per-dep rows showing changed (amber) vs stable distinction and prevValue \u2192 value transitions. Empty state when no deps captured. Wired to live sandbox telemetry. All 168 tests passing. Branch: codex/st-012-009-010-visualizer-adapter.",
     "order": 10
   },
   {
@@ -255,7 +254,7 @@ This file is the source of truth for the daily kanban board.
     "owner": "Codex",
     "priority": "P1",
     "status": "done",
-    "notes": "Completed 2026-02-18. Module 5 Debug Labs shipped as two scenarios: (1) Scenario 1 — Infinite Loop (useObservedSection.ts, IntersectionObserver with unstable object dep, fix: useMemo stabilization); (2) Scenario 2 — Stale Callback (useLogOnSave.ts, useCallback with empty deps, fix: add count to deps). Both lessons at ?lesson=5 and ?lesson=6. All gate checks use double-escaped regex. Also fixed dynamic breadcrumb (AppShell now reads lesson.module.moduleId + lesson.title via useLessonLoader). 140 tests passing.",
+    "notes": "Completed 2026-02-18. Module 5 Debug Labs shipped as two scenarios: (1) Scenario 1 \u2014 Infinite Loop (useObservedSection.ts, IntersectionObserver with unstable object dep, fix: useMemo stabilization); (2) Scenario 2 \u2014 Stale Callback (useLogOnSave.ts, useCallback with empty deps, fix: add count to deps). Both lessons at ?lesson=5 and ?lesson=6. All gate checks use double-escaped regex. Also fixed dynamic breadcrumb (AppShell now reads lesson.module.moduleId + lesson.title via useLessonLoader). 140 tests passing.",
     "order": 26
   },
   {
