@@ -1,6 +1,6 @@
 # Kanban Status
 
-Last updated: 2026-02-18T08:07:09Z
+Last updated: 2026-02-18T08:28:15Z
 
 This file is the source of truth for the daily kanban board.
 
@@ -12,7 +12,7 @@ This file is the source of truth for the daily kanban board.
     "owner": "Eng A",
     "priority": "P1",
     "status": "done",
-    "notes": "QA pass complete: persistent header, route container, and status rail behavior verified. See QA-ST-001.md for checklist and signoff context.",
+    "notes": "QA pass complete: persistent header, route container, and status rail behavior verified.",
     "order": 1771401419039
   },
   {
@@ -20,8 +20,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Theme tokens + primitives",
     "owner": "Eng A",
     "priority": "P1",
-    "status": "in_progress",
-    "notes": "Adding persistent shell regression test and CI enforcement so ST-001 behavior is validated on every build.",
+    "status": "backlog",
+    "notes": "Queued next after CI/testing guardrails are in place.",
     "order": 2
   },
   {
@@ -38,8 +38,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Accessibility baseline",
     "owner": "Eng A",
     "priority": "P2",
-    "status": "backlog",
-    "notes": "",
+    "status": "in_progress",
+    "notes": "Implementing show-stopper test gates: unit + e2e in CI, pre-commit test pass requirement, and TDD enforcement.",
     "order": 4
   },
   {
@@ -137,8 +137,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Gate state machine",
     "owner": "Eng C",
     "priority": "P1",
-    "status": "backlog",
-    "notes": "Week 1 stub-based start (mock interfaces, no sandbox dep)",
+    "status": "done",
+    "notes": "Completed 2026-02-18. Pure reducer (idle/attempting/passed/failed/soft-blocked) + GateContext provider + useGate hook. 34 tests passing. Branch: st-014-gate-state-machine. Unblocks ST-016, ST-015.",
     "order": 13
   },
   {
