@@ -164,8 +164,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Retry policy",
     "owner": "Eng C",
     "priority": "P1",
-    "status": "backlog",
-    "notes": "Soft block + attempt counter reset after 3 fails. All hints stay unlocked.",
+    "status": "in_progress",
+    "notes": "Claimed 2026-02-18. Soft-block UI + useRetryPolicy hook consuming GateContext. Stub-based, no sandbox dep. Unblocked by ST-014 + ST-016.",
     "order": 16
   },
   {
