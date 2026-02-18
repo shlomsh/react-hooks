@@ -1,6 +1,6 @@
 # Kanban Status
 
-Last updated: 2026-02-18T20:17:05.000Z
+Last updated: 2026-02-18T20:38:52.000Z
 
 This file is the source of truth for the daily kanban board.
 
@@ -290,8 +290,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Telemetry dispatcher",
     "owner": "Shared",
     "priority": "P2",
-    "status": "backlog",
-    "notes": "",
+    "status": "in_progress",
+    "notes": "Started 2026-02-18. Implementing client telemetry dispatcher with queueing and batched flush.",
     "order": 30
   },
   {
