@@ -1,6 +1,6 @@
 # Kanban Status
 
-Last updated: 2026-02-18T07:58:30Z
+Last updated: 2026-02-18T08:05:59Z
 
 This file is the source of truth for the daily kanban board.
 
@@ -11,8 +11,8 @@ This file is the source of truth for the daily kanban board.
     "title": "App shell layout",
     "owner": "Eng A",
     "priority": "P1",
-    "status": "review",
-    "notes": "Kickoff complete: persistent header + route container + status rail scaffolded in pro-track-app.html. Integration added: status rail now updates by active route/module. Ready for QA signoff.",
+    "status": "done",
+    "notes": "QA pass complete: persistent header, route container, and status rail behavior verified. See QA-ST-001.md for checklist and signoff context.",
     "order": 1771401419039
   },
   {
@@ -56,8 +56,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Lesson/exercise schema contract",
     "owner": "Eng B",
     "priority": "P0",
-    "status": "backlog",
-    "notes": "Week 1 deliverable. Blocks ST-008, ST-013, all content stories. Reviewed by Eng C.",
+    "status": "in_progress",
+    "notes": "Week 1 deliverable. Blocks ST-008, ST-013, all content stories. Reviewed by Eng C. Started 2026-02-18.",
     "order": 6
   },
   {
