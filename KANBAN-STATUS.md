@@ -378,10 +378,10 @@ This file is the source of truth for the daily kanban board.
   {
     "id": "ST-042",
     "title": "Implement missing screens from UI prototype",
-    "owner": "Unassigned",
+    "owner": "Claude",
     "priority": "P1",
-    "status": "backlog",
-    "notes": "PRD §9 defines 6 screens; only Lesson Player is built. Covers: Launch screen, Track Dashboard, Debug Arena layout, Capstone Workspace layout, Status Rail sidebar, Badge screen alignment. All subsystem hooks (progress, gate, hint, retry, visualizer) are done and ready for integration. Full spec in stories/ST-042-prototype-screens.md.",
+    "status": "done",
+    "notes": "All 6 PRD screens implemented as React components: LaunchScreen, DashboardScreen, DebugArenaScreen, CapstoneScreen, StatusRail sidebar, BadgeScreen (aligned with prototype). AppShell routing extended to 6 routes with nav tabs + URL deep links. 310 tests passing (308 unit + 2 e2e). Merged to main.",
     "order": 40
   }
 ]
