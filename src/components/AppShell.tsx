@@ -1,7 +1,23 @@
+import { useEffect, useState } from "react";
 import { LessonPlayer } from "./LessonPlayer";
 import styles from "./AppShell.module.css";
 
+const MIN_DESKTOP_WIDTH = 1280;
+
 export function AppShell() {
+  const [isDesktopViewport, setIsDesktopViewport] = useState(
+    () => window.innerWidth >= MIN_DESKTOP_WIDTH
+  );
+
+  useEffect(() => {
+    const onResize = () => {
+      setIsDesktopViewport(window.innerWidth >= MIN_DESKTOP_WIDTH);
+    };
+
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
   return (
     <div className={styles.shell}>
       <header className={styles.header}>
@@ -17,7 +33,20 @@ export function AppShell() {
         </nav>
       </header>
       <main className={styles.main}>
-        <LessonPlayer />
+        {isDesktopViewport ? (
+          <LessonPlayer />
+        ) : (
+          <section
+            className={styles.viewportBlock}
+            aria-label="Desktop viewport required"
+          >
+            <h1 className={styles.viewportTitle}>Desktop viewport required</h1>
+            <p className={styles.viewportBody}>
+              This app requires at least 1280px width. Resize your window or
+              move to a desktop display.
+            </p>
+          </section>
+        )}
       </main>
     </div>
   );

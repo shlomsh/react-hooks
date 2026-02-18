@@ -326,8 +326,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Desktop viewport QA",
     "owner": "Shared",
     "priority": "P1",
-    "status": "backlog",
-    "notes": "",
+    "status": "in_progress",
+    "notes": "Started 2026-02-18. Added runtime desktop viewport gate (min 1280) in AppShell and automated coverage in src/components/AppShell.test.tsx for >=1280 and <1280 behavior.",
     "order": 34
   },
   {
