@@ -208,9 +208,9 @@ Use this table during execution updates.
 | ST-021 | Eng C/A | BACKLOG |  |  | ST-020 |  |
 | ST-022 | Eng B | DONE |  |  | ST-008, ST-013 |  |
 | ST-023 | Eng B | DONE |  |  | ST-008, ST-013 |  |
-| ST-024 | Eng B | IN PROGRESS |  |  | ST-008, ST-013 |  |
-| ST-025 | Eng B | BACKLOG |  |  | ST-008, ST-013 |  |
-| ST-026 | Eng B | BACKLOG |  |  | ST-008, ST-013 |  |
+| ST-024 | Eng B | DONE |  |  | ST-008, ST-013 |  |
+| ST-025 | Eng B | DONE |  |  | ST-008, ST-013 |  |
+| ST-026 | Eng B | IN PROGRESS |  |  | ST-008, ST-013 |  |
 | ST-027 | Eng C/B | BACKLOG |  |  | ST-013, ST-026 |  |
 | ST-028 | Eng B | BACKLOG |  |  | ST-022..ST-027 |  |
 | ST-029 | Eng D | BACKLOG |  |  |  |  |

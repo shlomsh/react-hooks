@@ -92,7 +92,7 @@ You will practice the core \`useState\` update pattern:
       expectedOutcome: "Count increases by exactly 1",
       testCode: `
         const source = files["CounterIntro.tsx"];
-        if (!/setCount\\s*\\(\\s*\\(c\\)\\s*=>\\s*c\\s*\\+\\s*1\\s*\\)/.test(source)) {
+        if (!/setCount\\s*\\(\\s*\\(\\s*([A-Za-z_$][\\w$]*)\\s*\\)\\s*=>\\s*\\1\\s*\\+\\s*1\\s*\\)/.test(source)) {
           throw new Error("Increment handler must add 1");
         }
       `,
@@ -105,7 +105,7 @@ You will practice the core \`useState\` update pattern:
       weight: 0.3,
       testCode: `
         const source = files["CounterIntro.tsx"];
-        if (!/setCount\\s*\\(\\s*\\(c\\)\\s*=>\\s*c\\s*-\\s*1\\s*\\)/.test(source)) {
+        if (!/setCount\\s*\\(\\s*\\(\\s*([A-Za-z_$][\\w$]*)\\s*\\)\\s*=>\\s*\\1\\s*-\\s*1\\s*\\)/.test(source)) {
           throw new Error("Decrement behavior should stay as c - 1");
         }
         if (!/setCount\\s*\\(\\s*0\\s*\\)/.test(source)) {

@@ -96,7 +96,7 @@ Coordinate state updates with effect dependencies:
       expectedOutcome: "Page increases by exactly 1",
       testCode: `
         const source = files["SearchPaging.tsx"];
-        if (!/setPage\\s*\\(\\s*\\(p\\)\\s*=>\\s*p\\s*\\+\\s*1\\s*\\)/.test(source)) {
+        if (!/setPage\\s*\\(\\s*\\(\\s*([A-Za-z_$][\\w$]*)\\s*\\)\\s*=>\\s*\\1\\s*\\+\\s*1\\s*\\)/.test(source)) {
           throw new Error("Next should use setPage((p) => p + 1)");
         }
       `,
@@ -122,7 +122,7 @@ Coordinate state updates with effect dependencies:
       weight: 0.2,
       testCode: `
         const source = files["SearchPaging.tsx"];
-        if (!/setPage\\s*\\(\\s*\\(p\\)\\s*=>\\s*p\\s*-\\s*1\\s*\\)/.test(source)) {
+        if (!/setPage\\s*\\(\\s*\\(\\s*([A-Za-z_$][\\w$]*)\\s*\\)\\s*=>\\s*\\1\\s*-\\s*1\\s*\\)/.test(source)) {
           throw new Error("Previous should remain setPage((p) => p - 1)");
         }
         if (!/setPage\\s*\\(\\s*1\\s*\\)/.test(source)) {

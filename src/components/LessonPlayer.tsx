@@ -95,10 +95,7 @@ export function LessonPlayer() {
     return baseline ? baseline.content !== file.content : false;
   });
   const hasValidationPass = validationResult?.passed ?? false;
-  const stepStates = [hasEditedSomething, hasValidationPass];
   const awaitingGateSubmit = hasValidationPass && !gateSubmitted;
-  const completedSteps = stepStates.filter(Boolean).length;
-  const progressLabel = `${completedSteps}/2 complete`;
   const editableFileName =
     lesson.files.find((file) => file.editable && !file.hidden)?.fileName ??
     activeFile.filename;
@@ -154,6 +151,7 @@ export function LessonPlayer() {
   );
   const passedChecksCount = checkItems.filter((check) => check.pass === true).length;
   const totalChecksCount = checkItems.length;
+  const progressLabel = `${passedChecksCount}/${totalChecksCount} checks passed`;
   const primaryActionLabel = gateSubmitted
     ? "Gate Submitted"
     : awaitingGateSubmit
@@ -380,7 +378,6 @@ export function LessonPlayer() {
             statusNote={statusNote}
             hintText={hintText}
             canUnlockHint={unlockedHintTier < lesson.hintLadder.length}
-            stepStates={stepStates}
             primaryActionLabel={primaryActionLabel}
             primaryActionDisabled={primaryActionDisabled}
             awaitingGateSubmit={awaitingGateSubmit}

@@ -9,7 +9,6 @@ interface ControlBarProps {
   statusNote: string | null;
   hintText: string | null;
   canUnlockHint: boolean;
-  stepStates: boolean[];
   primaryActionLabel: string;
   primaryActionDisabled: boolean;
   awaitingGateSubmit?: boolean;
@@ -26,7 +25,6 @@ export function ControlBar({
   statusNote,
   hintText,
   canUnlockHint,
-  stepStates,
   primaryActionLabel,
   primaryActionDisabled,
   awaitingGateSubmit,
@@ -40,14 +38,6 @@ export function ControlBar({
         <div className={styles.left}>
           <div className={styles.progressRow}>
             <span className={styles.progressLabel}>{progressLabel}</span>
-            {stepStates.map((done, index) => (
-              <span
-                key={index + 1}
-                className={`${styles.stepChip} ${done ? styles.stepDone : styles.stepTodo}`}
-              >
-                {done ? "\u2713" : index + 1}
-              </span>
-            ))}
           </div>
           <div className={styles.coachMessage}>{coachMessage}</div>
           {statusNote ? <div className={styles.statusNote}>{statusNote}</div> : null}

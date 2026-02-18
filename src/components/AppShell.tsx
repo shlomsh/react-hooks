@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { LessonPlayer } from "./LessonPlayer";
+import { useLessonLoader } from "../hooks/useLessonLoader";
 import styles from "./AppShell.module.css";
 
 const MIN_DESKTOP_WIDTH = 1280;
 
 export function AppShell() {
+  const { lesson } = useLessonLoader();
   const [isDesktopViewport, setIsDesktopViewport] = useState(
     () => window.innerWidth >= MIN_DESKTOP_WIDTH
   );
@@ -33,9 +35,9 @@ export function AppShell() {
           <button className={styles.navTab}>Dashboard</button>
         </nav>
         <div className={styles.breadcrumb}>
-          <span className={styles.breadcrumbModule}>M1</span>
+          <span className={styles.breadcrumbModule}>M{lesson.module.moduleId}</span>
           <span className={styles.breadcrumbSep}>·</span>
-          <span className={styles.breadcrumbLesson}>Counter Intro</span>
+          <span className={styles.breadcrumbLesson}>{lesson.title}</span>
         </div>
       </header>
       <main className={styles.main}>

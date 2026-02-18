@@ -1,6 +1,6 @@
 # Kanban Status
 
-Last updated: 2026-02-18T12:40:46.404Z
+Last updated: 2026-02-18T14:00:29.872Z
 
 This file is the source of truth for the daily kanban board.
 
@@ -236,8 +236,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Module 3 content + gate",
     "owner": "Shared",
     "priority": "P1",
-    "status": "in_progress",
-    "notes": "In progress 2026-02-18. Module 3 lesson pack started: Step Counter Hook (custom hook extraction) added under src/content/lessons/03-step-counter-hook with starter files, checks, hints, and loader/test wiring via ?lesson=3.",
+    "status": "done",
+    "notes": "Completed 2026-02-18. Module 3 (Step Counter Hook) finalized with full lesson pack files, gate checks, hint ladder, and QA validation for equivalent valid updater-variable solutions.",
     "order": 24
   },
   {
@@ -245,8 +245,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Module 4 content + gate",
     "owner": "Shared",
     "priority": "P2",
-    "status": "backlog",
-    "notes": "",
+    "status": "done",
+    "notes": "Completed 2026-02-18. Module 4 (Stable Results Panel) shipped with composed hook lesson pack, dependency-stability gate checks (useMemo/useCallback), and QA tests covering valid dependency-order variants.",
     "order": 25
   },
   {
@@ -254,8 +254,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Debug labs content",
     "owner": "Shared",
     "priority": "P1",
-    "status": "backlog",
-    "notes": "",
+    "status": "done",
+    "notes": "Completed 2026-02-18. Module 5 Debug Labs shipped as two scenarios: (1) Scenario 1 — Infinite Loop (useObservedSection.ts, IntersectionObserver with unstable object dep, fix: useMemo stabilization); (2) Scenario 2 — Stale Callback (useLogOnSave.ts, useCallback with empty deps, fix: add count to deps). Both lessons at ?lesson=5 and ?lesson=6. All gate checks use double-escaped regex. Also fixed dynamic breadcrumb (AppShell now reads lesson.module.moduleId + lesson.title via useLessonLoader). 140 tests passing.",
     "order": 26
   },
   {

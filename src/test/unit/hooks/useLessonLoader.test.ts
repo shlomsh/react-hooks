@@ -42,4 +42,31 @@ describe("useLessonLoader", () => {
     expect(result.current.lesson.module.moduleId).toBe(3);
     expect(result.current.files[0].filename).toBe("useStepCounter.ts");
   });
+
+  it("loads module-4 when lesson query param is provided", () => {
+    window.history.replaceState({}, "", "/?lesson=4");
+    const { result } = renderHook(() => useLessonLoader());
+
+    expect(result.current.lesson.exerciseId).toBe("mod-4-hooks-stable-results-panel");
+    expect(result.current.lesson.module.moduleId).toBe(4);
+    expect(result.current.files[0].filename).toBe("useStableResults.ts");
+  });
+
+  it("loads module-5a (debug-lab: infinite loop) when lesson query param is 5", () => {
+    window.history.replaceState({}, "", "/?lesson=5");
+    const { result } = renderHook(() => useLessonLoader());
+
+    expect(result.current.lesson.exerciseId).toBe("mod-5a-debug-infinite-loop");
+    expect(result.current.lesson.module.moduleId).toBe(5);
+    expect(result.current.files[0].filename).toBe("useObservedSection.ts");
+  });
+
+  it("loads module-5b (debug-lab: stale callback) when lesson query param is 6", () => {
+    window.history.replaceState({}, "", "/?lesson=6");
+    const { result } = renderHook(() => useLessonLoader());
+
+    expect(result.current.lesson.exerciseId).toBe("mod-5b-debug-stale-callback");
+    expect(result.current.lesson.module.moduleId).toBe(5);
+    expect(result.current.files[0].filename).toBe("useLogOnSave.ts");
+  });
 });

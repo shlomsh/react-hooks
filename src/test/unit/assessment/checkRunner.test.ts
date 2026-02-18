@@ -6,6 +6,7 @@ describe("checkRunner", () => {
   const lesson1 = getLessonByIndex(0);
   const lesson2 = getLessonByIndex(1);
   const lesson3 = getLessonByIndex(2);
+  const lesson4 = getLessonByIndex(3);
 
   it("fails module1 starter files until increment bug is fixed", () => {
     const files = lesson1.files
@@ -37,6 +38,25 @@ describe("checkRunner", () => {
     expect(result.passed).toBe(true);
     expect(result.score).toBe(100);
     expect(result.checks.every((check) => check.passed)).toBe(true);
+  });
+
+  it("accepts module1 equivalent updater variable names", () => {
+    const files = lesson1.files
+      .filter((file) => !file.hidden)
+      .map((file) => ({
+        filename: file.fileName,
+        language: file.language,
+        content: file.starterCode,
+      }));
+
+    files[0].content = files[0].content
+      .replace("c + 2", "prev + 1")
+      .replace("c - 1", "value - 1");
+    files[0].content = files[0].content.replace("(c) => prev + 1", "(prev) => prev + 1");
+    files[0].content = files[0].content.replace("(c) => value - 1", "(value) => value - 1");
+
+    const result = runLessonChecks(lesson1, files, []);
+    expect(result.passed).toBe(true);
   });
 
   it("fails module2 starter until next-step and effect dependency bugs are fixed", () => {
@@ -77,6 +97,24 @@ describe("checkRunner", () => {
     expect(result.passed).toBe(true);
   });
 
+  it("accepts module2 equivalent updater variable names", () => {
+    const files = lesson2.files
+      .filter((file) => !file.hidden)
+      .map((file) => ({
+        filename: file.fileName,
+        language: file.language,
+        content: file.starterCode,
+      }));
+
+    files[0].content = files[0].content
+      .replace("(p) => p + 2", "(nextPage) => nextPage + 1")
+      .replace("(p) => p - 1", "(nextPage) => nextPage - 1")
+      .replace("[query])", "[query, page])");
+
+    const result = runLessonChecks(lesson2, files, []);
+    expect(result.passed).toBe(true);
+  });
+
   it("fails module3 starter and passes after custom hook fixes", () => {
     const files = lesson3.files
       .filter((file) => !file.hidden)
@@ -94,6 +132,109 @@ describe("checkRunner", () => {
       .replace("c - 1", "c - step")
       .replace("setCount(0)", "setCount(initialCount)");
     const fixedResult = runLessonChecks(lesson3, files, []);
+    expect(fixedResult.passed).toBe(true);
+    expect(fixedResult.score).toBe(100);
+  });
+
+  it("accepts module3 equivalent updater variable names", () => {
+    const files = lesson3.files
+      .filter((file) => !file.hidden)
+      .map((file) => ({
+        filename: file.fileName,
+        language: file.language,
+        content: file.starterCode,
+      }));
+
+    files[0].content = files[0].content
+      .replace("(c) => c + 1", "(current) => current + step")
+      .replace("(c) => c - 1", "(current) => current - step")
+      .replace("setCount(0)", "setCount(initialCount)");
+    const result = runLessonChecks(lesson3, files, []);
+    expect(result.passed).toBe(true);
+    expect(result.score).toBe(100);
+  });
+
+  it("fails module4 starter and passes after dependency fixes", () => {
+    const files = lesson4.files
+      .filter((file) => !file.hidden)
+      .map((file) => ({
+        filename: file.fileName,
+        language: file.language,
+        content: file.starterCode,
+      }));
+
+    const starterResult = runLessonChecks(lesson4, files, []);
+    expect(starterResult.passed).toBe(false);
+
+    files[0].content = files[0].content
+      .replace("[items]);", "[items, normalized]);")
+      .replace("}, []);", "}, [onPick]);");
+    const fixedResult = runLessonChecks(lesson4, files, []);
+    expect(fixedResult.passed).toBe(true);
+    expect(fixedResult.score).toBe(100);
+  });
+
+  it("accepts module4 valid memo dependency order variant [normalized, items]", () => {
+    const files = lesson4.files
+      .filter((file) => !file.hidden)
+      .map((file) => ({
+        filename: file.fileName,
+        language: file.language,
+        content: file.starterCode,
+      }));
+
+    files[0].content = files[0].content
+      .replace("[items]);", "[normalized, items]);")
+      .replace("}, []);", "}, [onPick]);");
+
+    const result = runLessonChecks(lesson4, files, []);
+    expect(result.passed).toBe(true);
+  });
+});
+
+describe("checkRunner — module5 debug labs", () => {
+  const lesson5a = getLessonByIndex(4); // debug-lab scenario 1
+  const lesson5b = getLessonByIndex(5); // debug-lab scenario 2
+
+  it("fails module5-scenario1 starter and passes after infinite-loop fix", () => {
+    const files = lesson5a.files
+      .filter((file) => !file.hidden)
+      .map((file) => ({
+        filename: file.fileName,
+        language: file.language,
+        content: file.starterCode,
+      }));
+
+    const starterResult = runLessonChecks(lesson5a, files, []);
+    expect(starterResult.passed).toBe(false);
+
+    // Fix: move options object outside component (use useMemo with stable deps)
+    files[0].content = files[0].content
+      .replace("const options = { threshold: 0.5 };", "const options = useMemo(() => ({ threshold: 0.5 }), []);")
+      .replace('import { useEffect, useRef } from "react";', 'import { useEffect, useMemo, useRef } from "react";');
+
+    const fixedResult = runLessonChecks(lesson5a, files, []);
+    expect(fixedResult.passed).toBe(true);
+    expect(fixedResult.score).toBe(100);
+  });
+
+  it("fails module5-scenario2 starter and passes after stale-ref fix", () => {
+    const files = lesson5b.files
+      .filter((file) => !file.hidden)
+      .map((file) => ({
+        filename: file.fileName,
+        language: file.language,
+        content: file.starterCode,
+      }));
+
+    const starterResult = runLessonChecks(lesson5b, files, []);
+    expect(starterResult.passed).toBe(false);
+
+    // Fix: add count to useCallback deps so handler reads fresh value
+    files[0].content = files[0].content
+      .replace("}, []);", "}, [count]);");
+
+    const fixedResult = runLessonChecks(lesson5b, files, []);
     expect(fixedResult.passed).toBe(true);
     expect(fixedResult.score).toBe(100);
   });

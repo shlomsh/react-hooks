@@ -101,7 +101,7 @@ You will practice writing reusable state logic by parameterizing behavior:
       weight: 0.35,
       testCode: `
         const source = files["useStepCounter.ts"];
-        if (!/setCount\\s*\\(\\s*\\(c\\)\\s*=>\\s*c\\s*\\+\\s*step\\s*\\)/.test(source)) {
+        if (!/setCount\\s*\\(\\s*\\(\\s*([A-Za-z_$][\\w$]*)\\s*\\)\\s*=>\\s*\\1\\s*\\+\\s*step\\s*\\)/.test(source)) {
           throw new Error("increment must use setCount((c) => c + step)");
         }
       `,
@@ -114,7 +114,7 @@ You will practice writing reusable state logic by parameterizing behavior:
       weight: 0.35,
       testCode: `
         const source = files["useStepCounter.ts"];
-        if (!/setCount\\s*\\(\\s*\\(c\\)\\s*=>\\s*c\\s*-\\s*step\\s*\\)/.test(source)) {
+        if (!/setCount\\s*\\(\\s*\\(\\s*([A-Za-z_$][\\w$]*)\\s*\\)\\s*=>\\s*\\1\\s*-\\s*step\\s*\\)/.test(source)) {
           throw new Error("decrement must use setCount((c) => c - step)");
         }
       `,
