@@ -1,7 +1,7 @@
 import { useRef, useCallback } from "react";
 import Editor from "@monaco-editor/react";
 import type { OnMount, BeforeMount } from "@monaco-editor/react";
-import type { editor } from "monaco-editor";
+import type { editor, Uri } from "monaco-editor";
 import styles from "./CodeEditor.module.css";
 
 interface CodeEditorProps {
@@ -117,11 +117,12 @@ export function CodeEditor({
       // Track diagnostics to enable/disable Run button
       const model = editor.getModel();
       if (model) {
-        monaco.editor.onDidChangeMarkers(([resource]) => {
-          if (resource.toString() === model.uri.toString()) {
+        monaco.editor.onDidChangeMarkers((uris: readonly Uri[]) => {
+          const [resource] = uris;
+          if (resource && resource.toString() === model.uri.toString()) {
             const markers = monaco.editor.getModelMarkers({ resource });
             const hasBlockingErrors = markers.some(
-              (m) => m.severity === monaco.MarkerSeverity.Error
+              (m: editor.IMarker) => m.severity === monaco.MarkerSeverity.Error
             );
             onErrorsChange(hasBlockingErrors);
           }
