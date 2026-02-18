@@ -193,10 +193,10 @@ Use this table during execution updates.
 | ST-006 | Eng B | DONE |  |  | ST-001, Spike pass |  |
 | ST-007 | Eng B | DONE |  |  | ST-006 |  |
 | ST-008 | Eng B | DONE |  |  | ST-006, ST-038 |  |
-| ST-009 | Eng D | BACKLOG |  |  | ST-012 |  |
-| ST-010 | Eng D | BACKLOG |  |  | ST-012 |  |
+| ST-009 | Eng D | DONE |  |  | ST-012 |  |
+| ST-010 | Eng D | DONE |  |  | ST-012 |  |
 | ST-011 | Eng D | BACKLOG |  |  | ST-012 |  |
-| ST-012 | Eng D | BACKLOG |  |  | ST-006 |  |
+| ST-012 | Eng D | DONE |  |  | ST-006 |  |
 | ST-013 | Eng C | DONE |  |  | ST-006, ST-038 |  |
 | ST-014 | Eng C | DONE |  |  |  | Stub-based, Week 1 |
 | ST-015 | Eng C | DONE |  |  | ST-013 | Soft block + reset |
@@ -210,7 +210,7 @@ Use this table during execution updates.
 | ST-023 | Eng B | DONE |  |  | ST-008, ST-013 |  |
 | ST-024 | Eng B | DONE |  |  | ST-008, ST-013 |  |
 | ST-025 | Eng B | DONE |  |  | ST-008, ST-013 |  |
-| ST-026 | Eng B | IN PROGRESS |  |  | ST-008, ST-013 |  |
+| ST-026 | Eng B | DONE |  |  | ST-008, ST-013 |  |
 | ST-027 | Eng C/B | BACKLOG |  |  | ST-013, ST-026 |  |
 | ST-028 | Eng B | BACKLOG |  |  | ST-022..ST-027 |  |
 | ST-029 | Eng D | BACKLOG |  |  |  |  |
@@ -250,6 +250,6 @@ Use this table during execution updates.
 ## 9. Immediate Next Actions
 1. ~~Confirm engineer-to-lane assignments (A/B/C/D names).~~
 2. ~~Create repo issues from ST-001 to ST-036.~~
-3. Continue content expansion: finalize ST-023 QA/tuning and start ST-024.
-4. Integrate true internals data pipeline to unblock ST-009-ST-012.
-5. Track progress in KANBAN-STATUS.md after every task.
+3. Complete ST-027 (Module 6 capstone) and align KANBAN + tracker statuses.
+4. Implement ST-011 hook call-order tracker to complete the visualizer core set.
+5. Start ST-028 final assessment flow after ST-027 is marked done.
