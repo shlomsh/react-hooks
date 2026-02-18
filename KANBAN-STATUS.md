@@ -374,6 +374,15 @@ This file is the source of truth for the daily kanban board.
     "status": "backlog",
     "notes": "Deferred to post-Demo 1. CI browser E2E will be added after core demo path ships.",
     "order": 39
+  },
+  {
+    "id": "ST-042",
+    "title": "Implement missing screens from UI prototype",
+    "owner": "Unassigned",
+    "priority": "P1",
+    "status": "backlog",
+    "notes": "PRD §9 defines 6 screens; only Lesson Player is built. Covers: Launch screen, Track Dashboard, Debug Arena layout, Capstone Workspace layout, Status Rail sidebar, Badge screen alignment. All subsystem hooks (progress, gate, hint, retry, visualizer) are done and ready for integration. Full spec in stories/ST-042-prototype-screens.md.",
+    "order": 40
   }
 ]
 ```
