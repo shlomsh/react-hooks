@@ -3,16 +3,19 @@ import styles from "./PreviewPanel.module.css";
 
 interface PreviewPanelProps {
   sandbox: SandboxState;
+  awaitingGateSubmit: boolean;
 }
 
-export function PreviewPanel({ sandbox }: PreviewPanelProps) {
+export function PreviewPanel({ sandbox, awaitingGateSubmit }: PreviewPanelProps) {
   const nextAction =
     sandbox.status === "timeout"
       ? "Try a smaller change first, then run again."
       : sandbox.status === "error"
         ? "Run failed. Next step: adjust one line, then click Run again."
         : sandbox.status === "success"
-          ? "Success. Great progress - you completed the first run loop."
+          ? awaitingGateSubmit
+            ? "Run succeeded. Final step: click Submit Gate to evaluate lesson criteria."
+            : "Success. Great progress - you completed the first run loop."
           : null;
 
   return (

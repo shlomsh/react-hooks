@@ -7,9 +7,11 @@ interface ControlBarProps {
   checkItems: { id: string; label: string; pass: boolean | null }[];
   progressLabel: string;
   coachMessage: string;
+  statusNote: string | null;
   hintText: string | null;
   canUnlockHint: boolean;
   stepStates: boolean[];
+  submitLabel: string;
   onRun: () => void;
   onReset: () => void;
   onUnlockHint: () => void;
@@ -22,9 +24,11 @@ export function ControlBar({
   checkItems,
   progressLabel,
   coachMessage,
+  statusNote,
   hintText,
   canUnlockHint,
   stepStates,
+  submitLabel,
   onRun,
   onReset,
   onUnlockHint,
@@ -46,6 +50,7 @@ export function ControlBar({
             ))}
           </div>
           <div className={styles.coachMessage}>{coachMessage}</div>
+          {statusNote ? <div className={styles.statusNote}>{statusNote}</div> : null}
           {hintText ? (
             <div className={styles.hintMessage}>
               Hint: {hintText}
@@ -69,7 +74,7 @@ export function ControlBar({
           >
             Unlock Hint
           </button>
-          <button className={styles.btnAmber} onClick={onSubmitGate}>Submit Gate</button>
+          <button className={styles.btnAmber} onClick={onSubmitGate}>{submitLabel}</button>
         </div>
       </div>
       <div className={styles.checks}>

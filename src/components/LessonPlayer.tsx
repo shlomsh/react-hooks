@@ -63,6 +63,7 @@ export function LessonPlayer() {
   const hasGatePass = gateResult?.passed ?? false;
   const hasSubmittedGate = gateResult !== null;
   const stepStates = [hasEditedSomething, hasRun, hasSubmittedGate && hasGatePass];
+  const awaitingGateSubmit = hasRun && !hasSubmittedGate;
   const completedSteps = stepStates.filter(Boolean).length;
   const progressLabel = `${completedSteps}/3 complete`;
   const editableFileName =
@@ -88,6 +89,10 @@ export function LessonPlayer() {
           : hasEditedSomething
             ? guidance.runStepPrompt
             : guidance.firstStepPrompt;
+  const statusNote = awaitingGateSubmit
+    ? "You are not stuck: Run only executes code. Submit Gate is required to complete Step 3."
+    : null;
+  const submitLabel = awaitingGateSubmit ? "Submit Gate (Step 3)" : "Submit Gate";
   const activeHint = unlockedHintTier > 0
     ? lesson.hintLadder[unlockedHintTier - 1]
     : null;
@@ -129,7 +134,7 @@ export function LessonPlayer() {
       </div>
 
       <div className={styles.previewArea}>
-        <PreviewPanel sandbox={sandbox.state} />
+        <PreviewPanel sandbox={sandbox.state} awaitingGateSubmit={awaitingGateSubmit} />
       </div>
 
       <VisualizerPanel />
@@ -141,9 +146,11 @@ export function LessonPlayer() {
           checkItems={checkItems}
           progressLabel={progressLabel}
           coachMessage={coachMessage}
+          statusNote={statusNote}
           hintText={hintText}
           canUnlockHint={unlockedHintTier < lesson.hintLadder.length}
           stepStates={stepStates}
+          submitLabel={submitLabel}
           onRun={handleRun}
           onReset={handleReset}
           onUnlockHint={handleUnlockHint}
