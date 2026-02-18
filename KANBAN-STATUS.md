@@ -1,6 +1,6 @@
 # Kanban Status
 
-Last updated: 2026-02-18T21:59:00.000Z
+Last updated: 2026-02-19T00:04:00.000Z
 
 This file is the source of truth for the daily kanban board.
 
@@ -299,8 +299,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Analytics adapters",
     "owner": "Shared",
     "priority": "P3",
-    "status": "in_progress",
-    "notes": "Started 2026-02-18. Building analytics adapters that derive learner metrics from progress state and telemetry events.",
+    "status": "done",
+    "notes": "Completed 2026-02-19. Added pure learner analytics adapters in src/analytics/adapters.ts that normalize per-module + aggregate metrics from ProgressState and telemetry events (attempts, gate pass/fail counts, hint tier usage, scores, duration, completion rate, badge rate). Added unit coverage in src/test/unit/analytics/adapters.test.ts including mixed event timelines, hint-tier dedupe/sort, and empty-telemetry fallbacks. All 240 unit tests passing.",
     "order": 31
   },
   {
