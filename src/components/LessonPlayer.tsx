@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { ConceptPanel } from "./ConceptPanel";
 import { VisualizerPanel } from "./VisualizerPanel";
 import { ControlBar } from "./ControlBar";
@@ -8,6 +8,7 @@ import { PreviewPanel } from "./editor/PreviewPanel";
 import { useEditorState } from "../hooks/useEditorState";
 import { useSandbox } from "../hooks/useSandbox";
 import { useLessonLoader } from "../hooks/useLessonLoader";
+import { runLessonChecks, type LessonRunResult } from "../assessment/checkRunner";
 import styles from "./LessonPlayer.module.css";
 
 export function LessonPlayer() {
@@ -23,6 +24,7 @@ export function LessonPlayer() {
     resetFiles,
   } = useEditorState(lessonFiles);
   const sandbox = useSandbox();
+  const [gateResult, setGateResult] = useState<LessonRunResult | null>(null);
 
   const handleContentChange = useCallback(
     (content: string) => {
@@ -38,26 +40,48 @@ export function LessonPlayer() {
   const handleReset = useCallback(() => {
     resetFiles(lessonFiles);
     sandbox.reset();
+    setGateResult(null);
   }, [lessonFiles, resetFiles, sandbox]);
+
+  const handleSubmitGate = useCallback(() => {
+    const capturedConsole = sandbox.state.events.map((event) => event.message);
+    const result = runLessonChecks(lesson, files, capturedConsole);
+    setGateResult(result);
+  }, [files, lesson, sandbox.state.events]);
 
   const hasEditedSomething = files.some((file) => {
     const baseline = lessonFiles.find((seed) => seed.filename === file.filename);
     return baseline ? baseline.content !== file.content : false;
   });
   const hasRun = sandbox.state.status !== "idle";
-  const hasSuccess = sandbox.state.status === "success";
-  const stepStates = [hasEditedSomething, hasRun, hasSuccess];
+  const hasGatePass = gateResult?.passed ?? false;
+  const stepStates = [hasEditedSomething, hasRun, hasGatePass];
   const completedSteps = stepStates.filter(Boolean).length;
   const progressLabel = `${completedSteps}/3 complete`;
   const coachMessage = hasErrors
     ? "Step 1: fix TypeScript errors, then click Run."
-    : hasSuccess
-      ? "Nice work - your first run passed. You are ready for the next challenge."
+    : hasGatePass
+      ? "Nice work - your first gate passed. You are ready for the next challenge."
+      : gateResult && !gateResult.passed
+        ? "Almost there. Fix the failed check, then submit gate again."
       : sandbox.state.status === "error" || sandbox.state.status === "timeout"
         ? "Good attempt. Use the console hint, make one small fix, and run again."
         : hasEditedSomething
           ? "Step 2: click Run to validate your change."
-          : "Step 1: edit one line in LifecycleLogger.tsx for a quick win.";
+          : "Step 1: edit one line in CounterIntro.tsx for a quick win.";
+
+  const checkItems = useMemo(
+    () =>
+      lesson.checks.map((check) => {
+        const result = gateResult?.checks.find((item) => item.id === check.id);
+        return {
+          id: check.id,
+          label: result?.message ?? check.successMessage,
+          pass: result ? result.passed : null,
+        };
+      }),
+    [gateResult?.checks, lesson.checks]
+  );
 
   return (
     <div className={styles.player}>
@@ -87,12 +111,13 @@ export function LessonPlayer() {
         <ControlBar
           hasErrors={hasErrors}
           runStatus={sandbox.state.status}
-          checkLabels={lesson.checks.map((check) => check.failMessage)}
+          checkItems={checkItems}
           progressLabel={progressLabel}
           coachMessage={coachMessage}
           stepStates={stepStates}
           onRun={handleRun}
           onReset={handleReset}
+          onSubmitGate={handleSubmitGate}
         />
       </div>
     </div>

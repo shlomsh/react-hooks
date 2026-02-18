@@ -92,6 +92,12 @@
   background: var(--red-dim);
 }
 
+.checkBox.pending {
+  border-color: var(--border-med);
+  color: var(--text-dim);
+  background: transparent;
+}
+
 .checkLabel {
   user-select: none;
 }

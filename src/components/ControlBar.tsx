@@ -4,23 +4,25 @@ import styles from "./ControlBar.module.css";
 interface ControlBarProps {
   hasErrors: boolean;
   runStatus: SandboxStatus;
-  checkLabels: string[];
+  checkItems: { id: string; label: string; pass: boolean | null }[];
   progressLabel: string;
   coachMessage: string;
   stepStates: boolean[];
   onRun: () => void;
   onReset: () => void;
+  onSubmitGate: () => void;
 }
 
 export function ControlBar({
   hasErrors,
   runStatus,
-  checkLabels,
+  checkItems,
   progressLabel,
   coachMessage,
   stepStates,
   onRun,
   onReset,
+  onSubmitGate,
 }: ControlBarProps) {
   return (
     <div className={styles.bar}>
@@ -39,8 +41,8 @@ export function ControlBar({
         <div className={styles.coachMessage}>{coachMessage}</div>
       </div>
       <div className={styles.checks}>
-        {checkLabels.map((label, index) => (
-          <CheckItem key={label} label={label} pass={index === 0} />
+        {checkItems.map((check) => (
+          <CheckItem key={check.id} label={check.label} pass={check.pass} />
         ))}
       </div>
       <div className={styles.actions}>
@@ -54,17 +56,20 @@ export function ControlBar({
         </button>
         <button className={styles.btnGhost} onClick={onReset}>Reset</button>
         <button className={styles.btnGhost}>Unlock Hint</button>
-        <button className={styles.btnAmber}>Submit Gate</button>
+        <button className={styles.btnAmber} onClick={onSubmitGate}>Submit Gate</button>
       </div>
     </div>
   );
 }
 
-function CheckItem({ label, pass }: { label: string; pass: boolean }) {
+function CheckItem({ label, pass }: { label: string; pass: boolean | null }) {
+  const stateClass =
+    pass === null ? styles.pending : pass ? styles.pass : styles.fail;
+  const symbol = pass === null ? "·" : pass ? "\u2713" : "\u00D7";
   return (
     <div className={styles.checkItem}>
-      <span className={`${styles.checkBox} ${pass ? styles.pass : styles.fail}`}>
-        {pass ? "\u2713" : "\u00D7"}
+      <span className={`${styles.checkBox} ${stateClass}`}>
+        {symbol}
       </span>
       <span className={styles.checkLabel}>{label}</span>
     </div>

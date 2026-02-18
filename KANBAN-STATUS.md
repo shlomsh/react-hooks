@@ -1,6 +1,6 @@
 # Kanban Status
 
-Last updated: 2026-02-18T08:58:10Z
+Last updated: 2026-02-18T10:06:26Z
 
 This file is the source of truth for the daily kanban board.
 
@@ -38,8 +38,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Accessibility baseline",
     "owner": "Shared",
     "priority": "P2",
-    "status": "in_progress",
-    "notes": "Implementing show-stopper test gates: unit + e2e in CI, pre-commit test pass requirement, and TDD enforcement.",
+    "status": "backlog",
+    "notes": "Deferred to keep minimal Demo 1 path focused.",
     "order": 4
   },
   {
@@ -155,8 +155,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Check runner contract",
     "owner": "Shared",
     "priority": "P1",
-    "status": "backlog",
-    "notes": "Depends on ST-006 + ST-038. Week 2.",
+    "status": "in_progress",
+    "notes": "Demo 1 focus: implement minimal check runner against lesson schema checks and wire pass/fail output to gate submit.",
     "order": 15
   },
   {
@@ -182,8 +182,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Progress local persistence",
     "owner": "Shared",
     "priority": "P2",
-    "status": "in_progress",
-    "notes": "Claimed 2026-02-18. useProgressPersistence hook: save/load lesson progress to localStorage.",
+    "status": "backlog",
+    "notes": "Deferred to keep minimal Demo 1 path focused.",
     "order": 18
   },
   {
@@ -191,8 +191,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Completion ledger",
     "owner": "Shared",
     "priority": "P2",
-    "status": "in_progress",
-    "notes": "Claimed 2026-02-18. useCompletionLedger hook: track completed modules/lessons, derives badge eligibility.",
+    "status": "backlog",
+    "notes": "Deferred to keep minimal Demo 1 path focused.",
     "order": 19
   },
   {
@@ -200,8 +200,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Proficiency validator",
     "owner": "Shared",
     "priority": "P1",
-    "status": "in_progress",
-    "notes": "Claimed 2026-02-18. Pure scoring fn + useProficiencyValidator hook. Stub-based, no sandbox dep.",
+    "status": "backlog",
+    "notes": "Deferred to keep minimal Demo 1 path focused.",
     "order": 20
   },
   {
@@ -218,8 +218,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Module 1 content + gate",
     "owner": "Shared",
     "priority": "P2",
-    "status": "backlog",
-    "notes": "",
+    "status": "in_progress",
+    "notes": "Demo 1 focus: simplified beginner useState lesson shipped; next close-out is wiring actual gate submit pass/fail from check runner.",
     "order": 22
   },
   {
