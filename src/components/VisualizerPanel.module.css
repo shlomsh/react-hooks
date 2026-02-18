@@ -1,0 +1,151 @@
+.panel {
+  grid-row: 1 / -1;
+  overflow-y: auto;
+  background: var(--bg-deep);
+  border-left: 1px solid var(--border-dim);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-dim);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--lime);
+  box-shadow: 0 0 6px var(--lime-glow);
+}
+
+.headerText {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.section {
+  padding: 0.75rem 1rem;
+}
+
+.sectionTitle {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+  margin-bottom: 0.5rem;
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.event {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.72rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-dim);
+}
+
+.event:hover {
+  border-color: var(--border-med);
+}
+
+.tag {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 600;
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+}
+
+.render .tag {
+  background: rgba(0, 229, 255, 0.12);
+  color: var(--cyan);
+}
+
+.effect .tag {
+  background: rgba(255, 179, 0, 0.1);
+  color: var(--amber);
+}
+
+.cleanup .tag {
+  background: rgba(255, 64, 96, 0.1);
+  color: var(--red);
+}
+
+.eventLabel {
+  color: var(--text-secondary);
+}
+
+.eventTime {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--text-dim);
+}
+
+.deps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.depRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  border-radius: var(--radius-sm);
+}
+
+.depChanged {
+  background: rgba(255, 179, 0, 0.08);
+  color: var(--amber);
+}
+
+.depStable {
+  background: var(--bg-surface);
+  color: var(--text-dim);
+}
+
+.depIndicator {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.depChanged .depIndicator {
+  background: var(--amber);
+  box-shadow: 0 0 4px var(--amber-glow);
+}
+
+.depStable .depIndicator {
+  background: var(--text-dim);
+  opacity: 0.4;
+}
+
+.depName {
+  min-width: 60px;
+}
+
+.depValues {
+  flex: 1;
+  text-align: right;
+  font-size: 0.65rem;
+}

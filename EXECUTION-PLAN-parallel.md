@@ -222,7 +222,34 @@ Use this table during execution updates.
 | ST-035 | Shared | TODO |  |  | Core epics complete |  |
 | ST-036 | Shared | TODO |  |  | ST-033, ST-034, ST-035 |  |
 
-## 8. Immediate Next Actions
-1. Confirm engineer-to-lane assignments (A/B/C/D names).
-2. Create repo issues from ST-001 to ST-036.
-3. Start Week 1 stories in parallel and track in the table above.
+## 8. Demo Milestones
+
+### Demo 1: "Lesson Player Live" (Target: End of Week 2)
+**Narrative:** Learner opens a lesson, reads the concept panel, writes TypeScript in the Monaco editor, hits Run, and sees output. Visualizer shows render/effect timeline.
+
+**Required stories (critical path):**
+| Story | Title | Status | Blocker |
+|-------|-------|--------|---------|
+| ST-001 | App shell layout | In Review | — |
+| ST-005 | Monaco editor integration | **Done** | — |
+| ST-038 | Lesson/exercise schema contract | In Progress | — |
+| ST-006 | Sandbox runtime executor | Backlog | ST-001, Sandpack spike |
+| ST-007 | Run/reset flow + output panel | Backlog | ST-006 |
+| ST-008 | Lesson schema loader | Backlog | ST-006, ST-038 |
+
+### Demo 2: "Gated Progression" (Target: End of Week 4)
+**Narrative:** Learner completes Module 1, passes the gate, unlocks Module 2. Failed attempts trigger hints and remediation flow.
+
+**Additional stories:** ST-013, ST-014, ST-015, ST-016, ST-022, ST-023
+
+### Demo 3: "Full Track + Badge" (Target: End of Week 6)
+**Narrative:** Learner completes all 7 modules, earns proficiency badge. Analytics captured throughout.
+
+**Additional stories:** ST-017–ST-021, ST-024–ST-028, ST-029–ST-032
+
+## 9. Immediate Next Actions
+1. ~~Confirm engineer-to-lane assignments (A/B/C/D names).~~
+2. ~~Create repo issues from ST-001 to ST-036.~~
+3. Ship ST-038 (schema contract) — highest priority unblocked item, blocks entire content pipeline.
+4. Land Sandpack spike to unblock ST-006.
+5. Track progress in KANBAN-STATUS.md after every task.

@@ -1,0 +1,68 @@
+.shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  min-width: 1280px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0 1.25rem;
+  height: 52px;
+  background: var(--bg-deep);
+  border-bottom: 1px solid var(--border-dim);
+  flex-shrink: 0;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logoDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan-glow);
+}
+
+.logoText {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--cyan);
+}
+
+.nav {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.navTab {
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  transition: all 0.2s;
+}
+
+.navTab:hover {
+  color: var(--text-secondary);
+  background: var(--bg-surface);
+}
+
+.navTab.active {
+  color: var(--text-primary);
+  background: var(--bg-raised);
+}
+
+.main {
+  flex: 1;
+  overflow: hidden;
+}

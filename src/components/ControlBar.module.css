@@ -1,0 +1,93 @@
+.bar {
+  display: flex;
+  align-items: center;
+  padding: 0.6rem 1rem;
+  background: var(--bg-deep);
+  border-top: 1px solid var(--border-dim);
+}
+
+.checks {
+  display: flex;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.checkItem {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+}
+
+.checkBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  border: 1.5px solid var(--border-med);
+  font-size: 0.6rem;
+  font-weight: 700;
+}
+
+.checkBox.pass {
+  border-color: var(--lime);
+  color: var(--lime);
+  background: var(--lime-dim);
+}
+
+.checkBox.fail {
+  border-color: var(--red);
+  color: var(--red);
+  background: var(--red-dim);
+}
+
+.checkLabel {
+  user-select: none;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btnGhost {
+  padding: 0.45rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  font-weight: 500;
+  background: transparent;
+  border: 1px solid var(--border-med);
+  color: var(--text-secondary);
+  transition: all 0.2s;
+}
+
+.btnGhost:hover:not(:disabled) {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border-color: var(--border-soft);
+}
+
+.btnGhost:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btnAmber {
+  padding: 0.45rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--amber);
+  color: var(--bg-abyss);
+  border: none;
+  box-shadow: 0 2px 12px rgba(255, 179, 0, 0.2);
+  transition: all 0.25s var(--ease-out-expo);
+}
+
+.btnAmber:hover {
+  box-shadow: 0 0 20px var(--amber-glow);
+  transform: translateY(-1px);
+}

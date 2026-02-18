@@ -1,6 +1,6 @@
 # Kanban Status
 
-Last updated: 2026-02-18T08:05:59Z
+Last updated: 2026-02-18T08:07:09Z
 
 This file is the source of truth for the daily kanban board.
 
@@ -20,8 +20,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Theme tokens + primitives",
     "owner": "Eng A",
     "priority": "P1",
-    "status": "backlog",
-    "notes": "",
+    "status": "in_progress",
+    "notes": "Adding persistent shell regression test and CI enforcement so ST-001 behavior is validated on every build.",
     "order": 2
   },
   {
@@ -56,8 +56,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Lesson/exercise schema contract",
     "owner": "Eng B",
     "priority": "P0",
-    "status": "in_progress",
-    "notes": "Week 1 deliverable. Blocks ST-008, ST-013, all content stories. Reviewed by Eng C. Started 2026-02-18.",
+    "status": "done",
+    "notes": "Completed 2026-02-18. Types in src/types/lesson-schema.ts. Sample Module 1 content in src/content/module-1.ts validates the schema. Unblocks ST-008, ST-013, ST-022–ST-028. Ready for Eng C review.",
     "order": 6
   },
   {

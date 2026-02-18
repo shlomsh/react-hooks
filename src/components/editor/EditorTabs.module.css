@@ -1,0 +1,24 @@
+.tabs {
+  display: flex;
+  background: var(--bg-deep);
+  border-bottom: 1px solid var(--border-dim);
+}
+
+.tab {
+  padding: 0.55rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.tab:hover {
+  color: var(--text-secondary);
+}
+
+.tab.active {
+  color: var(--text-primary);
+  border-bottom-color: var(--cyan);
+  background: var(--bg-panel);
+}
