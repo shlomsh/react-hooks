@@ -353,8 +353,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Playwright baseline setup",
     "owner": "Shared",
     "priority": "P1",
-    "status": "backlog",
-    "notes": "Tomorrow: install @playwright/test, add playwright.config.ts, and scripts for local/CI runs without replacing existing Vitest test:e2e gate.",
+    "status": "in_progress",
+    "notes": "Picked up 2026-02-18 for tomorrow continuation. Plan: install @playwright/test, add playwright.config.ts, and scripts for local/CI runs without replacing existing Vitest test:e2e gate.",
     "order": 37
   },
   {
