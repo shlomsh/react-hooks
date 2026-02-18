@@ -1,6 +1,6 @@
 # Kanban Status
 
-Last updated: 2026-02-18T20:41:19.000Z
+Last updated: 2026-02-18T21:59:00.000Z
 
 This file is the source of truth for the daily kanban board.
 
@@ -299,8 +299,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Analytics adapters",
     "owner": "Shared",
     "priority": "P3",
-    "status": "backlog",
-    "notes": "",
+    "status": "in_progress",
+    "notes": "Started 2026-02-18. Building analytics adapters that derive learner metrics from progress state and telemetry events.",
     "order": 31
   },
   {
