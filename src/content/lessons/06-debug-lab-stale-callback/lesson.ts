@@ -6,7 +6,7 @@ const lesson: LessonManifest = {
     moduleId: 5,
     moduleName: "Debugging Internals Lab",
     order: 6,
-    type: "concept-gate",
+    type: "debug-lab",
     estimatedMinutes: 15,
     difficulty: "advanced",
     concepts: ["useCallback", "stale closure", "dependency array"],

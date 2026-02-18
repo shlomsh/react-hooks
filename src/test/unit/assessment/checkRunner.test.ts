@@ -239,3 +239,42 @@ describe("checkRunner — module5 debug labs", () => {
     expect(fixedResult.score).toBe(100);
   });
 });
+
+describe("checkRunner — module6 capstone rubric threshold", () => {
+  const lesson6 = getLessonByIndex(6);
+
+  it("fails starter against rubric-score threshold", () => {
+    const files = lesson6.files
+      .filter((file) => !file.hidden)
+      .map((file) => ({
+        filename: file.fileName,
+        language: file.language,
+        content: file.starterCode,
+      }));
+
+    const starter = runLessonChecks(lesson6, files, []);
+    expect(lesson6.gate.passCondition).toBe("rubric-score");
+    expect(starter.passed).toBe(false);
+    expect(starter.score).toBeLessThan(80);
+  });
+
+  it("passes when threshold-relevant fixes are applied (>=80)", () => {
+    const files = lesson6.files
+      .filter((file) => !file.hidden)
+      .map((file) => ({
+        filename: file.fileName,
+        language: file.language,
+        content: file.starterCode,
+      }));
+
+    files[0].content = files[0].content
+      .replace("[items]);", "[items, query]);")
+      .replace("}, [items]);", "}, [filteredItems]);")
+      .replace("}, []);", "}, [onSelectItem]);");
+    // leave reset bug unresolved to verify rubric-score threshold behavior
+
+    const result = runLessonChecks(lesson6, files, []);
+    expect(result.score).toBeGreaterThanOrEqual(80);
+    expect(result.passed).toBe(true);
+  });
+});

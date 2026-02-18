@@ -6,7 +6,7 @@ const lesson: LessonManifest = {
     moduleId: 5,
     moduleName: "Debugging Internals Lab",
     order: 5,
-    type: "concept-gate",
+    type: "debug-lab",
     estimatedMinutes: 20,
     difficulty: "advanced",
     concepts: ["useEffect deps", "object identity", "IntersectionObserver", "infinite loop"],

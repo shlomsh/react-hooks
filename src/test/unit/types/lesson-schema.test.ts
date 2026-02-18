@@ -14,7 +14,7 @@ import type {
 
 describe("ST-038: Lesson schema contract", () => {
   it("all discovered lessons validate against schema requirements", () => {
-    expect(lessons.length).toBeGreaterThanOrEqual(4);
+    expect(lessons.length).toBeGreaterThanOrEqual(7);
 
     const ids = new Set<string>();
     for (const lesson of lessons as Lesson[]) {
@@ -25,7 +25,7 @@ describe("ST-038: Lesson schema contract", () => {
 
       const m: ModuleMetadata = lesson.module;
       expect(m.order).toBeGreaterThan(0);
-      expect(m.type).toBe("concept-gate");
+      expect(["concept-gate", "debug-lab", "capstone"]).toContain(m.type);
       expect(m.estimatedMinutes).toBeGreaterThan(0);
       expect(m.concepts.length).toBeGreaterThan(0);
       expect(m.tags.length).toBeGreaterThan(0);
@@ -110,6 +110,9 @@ describe("ST-038: Lesson schema contract", () => {
     const module2 = getLessonByIndex(1);
     const module3 = getLessonByIndex(2);
     const module4 = getLessonByIndex(3);
+    const module5a = getLessonByIndex(4);
+    const module5b = getLessonByIndex(5);
+    const module6 = getLessonByIndex(6);
 
     expect(module1.module.moduleId).toBe(1);
     expect(module1.module.order).toBe(1);
@@ -130,5 +133,26 @@ describe("ST-038: Lesson schema contract", () => {
     expect(module4.module.order).toBe(4);
     expect(module4.module.lockedUntilPrevious).toBe(true);
     expect(module4.module.unlocksModule).toBe(5);
+
+    expect(module5a.module.moduleId).toBe(5);
+    expect(module5a.module.order).toBe(5);
+    expect(module5a.module.type).toBe("debug-lab");
+    expect(module5a.module.lockedUntilPrevious).toBe(true);
+    expect(module5a.module.unlocksModule).toBe(6);
+
+    expect(module5b.module.moduleId).toBe(5);
+    expect(module5b.module.order).toBe(6);
+    expect(module5b.module.type).toBe("debug-lab");
+    expect(module5b.module.lockedUntilPrevious).toBe(true);
+    expect(module5b.module.unlocksModule).toBe(6);
+
+    expect(module6.module.moduleId).toBe(6);
+    expect(module6.module.order).toBe(7);
+    expect(module6.module.type).toBe("capstone");
+    expect(module6.module.lockedUntilPrevious).toBe(true);
+    expect(module6.module.unlocksModule).toBe(7);
+    expect(module6.gate.passCondition).toBe("rubric-score");
+    expect(module6.gate.scoreThreshold).toBeDefined();
+    expect(module6.gate.scoreThreshold).toBeGreaterThanOrEqual(80);
   });
 });

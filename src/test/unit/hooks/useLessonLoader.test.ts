@@ -69,4 +69,14 @@ describe("useLessonLoader", () => {
     expect(result.current.lesson.module.moduleId).toBe(5);
     expect(result.current.files[0].filename).toBe("useLogOnSave.ts");
   });
+
+  it("loads module-6 capstone when lesson query param is 7", () => {
+    window.history.replaceState({}, "", "/?lesson=7");
+    const { result } = renderHook(() => useLessonLoader());
+
+    expect(result.current.lesson.exerciseId).toBe("mod-6-capstone-stable-workspace");
+    expect(result.current.lesson.module.moduleId).toBe(6);
+    expect(result.current.lesson.gate.passCondition).toBe("rubric-score");
+    expect(result.current.files[0].filename).toBe("useStableWorkspace.ts");
+  });
 });
