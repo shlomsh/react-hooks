@@ -1,6 +1,6 @@
 # Kanban Status
 
-Last updated: 2026-02-19T00:04:00.000Z
+Last updated: 2026-02-19T00:12:00.000Z
 
 This file is the source of truth for the daily kanban board.
 
@@ -308,8 +308,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Failure classifier",
     "owner": "Shared",
     "priority": "P3",
-    "status": "backlog",
-    "notes": "",
+    "status": "in_progress",
+    "notes": "Started 2026-02-19. Implementing a telemetry-driven common-failure classifier for dependency issues, stale closures, and cleanup errors.",
     "order": 32
   },
   {
