@@ -75,4 +75,39 @@ describe("useSandbox", () => {
     });
     expect(result.current.state.errorMessage).toContain("infinite loop");
   });
+
+  it("can simulate basic user flow events for learning debug output", async () => {
+    const { result } = renderHook(() => useSandbox());
+
+    await act(async () => {
+      await result.current.run(
+        `import { useState } from "react";
+        export default function Demo() {
+          const [step, setStep] = useState(1);
+          return (
+            <div>
+              <input
+                type="number"
+                value={step}
+                onChange={(e) => {
+                  console.log("input value", e.target.value);
+                  setStep(Number(e.target.value));
+                }}
+              />
+              <button onClick={() => console.log("increment", step)}>Increment</button>
+              <button onClick={() => console.log("decrement", step)}>Decrement</button>
+            </div>
+          );
+        }`,
+        "demo.tsx",
+        undefined,
+        { simulateUserFlow: true }
+      );
+    });
+
+    const messages = result.current.state.events.map((event) => event.message);
+    expect(messages.some((message) => message.includes("[sim] input onChange"))).toBe(true);
+    expect(messages.some((message) => message.includes("input value 3"))).toBe(true);
+    expect(messages.some((message) => message.includes("[sim] button click -> Increment"))).toBe(true);
+  });
 });

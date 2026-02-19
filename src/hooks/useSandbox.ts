@@ -18,6 +18,10 @@ export interface SandboxState {
   truncated: boolean;
 }
 
+export interface SandboxRunOptions {
+  simulateUserFlow?: boolean;
+}
+
 const MAX_EVENTS = 200;
 const TIMEOUT_MS = 5000;
 
@@ -143,6 +147,92 @@ function transpileSource(source: string, fileName: string) {
   });
 }
 
+interface MockElementNode {
+  type: unknown;
+  props?: {
+    children?: unknown;
+    onChange?: (event: unknown) => void;
+    onClick?: (event: unknown) => void;
+  };
+}
+
+function isMockElementNode(value: unknown): value is MockElementNode {
+  return Boolean(value) && typeof value === "object" && "type" in (value as object);
+}
+
+function forEachMockNode(node: unknown, visit: (current: MockElementNode) => void): void {
+  if (!isMockElementNode(node)) {
+    return;
+  }
+
+  visit(node);
+
+  const children = node.props?.children;
+  if (Array.isArray(children)) {
+    children.forEach((child) => forEachMockNode(child, visit));
+    return;
+  }
+  if (children !== undefined && children !== null) {
+    forEachMockNode(children, visit);
+  }
+}
+
+function extractText(node: unknown): string {
+  if (typeof node === "string" || typeof node === "number") {
+    return String(node);
+  }
+  if (!isMockElementNode(node)) {
+    return "";
+  }
+  const children = node.props?.children;
+  if (Array.isArray(children)) {
+    return children.map((child) => extractText(child)).join("").trim();
+  }
+  return extractText(children).trim();
+}
+
+function findFirstInputOnChange(tree: unknown): ((event: unknown) => void) | null {
+  let handler: ((event: unknown) => void) | null = null;
+  forEachMockNode(tree, (node) => {
+    if (handler) return;
+    if (node.type === "input" && typeof node.props?.onChange === "function") {
+      handler = node.props.onChange;
+    }
+  });
+  return handler;
+}
+
+function findButtonOnClick(tree: unknown, label: string): ((event: unknown) => void) | null {
+  let handler: ((event: unknown) => void) | null = null;
+  const expected = label.trim().toLowerCase();
+  forEachMockNode(tree, (node) => {
+    if (handler) return;
+    if (node.type !== "button" || typeof node.props?.onClick !== "function") {
+      return;
+    }
+    const buttonLabel = extractText(node).toLowerCase();
+    if (buttonLabel.includes(expected)) {
+      handler = node.props.onClick;
+    }
+  });
+  return handler;
+}
+
+function createSyntheticInputEvent(value: string) {
+  return {
+    target: { value },
+    currentTarget: { value },
+  };
+}
+
+function createSyntheticMouseEvent() {
+  return {
+    preventDefault() {
+      // no-op
+    },
+  };
+}
+
 export function useSandbox() {
   const [state, setState] = useState<SandboxState>({
     status: "idle",
@@ -180,7 +270,12 @@ export function useSandbox() {
   }, []);
 
   const run = useCallback(
-    async (code: string, fileName: string, files?: EditorFile[]): Promise<SandboxStatus> => {
+    async (
+      code: string,
+      fileName: string,
+      files?: EditorFile[],
+      options?: SandboxRunOptions
+    ): Promise<SandboxStatus> => {
       const runId = runIdRef.current + 1;
       runIdRef.current = runId;
 
@@ -272,7 +367,30 @@ export function useSandbox() {
 
           if (typeof maybeDefault === "function") {
             resetHooks();
-            (maybeDefault as () => unknown)();
+            let tree = (maybeDefault as () => unknown)();
+
+            if (options?.simulateUserFlow) {
+              const onChange = findFirstInputOnChange(tree);
+              if (onChange) {
+                console.log("[sim] input onChange -> value=3");
+                onChange(createSyntheticInputEvent("3"));
+              }
+
+              resetHooks();
+              tree = (maybeDefault as () => unknown)();
+
+              const incrementClick = findButtonOnClick(tree, "Increment");
+              if (incrementClick) {
+                console.log("[sim] button click -> Increment");
+                incrementClick(createSyntheticMouseEvent());
+              }
+
+              const decrementClick = findButtonOnClick(tree, "Decrement");
+              if (decrementClick) {
+                console.log("[sim] button click -> Decrement");
+                decrementClick(createSyntheticMouseEvent());
+              }
+            }
           }
         });
 

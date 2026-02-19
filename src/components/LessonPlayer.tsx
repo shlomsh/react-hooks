@@ -60,7 +60,9 @@ export function LessonPlayer() {
 
   const handleRun = useCallback(() => {
     void (async () => {
-      const status = await sandbox.run(activeFile.content, activeFile.filename, files);
+      const status = await sandbox.run(activeFile.content, activeFile.filename, files, {
+        simulateUserFlow: lesson.module.moduleId === 1,
+      });
       if (status !== "success") {
         setValidationResult(null);
         setGateSubmitted(false);
