@@ -1,6 +1,6 @@
 # Kanban Status
 
-Last updated: 2026-02-19T11:12:00.000Z
+Last updated: 2026-02-19T11:20:00.000Z
 
 This file is the source of truth for the daily kanban board.
 
@@ -344,8 +344,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Pilot + release checklist",
     "owner": "Shared",
     "priority": "P2",
-    "status": "in_progress",
-    "notes": "Started 2026-02-19. Preparing pilot script, release checklist, and go/no-go gates.",
+    "status": "done",
+    "notes": "Completed 2026-02-19. Added release runbook artifacts under release/: PILOT-RUNBOOK.md (session script + exit criteria), RELEASE-CHECKLIST.md (mandatory build/product/perf/ops go/no-go gates), and BUG-TRIAGE-TEMPLATE.md (standardized defect intake).",
     "order": 36
   },
   {
