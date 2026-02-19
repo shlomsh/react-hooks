@@ -1,6 +1,6 @@
 # Kanban Status
 
-Last updated: 2026-02-19T11:20:00.000Z
+Last updated: 2026-02-19T11:58:00.000Z
 
 This file is the source of truth for the daily kanban board.
 
@@ -416,8 +416,8 @@ This file is the source of truth for the daily kanban board.
     "title": "M1: add 'extend it' construction step to Counter lesson",
     "owner": "Shared",
     "priority": "P2",
-    "status": "backlog",
-    "notes": "Improve src/content/lessons/01-counter-intro/lesson.ts. After the bug-fix phase (c+2→c+1), add Phase 2 build step: student adds const [step, setStep] = useState(1), wires a number <input> to setStep, and updates Increment/Decrement to use ± step. New checks: step-state-declared (0.20), increment-uses-step (0.20), decrement-uses-step (0.20). Rebalance existing: increment-handler 0.25, preserve-other-buttons 0.15. Add 3-tier hint ladder for Phase 2. Bump estimatedMinutes 10→15. Acceptance: lesson.ts schema-valid, 5 checks defined, npm run test:all green.",
+    "status": "in_progress",
+    "notes": "Started 2026-02-19. Expanding M1 to include a phase-2 construction step (step state + input + +/-step handlers), rebalanced checks, and updated hint ladder.",
     "order": 44
   },
   {
