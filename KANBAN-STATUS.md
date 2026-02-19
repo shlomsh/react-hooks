@@ -1,6 +1,6 @@
 # Kanban Status
 
-Last updated: 2026-02-19T12:07:00.000Z
+Last updated: 2026-02-19T17:35:00.000Z
 
 This file is the source of truth for the daily kanban board.
 
@@ -425,8 +425,8 @@ This file is the source of truth for the daily kanban board.
     "title": "M2: new lesson — State has Shape (useState + objects/arrays)",
     "owner": "Shared",
     "priority": "P1",
-    "status": "backlog",
-    "notes": "Create src/content/lessons/02-usestate-array-state/. Exercise: TodoList.tsx with 3 bugs — Bug1: items.push() direct mutation (no setItems), Bug2: item.done = !item.done direct mutation, Bug3 (correct, preserve): filter delete. Phase 2 build: clearCompleted using filter(!item.done). Files: TodoList.tsx (editable), App.tsx. Checks: add-uses-spread (0.30) /setItems\\(\\s*\\[/ or .concat, toggle-returns-map (0.30) .map() + spread + done:!item.done, delete-preserved (0.15), clear-completed (0.25) /filter\\(.*!\\.done/. 3-tier hint ladder. moduleId:2, moduleName:'State has Shape', difficulty:'intro', estimatedMinutes:15, type:concept-gate, passCondition:all-checks, unlocksModule:3. Acceptance: schema-valid, all 4 checks pass on solution, npm run test:all green.",
+    "status": "done",
+    "notes": "Completed 2026-02-19. Created 02-usestate-array-state/ with TodoList.tsx (array mutation bugs + clearCompleted Phase 2) and App.tsx. 4 checks (add-uses-spread, toggle-returns-map, delete-preserved, clear-completed). All tests passing, merged to main.",
     "order": 45
   },
   {
@@ -434,8 +434,8 @@ This file is the source of truth for the daily kanban board.
     "title": "M3: new lesson — Effects Are Synchronization (useEffect from scratch)",
     "owner": "Shared",
     "priority": "P1",
-    "status": "backlog",
-    "notes": "Create src/content/lessons/03-useeffect-essentials/. Exercise: build useDocumentTitle hook from scratch. Starter is a stub with TODO comments — student writes the full useEffect body. Files: useDocumentTitle.ts (editable), TitleDemo.tsx (not editable), App.tsx. Checks: uses-useeffect (0.30), sets-document-title /document\\.title\\s*=\\s*title/ (0.30), has-dependency-array /\\[\\s*title\\s*\\]/ (0.20), has-cleanup /return\\s*\\(\\s*\\)\\s*=>/ (0.20). Concept panel: what a side effect is, when effects run (after paint), cleanup function, dependency array. 3-tier hint ladder. moduleId:3, moduleName:'Effects Are Synchronization', difficulty:'intro', estimatedMinutes:20, type:concept-gate, passCondition:all-checks, unlocksModule:4. Acceptance: schema-valid, all 4 checks pass, npm run test:all green.",
+    "status": "done",
+    "notes": "Completed 2026-02-19. Created 03-useeffect-essentials/ with useDocumentTitle.ts stub, TitleDemo.tsx, App.tsx. 4 checks (uses-useeffect, sets-document-title, has-dependency-array, has-cleanup). All tests passing, merged to main.",
     "order": 46
   },
   {
@@ -443,8 +443,8 @@ This file is the source of truth for the daily kanban board.
     "title": "M5: new lesson — The Escape Hatch (useRef + stopwatch)",
     "owner": "Shared",
     "priority": "P1",
-    "status": "backlog",
-    "notes": "Create src/content/lessons/05-useref-stopwatch/. Exercise: useStopwatch hook stub — useState + intervalRef provided, student fills start() and stop(). start: intervalRef.current = setInterval(() => setSeconds(s => s+1), 1000). stop: clearInterval(intervalRef.current); intervalRef.current = null. Files: useStopwatch.ts (editable), StopwatchDisplay.tsx, App.tsx. Checks: start-uses-setinterval (0.30), start-stores-in-ref /intervalRef\\.current\\s*=\\s*setInterval/ (0.30), stop-uses-clearinterval /clearInterval\\s*\\(\\s*intervalRef\\.current/ (0.25), stop-nulls-ref /intervalRef\\.current\\s*=\\s*null/ (0.15). Concept panel: two faces of useRef, why not useState (no re-render), refs vs stale closures. 3-tier hint ladder. moduleId:5, moduleName:'The Escape Hatch', difficulty:'intro', estimatedMinutes:15, type:concept-gate, passCondition:all-checks, unlocksModule:6. Acceptance: schema-valid, all 4 checks pass, npm run test:all green.",
+    "status": "done",
+    "notes": "Completed 2026-02-19. Created 05-useref-stopwatch/ with useStopwatch.ts stub, StopwatchDisplay.tsx, App.tsx. 4 checks (start-uses-setinterval, start-stores-in-ref, stop-uses-clearinterval, stop-nulls-ref). All tests passing, merged to main.",
     "order": 47
   },
   {
@@ -452,8 +452,8 @@ This file is the source of truth for the daily kanban board.
     "title": "M7: new lesson — Cache Expensive Work (useMemo standalone)",
     "owner": "Shared",
     "priority": "P1",
-    "status": "backlog",
-    "notes": "Create src/content/lessons/07-usememo-standalone/. Exercise: useFilteredEmployees hook where filtered and sorted are plain variable assignments. Student wraps both with useMemo + correct deps. Files: useFilteredEmployees.ts (editable), EmployeeList.tsx (shows render count), App.tsx. Checks: filter-uses-usememo /const\\s+filtered\\s*=\\s*useMemo/ (0.40), filter-deps-correct [employees,query] either order (0.35), sort-uses-usememo /const\\s+sorted\\s*=\\s*useMemo/ (0.25). Concept panel: how React re-renders, what useMemo does, dep array rules, when NOT to use, preview useCallback in M8. 3-tier hint ladder. moduleId:7, moduleName:'Cache Expensive Work', difficulty:'intermediate', estimatedMinutes:15, type:concept-gate, passCondition:all-checks, unlocksModule:8. Acceptance: schema-valid, all 3 checks pass, npm run test:all green.",
+    "status": "done",
+    "notes": "Completed 2026-02-19. Created 07-usememo-standalone/ with useFilteredEmployees.ts (plain filter/sort), EmployeeList.tsx, App.tsx. 3 checks (filter-uses-usememo, filter-deps-correct, sort-uses-usememo). All tests passing, merged to main.",
     "order": 48
   },
   {
@@ -461,8 +461,8 @@ This file is the source of truth for the daily kanban board.
     "title": "M8: new lesson — Stable Function References (useCallback standalone)",
     "owner": "Shared",
     "priority": "P1",
-    "status": "backlog",
-    "notes": "Create src/content/lessons/08-usecallback-standalone/. Context: EmployeeBoard parent has onToggle as an inline arrow function — React.memo child EmployeeRow re-renders on every keystroke. Student wraps onToggle with useCallback. Files: EmployeeBoard.tsx (editable), EmployeeRow.tsx (React.memo + render count display, not editable), App.tsx. Checks: ontoggle-uses-usecallback /const\\s+onToggle\\s*=\\s*useCallback\\s*\\(/ (0.50), deps-include-set-employees [setEmployees] or [employees] (0.35), usecallback-imported /import.*useCallback/ (0.15). Concept panel: why inline functions break React.memo, useCallback = useMemo for functions, when NOT to use, preview stale closure (M10). 3-tier hint ladder. moduleId:8, moduleName:'Stable Function References', difficulty:'intermediate', estimatedMinutes:15, type:concept-gate, passCondition:all-checks, unlocksModule:9. Acceptance: schema-valid, all 3 checks pass, npm run test:all green.",
+    "status": "done",
+    "notes": "Completed 2026-02-19. Created 08-usecallback-standalone/ with EmployeeBoard.tsx (inline onToggle to wrap), EmployeeRow.tsx (React.memo + render counter), App.tsx. 3 checks (ontoggle-uses-usecallback, deps-include-set-employees, usecallback-imported). All tests passing, merged to main.",
     "order": 49
   },
   {
@@ -470,8 +470,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Renumber and reorder existing lessons to match new curriculum sequence",
     "owner": "Shared",
     "priority": "P1",
-    "status": "backlog",
-    "notes": "Run after ST-045 is merged AND ST-046–ST-051 are all merged. Rename lesson folders and update all lesson.ts fields (moduleId, moduleName, order, unlocksModule, exerciseId).\n\nFolder renames:\n  02-search-paging-sync              → 04-useeffect-dependencies\n  03-step-counter-hook               → 06-custom-hooks-extract-reuse\n  04-stable-results-panel            → 09-hook-composition-stability\n  05-debug-lab-infinite-loop         → 11-debug-infinite-loop\n  06-debug-lab-stale-callback        → 10-debug-stale-closure\n  07-capstone-stable-workspace       → 12-capstone-workspace\n  08-final-assessment-track-complete → 13-final-assessment\n\nlesson.ts field updates:\n  04: moduleId 2→4, 'The Dependency Contract', order 4, unlocksModule 5\n  06: moduleId 3→6, 'Extract and Reuse', order 6, unlocksModule 7. PLUS Phase 2: add resetCountRef = useRef(0), increment in reset(), expose resetCount. New checks: reset-count-uses-ref (0.20), reset-count-exposed (0.10). Rebalance: increment 0.28, decrement 0.28, reset-uses-initial 0.14.\n  09: moduleId 4→9, order 9, unlocksModule 10\n  10: moduleId 6→10, 'Debug: The Stale Closure', order 10, unlocksModule 11. PLUS expand to TWO stale useCallbacks (handleSave + handleReset, both with empty deps) to raise difficulty from grade 3 to 4.\n  11: moduleId 5→11, 'Debug: The Infinite Loop', order 11, unlocksModule 12\n  12: moduleId 7→12, order 12, unlocksModule 13\n  13: moduleId 8→13, order 13, unlocksModule null\n\nAlso update LaunchScreen.tsx MODULES array to reflect 12-session titles + times. Verify import.meta.glob in lessons.ts still works. Update any test files referencing old folder names by string. Acceptance: all 13 lessons resolve in correct order, npm run test:all green, no references to old folder names in tests.",
+    "status": "done",
+    "notes": "Completed 2026-02-19. All 7 lesson folders renamed (search-paging→04, step-counter→06, stable-results→09, debug-infinite→11, debug-stale→10, capstone→12, final-assessment→13). All lesson.ts fields updated (moduleId, order, unlocksModule, exerciseId). M6 expanded with Phase 2 useRef checks. M10 expanded to 2 stale callbacks with fixed check regex. LaunchScreen MODULES updated to 12 entries. lesson-schema types expanded to moduleId 1–13. All tests (1073 unit + 2 e2e) passing on main.",
     "order": 50
   }
 ]
