@@ -7,7 +7,7 @@ const lesson: LessonManifest = {
     moduleName: "Hooks Intro",
     order: 1,
     type: "concept-gate",
-    estimatedMinutes: 10,
+    estimatedMinutes: 15,
     difficulty: "intro",
     concepts: ["useState basics", "state updates", "event handlers"],
     tags: ["useState", "counter", "intro"],
@@ -17,52 +17,62 @@ const lesson: LessonManifest = {
 
   title: "Counter Intro",
   description:
-    "The Increment button is buggy: it adds 2. Your mission is to change it to +1, verify with Run, then submit the gate.",
+    "Phase 1: fix the Increment bug (+2 -> +1). Phase 2: extend the counter with configurable step state and update Increment/Decrement to use it.",
   constraints: [
-    "Edit only the Increment handler line",
-    "Keep Decrement and Reset behavior unchanged",
+    "Fix Increment first, then add the step extension",
+    "Update both Increment and Decrement to use step",
+    "Keep Reset behavior setCount(0)",
     "Pass Run validation before Submit Gate",
   ],
 
   conceptPanel: {
-    title: "Bug-Fix Mission",
+    title: "Fix + Extend Mission",
     content: `
 ### Mission
 
-Find and fix one bug in the counter:
+Phase 1: fix one bug in the counter:
 the Increment button currently uses \`c + 2\` but should use \`c + 1\`.
+
+Phase 2: extend the component to support variable step updates:
+1. Add \`const [step, setStep] = useState(1)\`
+2. Add a number input bound to \`step\`
+3. Update Increment to \`c + step\`
+4. Update Decrement to \`c - step\`
 
 ### Learning outcome
 
-You will practice the core \`useState\` update pattern:
-\`setCount((c) => c + 1)\`
+You will practice both:
+- bug-fix updates with \`useState\` updater form
+- building new state-driven behavior from scratch
 
 ### Done criteria
 
-1. Increment uses \`+1\`.
-2. Decrement still uses \`-1\`.
-3. Reset still sets count to \`0\`.
+1. \`step\` state exists and is editable from the input.
+2. Increment uses \`+step\`.
+3. Decrement uses \`-step\`.
+4. Reset still sets count to \`0\`.
     `.trim(),
     keyPoints: [
-      "Read the TODO comment to locate the bug quickly",
       "Use updater form: setCount((c) => ...)",
-      "Fix one thing at a time, then run",
+      "State drives behavior: step should control both +/- handlers",
+      "Fix Phase 1 first, then implement Phase 2",
     ],
     commonFailures: [
-      "Editing Decrement or Reset by mistake instead of Increment",
-      "Changing +2 to another wrong value",
-      "Skipping Run and trying Submit Gate immediately",
+      "Keeping handlers on literal +1/-1 instead of using step",
+      "Adding step state but forgetting the input binding",
+      "Changing Reset away from setCount(0)",
     ],
   },
 
   guidance: {
     firstStepPrompt:
-      "Step 1: in CounterIntro.tsx, change Increment from c + 2 to c + 1.",
-    runStepPrompt: "Step 2: click Run. It validates both the bug fix and unchanged buttons.",
+      "Step 1: in CounterIntro.tsx, fix Increment from c + 2 to c + 1.",
+    runStepPrompt:
+      "Step 2: add step state + input, then wire Increment/Decrement to use step.",
     retryPrompt:
-      "Not passed yet. Compare Increment/Decrement/Reset handlers with the mission criteria, then run again.",
+      "Not passed yet. Verify step state, input binding, +/-step handlers, and Reset behavior, then run again.",
     successPrompt:
-      "Great work - you fixed the bug and preserved the rest of the component.",
+      "Great work - you fixed the bug and shipped the phase-2 extension.",
   },
 
   files: [
@@ -87,33 +97,75 @@ You will practice the core \`useState\` update pattern:
     {
       id: "increment-handler",
       type: "behavioral",
-      weight: 0.7,
-      stimulus: "Click Increment once",
-      expectedOutcome: "Count increases by exactly 1",
+      weight: 0.25,
+      stimulus: "Read phase-1 Increment fix",
+      expectedOutcome: "Increment no longer uses +2",
       testCode: `
         const source = files["CounterIntro.tsx"];
-        if (!/setCount\\s*\\(\\s*\\(\\s*([A-Za-z_$][\\w$]*)\\s*\\)\\s*=>\\s*\\1\\s*\\+\\s*1\\s*\\)/.test(source)) {
-          throw new Error("Increment handler must add 1");
+        if (/setCount\\s*\\(\\s*\\(\\s*([A-Za-z_$][\\w$]*)\\s*\\)\\s*=>\\s*\\1\\s*\\+\\s*2\\s*\\)/.test(source)) {
+          throw new Error("Increment still uses +2");
         }
       `,
-      failMessage: "Step 2: make Increment add 1.",
-      successMessage: "Increment logic looks correct.",
+      failMessage: "Phase 1 is incomplete: remove the +2 increment bug.",
+      successMessage: "Phase 1 fix is in place.",
+    },
+    {
+      id: "step-state-declared",
+      type: "functional",
+      weight: 0.2,
+      testCode: `
+        const source = files["CounterIntro.tsx"];
+        if (!/const\\s*\\[\\s*step\\s*,\\s*setStep\\s*\\]\\s*=\\s*useState\\s*\\(\\s*1\\s*\\)/.test(source)) {
+          throw new Error("Missing step state");
+        }
+        if (!/input[^>]*type=\\{?["']number["']\\}?[^>]*value=\\{\\s*step\\s*\\}/s.test(source)) {
+          throw new Error("Missing step input bound to step");
+        }
+        if (!/onChange=\\{\\s*\\(\\s*e\\s*\\)\\s*=>\\s*setStep\\s*\\(\\s*Number\\s*\\(\\s*e\\.target\\.value\\s*\\)\\s*\\)\\s*\\}/.test(source)) {
+          throw new Error("Missing numeric step input onChange");
+        }
+      `,
+      failMessage: "Add step state and a number input bound to setStep.",
+      successMessage: "Step state/input are wired.",
+    },
+    {
+      id: "increment-uses-step",
+      type: "functional",
+      weight: 0.2,
+      testCode: `
+        const source = files["CounterIntro.tsx"];
+        if (!/setCount\\s*\\(\\s*\\(\\s*([A-Za-z_$][\\w$]*)\\s*\\)\\s*=>\\s*\\1\\s*\\+\\s*step\\s*\\)/.test(source)) {
+          throw new Error("Increment must use step");
+        }
+      `,
+      failMessage: "Update Increment to use c + step.",
+      successMessage: "Increment uses step.",
+    },
+    {
+      id: "decrement-uses-step",
+      type: "functional",
+      weight: 0.2,
+      testCode: `
+        const source = files["CounterIntro.tsx"];
+        if (!/setCount\\s*\\(\\s*\\(\\s*([A-Za-z_$][\\w$]*)\\s*\\)\\s*=>\\s*\\1\\s*-\\s*step\\s*\\)/.test(source)) {
+          throw new Error("Decrement must use step");
+        }
+      `,
+      failMessage: "Update Decrement to use c - step.",
+      successMessage: "Decrement uses step.",
     },
     {
       id: "preserve-other-buttons",
       type: "functional",
-      weight: 0.3,
+      weight: 0.15,
       testCode: `
         const source = files["CounterIntro.tsx"];
-        if (!/setCount\\s*\\(\\s*\\(\\s*([A-Za-z_$][\\w$]*)\\s*\\)\\s*=>\\s*\\1\\s*-\\s*1\\s*\\)/.test(source)) {
-          throw new Error("Decrement behavior should stay as c - 1");
-        }
         if (!/setCount\\s*\\(\\s*0\\s*\\)/.test(source)) {
           throw new Error("Reset behavior should stay setCount(0)");
         }
       `,
-      failMessage: "Keep Decrement and Reset unchanged.",
-      successMessage: "Decrement and Reset still behave correctly.",
+      failMessage: "Keep Reset behavior unchanged.",
+      successMessage: "Reset still behaves correctly.",
     },
   ],
 
@@ -121,26 +173,34 @@ You will practice the core \`useState\` update pattern:
     {
       tier: 1,
       unlocksAfterFails: 1,
-      text: "Only one line is wrong: the Increment button handler still uses +2.",
+      text: "Phase 2 starts after the bug fix: declare `const [step, setStep] = useState(1)` and use step in both +/- handlers.",
     },
     {
       tier: 2,
       unlocksAfterFails: 2,
-      text: "Set Increment to: setCount((c) => c + 1). Leave the other two buttons unchanged.",
-      focusArea: "Increment click handler",
-      codeSnippet: `onClick={() => setCount((c) => c + 1)}`,
+      text: "Wire a number input to setStep, then update handlers to c + step / c - step.",
+      focusArea: "step state + input + button handlers",
+      codeSnippet: `const [step, setStep] = useState(1);
+<input type="number" value={step} onChange={(e) => setStep(Number(e.target.value))} />
+<button onClick={() => setCount((c) => c + step)}>Increment</button>
+<button onClick={() => setCount((c) => c - step)}>Decrement</button>`,
     },
     {
       tier: 3,
       unlocksAfterFails: 3,
-      text: "Use this exact handler set to pass the lesson checks.",
+      text: "Apply both phases: fix +2, then complete the step extension.",
       steps: [
-        "Increment: setCount((c) => c + 1)",
-        "Decrement: setCount((c) => c - 1)",
+        "Add: const [step, setStep] = useState(1)",
+        "Input: type=number, value={step}, onChange -> setStep(Number(e.target.value))",
+        "Increment: setCount((c) => c + step)",
+        "Decrement: setCount((c) => c - step)",
         "Reset: setCount(0)",
       ],
       pseudoCode: `const [count, setCount] = useState(0);
-<button onClick={() => setCount((c) => c + 1)}>Increment</button>`,
+const [step, setStep] = useState(1);
+<input type="number" value={step} onChange={(e) => setStep(Number(e.target.value))} />
+<button onClick={() => setCount((c) => c + step)}>Increment</button>
+<button onClick={() => setCount((c) => c - step)}>Decrement</button>`,
     },
   ],
 

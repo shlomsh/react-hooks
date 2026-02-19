@@ -23,7 +23,7 @@ describe("checkRunner", () => {
     expect(result.checks.some((check) => !check.passed)).toBe(true);
   });
 
-  it("passes once increment logic is corrected", () => {
+  it("passes module1 once phase-1 and phase-2 requirements are implemented", () => {
     const files = lesson1.files
       .filter((file) => !file.hidden)
       .map((file) => ({
@@ -32,7 +32,17 @@ describe("checkRunner", () => {
         content: file.starterCode,
       }));
 
-    files[0].content = files[0].content.replace("c + 2", "c + 1");
+    files[0].content = files[0].content
+      .replace(
+        "const [count, setCount] = useState(0);",
+        "const [count, setCount] = useState(0);\n  const [step, setStep] = useState(1);"
+      )
+      .replace(
+        "<p>Count: {count}</p>",
+        '<p>Count: {count}</p>\n      <input type=\"number\" value={step} onChange={(e) => setStep(Number(e.target.value))} />'
+      )
+      .replace("c + 2", "c + step")
+      .replace("c - 1", "c - step");
     const result = runLessonChecks(lesson1, files, []);
 
     expect(result.passed).toBe(true);
@@ -50,10 +60,18 @@ describe("checkRunner", () => {
       }));
 
     files[0].content = files[0].content
-      .replace("c + 2", "prev + 1")
-      .replace("c - 1", "value - 1");
-    files[0].content = files[0].content.replace("(c) => prev + 1", "(prev) => prev + 1");
-    files[0].content = files[0].content.replace("(c) => value - 1", "(value) => value - 1");
+      .replace(
+        "const [count, setCount] = useState(0);",
+        "const [count, setCount] = useState(0);\n  const [step, setStep] = useState(1);"
+      )
+      .replace(
+        "<p>Count: {count}</p>",
+        '<p>Count: {count}</p>\n      <input type=\"number\" value={step} onChange={(e) => setStep(Number(e.target.value))} />'
+      )
+      .replace("c + 2", "value + step")
+      .replace("c - 1", "prev - step");
+    files[0].content = files[0].content.replace("(c) => value + step", "(value) => value + step");
+    files[0].content = files[0].content.replace("(c) => prev - step", "(prev) => prev - step");
 
     const result = runLessonChecks(lesson1, files, []);
     expect(result.passed).toBe(true);
