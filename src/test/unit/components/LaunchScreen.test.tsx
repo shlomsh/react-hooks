@@ -145,9 +145,9 @@ describe("LaunchScreen — curriculum overview", () => {
     expect(screen.getByTestId("curriculum-overview")).toBeInTheDocument();
   });
 
-  it("lists all 8 modules", () => {
+  it("lists all 12 modules", () => {
     render(<LaunchScreen onStart={vi.fn()} onPreview={vi.fn()} />);
-    expect(screen.getAllByTestId("curriculum-module")).toHaveLength(8);
+    expect(screen.getAllByTestId("curriculum-module")).toHaveLength(12);
   });
 
   it("each module item shows an estimated time", () => {
@@ -176,9 +176,9 @@ describe("LaunchScreen — curriculum overview", () => {
     expect(overview.textContent?.toLowerCase()).toMatch(/capstone/);
   });
 
-  it("overview includes final assessment content", () => {
+  it("overview includes capstone content", () => {
     render(<LaunchScreen onStart={vi.fn()} onPreview={vi.fn()} />);
     const overview = screen.getByTestId("curriculum-overview");
-    expect(overview.textContent?.toLowerCase()).toMatch(/assessment|final/);
+    expect(overview.textContent?.toLowerCase()).toMatch(/capstone/);
   });
 });

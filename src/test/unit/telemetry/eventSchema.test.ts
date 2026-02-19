@@ -15,7 +15,7 @@ import {
 const context: TelemetryContext = {
   sessionId: "session-123",
   moduleId: 4,
-  exerciseId: "mod-4-hooks-stable-results-panel",
+  exerciseId: "mod-4-useeffect-dependencies",
   learnerId: "learner-42",
 };
 

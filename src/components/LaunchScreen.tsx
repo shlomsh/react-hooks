@@ -6,9 +6,9 @@ interface LaunchScreenProps {
 }
 
 const PILLS = [
-  "8 gated modules",
+  "12 gated modules",
   "guided progression",
-  "~3–4 hours",
+  "~4–5 hours",
   "TypeScript only",
   "capstone project",
 ];
@@ -32,14 +32,18 @@ const OUTCOMES = [
 ];
 
 const MODULES = [
-  { title: "Counter Intro — useState & state snapshots", duration: "20 min" },
-  { title: "Search Paging Sync — useEffect & dependencies", duration: "30 min" },
-  { title: "Step Counter Hook — custom hook foundations", duration: "30 min" },
-  { title: "Stable Results Panel — useMemo & useCallback", duration: "30 min" },
-  { title: "Debug Lab — Infinite Loop", duration: "25 min" },
-  { title: "Debug Lab — Stale Callback", duration: "20 min" },
-  { title: "Capstone: Stable Workspace", duration: "45 min" },
-  { title: "Final Assessment", duration: "varies" },
+  { title: "M1 — State is Memory (useState)", duration: "15 min" },
+  { title: "M2 — State has Shape (arrays & objects)", duration: "15 min" },
+  { title: "M3 — Effects Are Synchronization (useEffect)", duration: "20 min" },
+  { title: "M4 — The Dependency Contract (effect deps)", duration: "15 min" },
+  { title: "M5 — The Escape Hatch (useRef)", duration: "15 min" },
+  { title: "M6 — Extract and Reuse (custom hooks)", duration: "16 min" },
+  { title: "M7 — Cache Expensive Work (useMemo)", duration: "15 min" },
+  { title: "M8 — Stable Function References (useCallback)", duration: "15 min" },
+  { title: "M9 — Composition and Stability (hook composition)", duration: "18 min" },
+  { title: "M10 — Debug: The Stale Closure", duration: "20 min" },
+  { title: "M11 — Debug: The Infinite Loop", duration: "20 min" },
+  { title: "M12 — Capstone: Stable Workspace", duration: "24 min" },
 ];
 
 export function LaunchScreen({ onStart, onPreview }: LaunchScreenProps) {

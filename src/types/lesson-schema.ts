@@ -45,7 +45,7 @@ export interface LessonGuidance {
 // ---------------------------------------------------------------------------
 
 export interface ModuleMetadata {
-  moduleId: 1 | 2 | 3 | 4 | 5 | 6 | 7;
+  moduleId: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13;
   moduleName: string;
   order: number;
   type: ModuleType;
@@ -56,8 +56,8 @@ export interface ModuleMetadata {
 
   /** True for all modules except Module 1 */
   lockedUntilPrevious: boolean;
-  /** Module ID unlocked on pass (undefined for Module 7) */
-  unlocksModule?: 2 | 3 | 4 | 5 | 6 | 7;
+  /** Module ID unlocked on pass (undefined for final module) */
+  unlocksModule?: 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13;
 }
 
 export type ModuleType =
@@ -138,7 +138,15 @@ export type RubricDimensionId =
   | "design"
   | "ts-quality"
   | "lifecycle"
-  | "performance";
+  | "performance"
+  | "patterns"
+  | "scope"
+  | "deps"
+  | "cleanup"
+  | "ref-usage"
+  | "memoization"
+  | "stability"
+  | "import";
 
 export interface RubricDimension {
   id: RubricDimensionId;

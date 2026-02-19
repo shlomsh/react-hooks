@@ -1,11 +1,11 @@
 import type { LessonManifest } from "../../lesson-manifest";
 
 const lesson: LessonManifest = {
-  exerciseId: "mod-7-final-assessment-track-complete",
+  exerciseId: "mod-13-final-assessment",
   module: {
-    moduleId: 7,
+    moduleId: 13,
     moduleName: "Final Assessment",
-    order: 8,
+    order: 13,
     type: "final-assessment",
     estimatedMinutes: 20,
     difficulty: "advanced",
