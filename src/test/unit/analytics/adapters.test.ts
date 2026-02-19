@@ -67,9 +67,9 @@ describe("ST-031 analytics adapters", () => {
     expect(module2.gateFailCount).toBe(1);
     expect(module2.timeSpentMs).toBe(600);
 
-    expect(snapshot.summary.totalModules).toBe(7);
+    expect(snapshot.summary.totalModules).toBe(12);
     expect(snapshot.summary.completedModules).toBe(1);
-    expect(snapshot.summary.completionRate).toBeCloseTo(1 / 7, 4);
+    expect(snapshot.summary.completionRate).toBeCloseTo(1 / 12, 4);
     expect(snapshot.summary.totalAttempts).toBe(3);
     expect(snapshot.summary.totalGatePasses).toBe(1);
     expect(snapshot.summary.totalGateFails).toBe(2);
@@ -109,7 +109,7 @@ describe("ST-031 analytics adapters", () => {
     const progress = createProgressState();
     const snapshot = buildLearnerAnalytics({ progress, events: [], now: 5_000 });
 
-    expect(snapshot.modules).toHaveLength(7);
+    expect(snapshot.modules).toHaveLength(12);
     expect(snapshot.summary.totalAttempts).toBe(0);
     expect(snapshot.summary.totalGatePasses).toBe(0);
     expect(snapshot.summary.totalGateFails).toBe(0);

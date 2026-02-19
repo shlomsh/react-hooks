@@ -22,11 +22,11 @@ import type { ProgressState, ModuleProgress } from "../../../progress/progressMo
 // ---------------------------------------------------------------------------
 
 describe("createProgressState", () => {
-  it("creates state with 7 modules all locked except module 1", () => {
+  it("creates state with 12 modules all locked except module 1", () => {
     const state = createProgressState();
-    expect(state.modules).toHaveLength(7);
+    expect(state.modules).toHaveLength(12);
     expect(state.modules[0].status).toBe("unlocked");
-    for (let i = 1; i < 7; i++) {
+    for (let i = 1; i < 12; i++) {
       expect(state.modules[i].status).toBe("locked");
     }
   });
@@ -110,16 +110,16 @@ describe("markModulePassed", () => {
     expect(updated.modules[1].status).toBe("unlocked");
   });
 
-  it("does not unlock beyond module 7", () => {
-    // Simulate module 7 pass — no module 8 to unlock
+  it("does not unlock beyond module 12", () => {
+    // Simulate module 12 pass — no module 13 to unlock
     const s = createProgressState();
     s.modules.forEach((_, i) => {
-      if (i < 6) s.modules[i].status = "passed";
+      if (i < 11) s.modules[i].status = "passed";
     });
-    s.modules[6].status = "in-progress";
-    const updated = markModulePassed(s, 7, 88);
-    expect(updated.modules).toHaveLength(7);
-    expect(updated.modules[6].status).toBe("passed");
+    s.modules[11].status = "in-progress";
+    const updated = markModulePassed(s, 12, 88);
+    expect(updated.modules).toHaveLength(12);
+    expect(updated.modules[11].status).toBe("passed");
   });
 });
 
@@ -157,7 +157,7 @@ describe("getModuleProgress", () => {
 
   it("returns undefined for out-of-range module", () => {
     const state = createProgressState();
-    expect(getModuleProgress(state, 8)).toBeUndefined();
+    expect(getModuleProgress(state, 13)).toBeUndefined();
   });
 });
 

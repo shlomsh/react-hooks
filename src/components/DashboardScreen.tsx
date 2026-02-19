@@ -10,13 +10,18 @@ interface DashboardScreenProps {
 }
 
 const MODULE_NAMES = [
-  "Internals Primer",
-  "Core Hooks Fast Pass",
-  "Custom Hooks",
-  "Composition + Stability",
-  "Debug Labs",
-  "SaaS Capstone",
-  "Final Assessment",
+  "State is Memory",
+  "State has Shape",
+  "Effects Are Synchronization",
+  "The Dependency Contract",
+  "The Escape Hatch",
+  "Extract and Reuse",
+  "Cache Expensive Work",
+  "Stable Function References",
+  "Composition and Stability",
+  "Debug: The Stale Closure",
+  "Debug: The Infinite Loop",
+  "Capstone",
 ];
 
 const PITFALLS = [
@@ -54,7 +59,7 @@ function getStatusLabel(mod: ModuleProgress): string {
 
 function estimateTimeRemaining(completedCount: number): string {
   const minutesPerModule = 30;
-  const remaining = (7 - completedCount) * minutesPerModule;
+  const remaining = (12 - completedCount) * minutesPerModule;
   if (remaining <= 0) return "Completed";
   const hours = Math.floor(remaining / 60);
   const mins = remaining % 60;
@@ -80,7 +85,7 @@ export function DashboardScreen({ progress, onOpenLesson, showCompletionToast }:
         </div>
         <div className={styles.headerMeta}>
           <div className={styles.headerTime}>{estimateTimeRemaining(completedCount)}</div>
-          <div className={styles.headerProgress}>{completedCount} of 7 modules completed</div>
+          <div className={styles.headerProgress}>{completedCount} of 12 modules completed</div>
         </div>
       </div>
 
@@ -178,7 +183,7 @@ export function DashboardScreen({ progress, onOpenLesson, showCompletionToast }:
             })}
             {progress.modules.some((m) => m.status === "locked") && (
               <span className={`${styles.badgePill} ${styles.badgeDim}`}>
-                M{progress.modules.find((m) => m.status === "locked")!.moduleId}–M7
+                M{progress.modules.find((m) => m.status === "locked")!.moduleId}–M12
               </span>
             )}
           </div>

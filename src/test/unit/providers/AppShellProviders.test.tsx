@@ -47,7 +47,7 @@ describe("AppShellProviders", () => {
         <AllContextsConsumer />
       </AppShellProviders>
     );
-    expect(screen.getByTestId("progress-ok").textContent).toBe("7");
+    expect(screen.getByTestId("progress-ok").textContent).toBe("12");
     // EditorProvider with no initialFiles uses STARTER_FILES fallback — >= 1 file
     expect(Number(screen.getByTestId("editor-ok").textContent)).toBeGreaterThanOrEqual(1);
     expect(screen.getByTestId("visualizer-ok").textContent).toBe("0");
