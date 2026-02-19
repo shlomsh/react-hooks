@@ -22,6 +22,7 @@ const lesson: LessonManifest = {
     "Fix Increment first, then add the step extension",
     "Add a visible <input type='number'> that the user can edit",
     "Update both Increment and Decrement to use step",
+    "If stuck, temporarily log event values in onChange: console.log(e, e.target.value)",
     "Keep Reset behavior setCount(0)",
     "Pass Run validation before Submit Gate",
   ],
@@ -58,6 +59,7 @@ You will practice both:
       "Use updater form: setCount((c) => ...)",
       "The user must control step via a visible number input",
       "State drives behavior: step should control both +/- handlers",
+      "Debug tip: log both e and e.target.value inside onChange while testing",
       "Fix Phase 1 first, then implement Phase 2",
     ],
     commonFailures: [
@@ -124,11 +126,19 @@ You will practice both:
         if (!/input[^>]*type=\\{?["']number["']\\}?[^>]*value=\\{\\s*step\\s*\\}/s.test(source)) {
           throw new Error("Missing step input bound to step");
         }
-        if (!/onChange=\\{\\s*\\(\\s*e\\s*\\)\\s*=>\\s*setStep\\s*\\(\\s*Number\\s*\\(\\s*e\\.target\\.value\\s*\\)\\s*\\)\\s*\\}/.test(source)) {
-          throw new Error("Missing numeric step input onChange");
+        if (/onChange=\\{\\s*\\(\\s*e\\s*\\)\\s*=>\\s*setStep\\s*\\(\\s*Number\\s*\\(\\s*e\\s*\\)\\s*\\)\\s*\\}/.test(source)) {
+          throw new Error("onChange receives an event object. Convert e.target.value (or e.currentTarget.value), not e.");
+        }
+        const usesTargetValue =
+          /onChange=\\{\\s*\\(\\s*e\\s*\\)\\s*=>\\s*setStep\\s*\\(\\s*Number\\s*\\(\\s*e\\.target\\.value\\s*\\)\\s*\\)\\s*\\}/.test(source) ||
+          /onChange=\\{\\s*\\(\\s*e\\s*\\)\\s*=>\\s*setStep\\s*\\(\\s*Number\\s*\\(\\s*e\\.currentTarget\\.value\\s*\\)\\s*\\)\\s*\\}/.test(source) ||
+          /onChange=\\{\\s*\\(\\s*e\\s*\\)\\s*=>\\s*setStep\\s*\\(\\s*parseInt\\s*\\(\\s*e\\.target\\.value\\s*,\\s*10\\s*\\)\\s*\\)\\s*\\}/.test(source);
+        if (!usesTargetValue) {
+          throw new Error("Missing numeric step input onChange (use e.target.value).");
         }
       `,
-      failMessage: "Add step state and a number input bound to setStep.",
+      failMessage:
+        "Add step state and a number input. In onChange, convert e.target.value (not the event object). If stuck, log e and e.target.value.",
       successMessage: "Step state/input are wired.",
     },
     {
@@ -176,15 +186,19 @@ You will practice both:
     {
       tier: 1,
       unlocksAfterFails: 1,
-      text: "Phase 2 starts after the bug fix: declare `const [step, setStep] = useState(1)` and use step in both +/- handlers.",
+      text: "Phase 2 starts after the bug fix: declare `const [step, setStep] = useState(1)`, add the number input, and use step in both +/- handlers. If unsure what onChange gets, temporarily log `e` and `e.target.value`.",
     },
     {
       tier: 2,
       unlocksAfterFails: 2,
-      text: "Wire a number input to setStep, then update handlers to c + step / c - step.",
+      text: "Wire a number input to setStep, then update handlers to c + step / c - step. Debug with a temporary log if needed.",
       focusArea: "step state + input + button handlers",
       codeSnippet: `const [step, setStep] = useState(1);
-<input type="number" value={step} onChange={(e) => setStep(Number(e.target.value))} />
+<input type="number" value={step} onChange={(e) => {
+  // temporary debug while learning:
+  console.log(e, e.target.value);
+  setStep(Number(e.target.value));
+}} />
 <button onClick={() => setCount((c) => c + step)}>Increment</button>
 <button onClick={() => setCount((c) => c - step)}>Decrement</button>`,
     },
