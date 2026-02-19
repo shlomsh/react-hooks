@@ -220,7 +220,7 @@ Use this table during execution updates.
 | ST-033 | Shared | DONE |  |  | Core epics complete |  |
 | ST-034 | Shared | DONE |  |  | Core epics complete | Desktop-only QA |
 | ST-035 | Shared | DONE |  |  | Core epics complete |  |
-| ST-036 | Shared | IN PROGRESS |  |  | ST-033, ST-034, ST-035 |  |
+| ST-036 | Shared | DONE |  |  | ST-033, ST-034, ST-035 |  |
 
 ## 8. Demo Milestones
 
