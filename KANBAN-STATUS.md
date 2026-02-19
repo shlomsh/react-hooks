@@ -1,6 +1,6 @@
 # Kanban Status
 
-Last updated: 2026-02-19T11:58:00.000Z
+Last updated: 2026-02-19T12:07:00.000Z
 
 This file is the source of truth for the daily kanban board.
 
@@ -416,8 +416,8 @@ This file is the source of truth for the daily kanban board.
     "title": "M1: add 'extend it' construction step to Counter lesson",
     "owner": "Shared",
     "priority": "P2",
-    "status": "in_progress",
-    "notes": "Started 2026-02-19. Expanding M1 to include a phase-2 construction step (step state + input + +/-step handlers), rebalanced checks, and updated hint ladder.",
+    "status": "done",
+    "notes": "Completed 2026-02-19. Updated M1 lesson to include phase-2 construction task (step state + numeric input + +/-step handlers), rebalanced checks to 5 total (0.25/0.20/0.20/0.20/0.15), refreshed guidance/concept/hints for fix+extend flow, and updated checkRunner tests to require full phase-2 completion. Unit + e2e gates passing.",
     "order": 44
   },
   {
