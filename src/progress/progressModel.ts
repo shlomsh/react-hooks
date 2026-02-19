@@ -1,7 +1,7 @@
 /**
  * ST-018 — Progress model and local persistence
  *
- * Pure data model for tracking learner progress across 7 modules.
+ * Pure data model for tracking learner progress across 12 modules.
  * All functions are immutable. Persistence via serializeProgress /
  * deserializeProgress — callers own the localStorage I/O.
  */
@@ -12,7 +12,7 @@
 
 export const PROGRESS_STORAGE_KEY = "rh-pro-track-progress-v1";
 
-export const TOTAL_MODULES = 7;
+export const TOTAL_MODULES = 12;
 
 // ---------------------------------------------------------------------------
 // Types
