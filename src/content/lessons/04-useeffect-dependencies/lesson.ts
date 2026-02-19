@@ -1,18 +1,18 @@
 import type { LessonManifest } from "../../lesson-manifest";
 
 const lesson: LessonManifest = {
-  exerciseId: "mod-2-hooks-search-paging",
+  exerciseId: "mod-4-useeffect-dependencies",
   module: {
-    moduleId: 2,
-    moduleName: "Hooks Flow",
-    order: 2,
+    moduleId: 4,
+    moduleName: "The Dependency Contract",
+    order: 4,
     type: "concept-gate",
     estimatedMinutes: 14,
     difficulty: "intermediate",
     concepts: ["useEffect dependencies", "derived UI behavior", "state coordination"],
     tags: ["useEffect", "pagination", "state"],
     lockedUntilPrevious: true,
-    unlocksModule: 3,
+    unlocksModule: 5,
   },
 
   title: "Search Paging Sync",

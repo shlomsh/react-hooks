@@ -14,7 +14,7 @@ import type {
 
 describe("ST-038: Lesson schema contract", () => {
   it("all discovered lessons validate against schema requirements", () => {
-    expect(lessons.length).toBeGreaterThanOrEqual(8);
+    expect(lessons.length).toBeGreaterThanOrEqual(13);
 
     const ids = new Set<string>();
     for (const lesson of lessons as Lesson[]) {
@@ -106,61 +106,93 @@ describe("ST-038: Lesson schema contract", () => {
   });
 
   it("module ordering and unlock chain remain aligned", () => {
-    const module1 = getLessonByIndex(0);
-    const module2 = getLessonByIndex(1);
-    const module3 = getLessonByIndex(2);
-    const module4 = getLessonByIndex(3);
-    const module5a = getLessonByIndex(4);
-    const module5b = getLessonByIndex(5);
-    const module6 = getLessonByIndex(6);
-    const module7 = getLessonByIndex(7);
+    // 13 lessons total: M1-M8 (new), M9-M13 (renamed existing)
+    const m1  = getLessonByIndex(0);   // State is Memory
+    const m2  = getLessonByIndex(1);   // State has Shape
+    const m3  = getLessonByIndex(2);   // Effects Are Synchronization
+    const m4  = getLessonByIndex(3);   // The Dependency Contract
+    const m5  = getLessonByIndex(4);   // The Escape Hatch
+    const m6  = getLessonByIndex(5);   // Extract and Reuse
+    const m7  = getLessonByIndex(6);   // Cache Expensive Work
+    const m8  = getLessonByIndex(7);   // Stable Function References
+    const m9  = getLessonByIndex(8);   // Composition and Stability
+    const m10 = getLessonByIndex(9);   // Debug: The Stale Closure
+    const m11 = getLessonByIndex(10);  // Debug: The Infinite Loop
+    const m12 = getLessonByIndex(11);  // Capstone
+    const m13 = getLessonByIndex(12);  // Final Assessment
 
-    expect(module1.module.moduleId).toBe(1);
-    expect(module1.module.order).toBe(1);
-    expect(module1.module.lockedUntilPrevious).toBe(false);
-    expect(module1.module.unlocksModule).toBe(2);
+    expect(m1.module.moduleId).toBe(1);
+    expect(m1.module.order).toBe(1);
+    expect(m1.module.lockedUntilPrevious).toBe(false);
+    expect(m1.module.unlocksModule).toBe(2);
 
-    expect(module2.module.moduleId).toBe(2);
-    expect(module2.module.order).toBe(2);
-    expect(module2.module.lockedUntilPrevious).toBe(true);
-    expect(module2.module.unlocksModule).toBe(3);
+    expect(m2.module.moduleId).toBe(2);
+    expect(m2.module.order).toBe(2);
+    expect(m2.module.lockedUntilPrevious).toBe(true);
+    expect(m2.module.unlocksModule).toBe(3);
 
-    expect(module3.module.moduleId).toBe(3);
-    expect(module3.module.order).toBe(3);
-    expect(module3.module.lockedUntilPrevious).toBe(true);
-    expect(module3.module.unlocksModule).toBe(4);
+    expect(m3.module.moduleId).toBe(3);
+    expect(m3.module.order).toBe(3);
+    expect(m3.module.lockedUntilPrevious).toBe(true);
+    expect(m3.module.unlocksModule).toBe(4);
 
-    expect(module4.module.moduleId).toBe(4);
-    expect(module4.module.order).toBe(4);
-    expect(module4.module.lockedUntilPrevious).toBe(true);
-    expect(module4.module.unlocksModule).toBe(5);
+    expect(m4.module.moduleId).toBe(4);
+    expect(m4.module.order).toBe(4);
+    expect(m4.module.lockedUntilPrevious).toBe(true);
+    expect(m4.module.unlocksModule).toBe(5);
 
-    expect(module5a.module.moduleId).toBe(5);
-    expect(module5a.module.order).toBe(5);
-    expect(module5a.module.type).toBe("debug-lab");
-    expect(module5a.module.lockedUntilPrevious).toBe(true);
-    expect(module5a.module.unlocksModule).toBe(6);
+    expect(m5.module.moduleId).toBe(5);
+    expect(m5.module.order).toBe(5);
+    expect(m5.module.type).toBe("concept-gate");
+    expect(m5.module.lockedUntilPrevious).toBe(true);
+    expect(m5.module.unlocksModule).toBe(6);
 
-    expect(module5b.module.moduleId).toBe(5);
-    expect(module5b.module.order).toBe(6);
-    expect(module5b.module.type).toBe("debug-lab");
-    expect(module5b.module.lockedUntilPrevious).toBe(true);
-    expect(module5b.module.unlocksModule).toBe(6);
+    expect(m6.module.moduleId).toBe(6);
+    expect(m6.module.order).toBe(6);
+    expect(m6.module.lockedUntilPrevious).toBe(true);
+    expect(m6.module.unlocksModule).toBe(7);
 
-    expect(module6.module.moduleId).toBe(6);
-    expect(module6.module.order).toBe(7);
-    expect(module6.module.type).toBe("capstone");
-    expect(module6.module.lockedUntilPrevious).toBe(true);
-    expect(module6.module.unlocksModule).toBe(7);
-    expect(module6.gate.passCondition).toBe("rubric-score");
-    expect(module6.gate.scoreThreshold).toBeDefined();
-    expect(module6.gate.scoreThreshold).toBeGreaterThanOrEqual(80);
+    expect(m7.module.moduleId).toBe(7);
+    expect(m7.module.order).toBe(7);
+    expect(m7.module.lockedUntilPrevious).toBe(true);
+    expect(m7.module.unlocksModule).toBe(8);
 
-    expect(module7.module.moduleId).toBe(7);
-    expect(module7.module.order).toBe(8);
-    expect(module7.module.type).toBe("final-assessment");
-    expect(module7.module.lockedUntilPrevious).toBe(true);
-    expect(module7.module.unlocksModule).toBeUndefined();
-    expect(module7.gate.passCondition).toBe("all-checks");
+    expect(m8.module.moduleId).toBe(8);
+    expect(m8.module.order).toBe(8);
+    expect(m8.module.lockedUntilPrevious).toBe(true);
+    expect(m8.module.unlocksModule).toBe(9);
+
+    expect(m9.module.moduleId).toBe(9);
+    expect(m9.module.order).toBe(9);
+    expect(m9.module.lockedUntilPrevious).toBe(true);
+    expect(m9.module.unlocksModule).toBe(10);
+
+    expect(m10.module.moduleId).toBe(10);
+    expect(m10.module.order).toBe(10);
+    expect(m10.module.type).toBe("debug-lab");
+    expect(m10.module.lockedUntilPrevious).toBe(true);
+    expect(m10.module.unlocksModule).toBe(11);
+
+    expect(m11.module.moduleId).toBe(11);
+    expect(m11.module.order).toBe(11);
+    expect(m11.module.type).toBe("debug-lab");
+    expect(m11.module.lockedUntilPrevious).toBe(true);
+    expect(m11.module.unlocksModule).toBe(12);
+
+    expect(m12.module.moduleId).toBe(12);
+    expect(m12.module.order).toBe(12);
+    expect(m12.module.type).toBe("capstone");
+    expect(m12.module.lockedUntilPrevious).toBe(true);
+    expect(m12.module.unlocksModule).toBe(13);
+    expect(m12.gate.passCondition).toBe("rubric-score");
+    expect(m12.gate.scoreThreshold).toBeDefined();
+    expect(m12.gate.scoreThreshold).toBeGreaterThanOrEqual(80);
+
+    expect(m13.module.moduleId).toBe(13);
+    expect(m13.module.order).toBe(13);
+    expect(m13.module.type).toBe("final-assessment");
+    expect(m13.module.lockedUntilPrevious).toBe(true);
+    expect(m13.module.unlocksModule).toBeUndefined();
+    expect(m13.gate.passCondition).toBe("all-checks");
   });
 });

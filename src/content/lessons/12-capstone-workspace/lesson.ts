@@ -1,18 +1,18 @@
 import type { LessonManifest } from "../../lesson-manifest";
 
 const lesson: LessonManifest = {
-  exerciseId: "mod-6-capstone-stable-workspace",
+  exerciseId: "mod-12-capstone-workspace",
   module: {
-    moduleId: 6,
+    moduleId: 12,
     moduleName: "Capstone",
-    order: 7,
+    order: 12,
     type: "capstone",
     estimatedMinutes: 24,
     difficulty: "advanced",
     concepts: ["hook composition", "memoization correctness", "callback stability", "state reset semantics"],
     tags: ["capstone", "useMemo", "useCallback", "stability"],
     lockedUntilPrevious: true,
-    unlocksModule: 7,
+    unlocksModule: 13,
   },
 
   title: "Capstone: Stable Workspace",

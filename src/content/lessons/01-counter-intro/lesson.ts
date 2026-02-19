@@ -4,7 +4,7 @@ const lesson: LessonManifest = {
   exerciseId: "mod-1-hooks-intro-counter",
   module: {
     moduleId: 1,
-    moduleName: "Hooks Intro",
+    moduleName: "State is Memory",
     order: 1,
     type: "concept-gate",
     estimatedMinutes: 15,

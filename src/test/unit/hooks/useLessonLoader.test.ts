@@ -25,67 +25,86 @@ describe("useLessonLoader", () => {
     }
   });
 
-  it("loads module-2 when lesson query param is provided", () => {
+  it("loads module-2 (State has Shape) when lesson query param is 2", () => {
     window.history.replaceState({}, "", "/?lesson=2");
     const { result } = renderHook(() => useLessonLoader());
 
-    expect(result.current.lesson.exerciseId).toBe("mod-2-hooks-search-paging");
+    expect(result.current.lesson.exerciseId).toBe("mod-2-usestate-array-state");
     expect(result.current.lesson.module.moduleId).toBe(2);
-    expect(result.current.files[0].filename).toBe("SearchPaging.tsx");
+    expect(result.current.files[0].filename).toBe("TodoList.tsx");
   });
 
-  it("loads module-3 when lesson query param is provided", () => {
+  it("loads module-3 (Effects Are Synchronization) when lesson query param is 3", () => {
     window.history.replaceState({}, "", "/?lesson=3");
     const { result } = renderHook(() => useLessonLoader());
 
-    expect(result.current.lesson.exerciseId).toBe("mod-3-hooks-custom-step-counter");
+    expect(result.current.lesson.exerciseId).toBe("mod-3-useeffect-essentials");
     expect(result.current.lesson.module.moduleId).toBe(3);
-    expect(result.current.files[0].filename).toBe("useStepCounter.ts");
+    expect(result.current.files[0].filename).toBe("useDocumentTitle.ts");
   });
 
-  it("loads module-4 when lesson query param is provided", () => {
+  it("loads module-4 (The Dependency Contract) when lesson query param is 4", () => {
     window.history.replaceState({}, "", "/?lesson=4");
     const { result } = renderHook(() => useLessonLoader());
 
-    expect(result.current.lesson.exerciseId).toBe("mod-4-hooks-stable-results-panel");
+    expect(result.current.lesson.exerciseId).toBe("mod-4-useeffect-dependencies");
     expect(result.current.lesson.module.moduleId).toBe(4);
-    expect(result.current.files[0].filename).toBe("useStableResults.ts");
+    expect(result.current.files[0].filename).toBe("SearchPaging.tsx");
   });
 
-  it("loads module-5a (debug-lab: infinite loop) when lesson query param is 5", () => {
+  it("loads module-5 (The Escape Hatch) when lesson query param is 5", () => {
     window.history.replaceState({}, "", "/?lesson=5");
     const { result } = renderHook(() => useLessonLoader());
 
-    expect(result.current.lesson.exerciseId).toBe("mod-5a-debug-infinite-loop");
+    expect(result.current.lesson.exerciseId).toBe("mod-5-useref-stopwatch");
     expect(result.current.lesson.module.moduleId).toBe(5);
-    expect(result.current.files[0].filename).toBe("useObservedSection.ts");
+    expect(result.current.files[0].filename).toBe("useStopwatch.ts");
   });
 
-  it("loads module-5b (debug-lab: stale callback) when lesson query param is 6", () => {
+  it("loads module-6 (Extract and Reuse) when lesson query param is 6", () => {
     window.history.replaceState({}, "", "/?lesson=6");
     const { result } = renderHook(() => useLessonLoader());
 
-    expect(result.current.lesson.exerciseId).toBe("mod-5b-debug-stale-callback");
-    expect(result.current.lesson.module.moduleId).toBe(5);
-    expect(result.current.files[0].filename).toBe("useLogOnSave.ts");
+    expect(result.current.lesson.exerciseId).toBe("mod-6-custom-hooks-extract-reuse");
+    expect(result.current.lesson.module.moduleId).toBe(6);
+    expect(result.current.files[0].filename).toBe("useStepCounter.ts");
   });
 
-  it("loads module-6 capstone when lesson query param is 7", () => {
+  it("loads module-7 (Cache Expensive Work) when lesson query param is 7", () => {
     window.history.replaceState({}, "", "/?lesson=7");
     const { result } = renderHook(() => useLessonLoader());
 
-    expect(result.current.lesson.exerciseId).toBe("mod-6-capstone-stable-workspace");
-    expect(result.current.lesson.module.moduleId).toBe(6);
+    expect(result.current.lesson.exerciseId).toBe("mod-7-usememo-standalone");
+    expect(result.current.lesson.module.moduleId).toBe(7);
+    expect(result.current.files[0].filename).toBe("useFilteredEmployees.ts");
+  });
+
+  it("loads module-8 (Stable Function References) when lesson query param is 8", () => {
+    window.history.replaceState({}, "", "/?lesson=8");
+    const { result } = renderHook(() => useLessonLoader());
+
+    expect(result.current.lesson.exerciseId).toBe("mod-8-usecallback-standalone");
+    expect(result.current.lesson.module.moduleId).toBe(8);
+    expect(result.current.lesson.gate.passCondition).toBe("all-checks");
+    expect(result.current.files[0].filename).toBe("EmployeeBoard.tsx");
+  });
+
+  it("loads module-12 capstone when lesson query param is 12", () => {
+    window.history.replaceState({}, "", "/?lesson=12");
+    const { result } = renderHook(() => useLessonLoader());
+
+    expect(result.current.lesson.exerciseId).toBe("mod-12-capstone-workspace");
+    expect(result.current.lesson.module.moduleId).toBe(12);
     expect(result.current.lesson.gate.passCondition).toBe("rubric-score");
     expect(result.current.files[0].filename).toBe("useStableWorkspace.ts");
   });
 
-  it("loads module-7 final assessment when lesson query param is 8", () => {
-    window.history.replaceState({}, "", "/?lesson=8");
+  it("loads module-13 final assessment when lesson query param is 13", () => {
+    window.history.replaceState({}, "", "/?lesson=13");
     const { result } = renderHook(() => useLessonLoader());
 
-    expect(result.current.lesson.exerciseId).toBe("mod-7-final-assessment-track-complete");
-    expect(result.current.lesson.module.moduleId).toBe(7);
+    expect(result.current.lesson.exerciseId).toBe("mod-13-final-assessment");
+    expect(result.current.lesson.module.moduleId).toBe(13);
     expect(result.current.lesson.module.type).toBe("final-assessment");
     expect(result.current.lesson.gate.passCondition).toBe("all-checks");
     expect(result.current.files[0].filename).toBe("FinalAssessment.tsx");

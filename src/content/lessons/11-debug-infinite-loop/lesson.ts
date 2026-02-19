@@ -1,18 +1,18 @@
 import type { LessonManifest } from "../../lesson-manifest";
 
 const lesson: LessonManifest = {
-  exerciseId: "mod-5a-debug-infinite-loop",
+  exerciseId: "mod-11-debug-infinite-loop",
   module: {
-    moduleId: 5,
-    moduleName: "Debugging Internals Lab",
-    order: 5,
+    moduleId: 11,
+    moduleName: "Debug: The Infinite Loop",
+    order: 11,
     type: "debug-lab",
     estimatedMinutes: 20,
     difficulty: "advanced",
     concepts: ["useEffect deps", "object identity", "IntersectionObserver", "infinite loop"],
     tags: ["debug", "useEffect", "useMemo", "infinite-loop"],
     lockedUntilPrevious: true,
-    unlocksModule: 6,
+    unlocksModule: 12,
   },
 
   title: "Debug Lab: Infinite Loop",

@@ -1,18 +1,18 @@
 import type { LessonManifest } from "../../lesson-manifest";
 
 const lesson: LessonManifest = {
-  exerciseId: "mod-4-hooks-stable-results-panel",
+  exerciseId: "mod-9-hook-composition-stability",
   module: {
-    moduleId: 4,
+    moduleId: 9,
     moduleName: "Composition and Stability",
-    order: 4,
+    order: 9,
     type: "concept-gate",
     estimatedMinutes: 18,
     difficulty: "intermediate",
     concepts: ["useMemo dependencies", "useCallback stability", "hook composition"],
     tags: ["useMemo", "useCallback", "composition"],
     lockedUntilPrevious: true,
-    unlocksModule: 5,
+    unlocksModule: 10,
   },
 
   title: "Stable Results Panel",
