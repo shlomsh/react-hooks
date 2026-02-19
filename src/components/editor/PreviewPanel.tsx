@@ -7,6 +7,14 @@ interface PreviewPanelProps {
 }
 
 export function PreviewPanel({ sandbox, awaitingGateSubmit }: PreviewPanelProps) {
+  const runtimeEvents = sandbox.events.filter((event) => !event.message.startsWith("[sim]"));
+  const simulationEvents = sandbox.events
+    .filter((event) => event.message.startsWith("[sim]"))
+    .map((event) => ({
+      ...event,
+      message: event.message.replace("[sim]", "").trim(),
+    }));
+
   const statusLine =
     sandbox.status === "running"
       ? `[system] Running ${sandbox.activeFile ?? "current file"}...`
@@ -31,7 +39,8 @@ export function PreviewPanel({ sandbox, awaitingGateSubmit }: PreviewPanelProps)
         : sandbox.status === "error" || sandbox.status === "timeout"
           ? styles.statusError
           : styles.statusIdle;
-  const hasRuntimeEvents = sandbox.events.length > 0;
+  const hasRuntimeEvents = runtimeEvents.length > 0;
+  const hasSimulationEvents = simulationEvents.length > 0;
   const dotClass =
     sandbox.status === "running"
       ? `${styles.dot} ${styles.dotRunning}`
@@ -52,16 +61,22 @@ export function PreviewPanel({ sandbox, awaitingGateSubmit }: PreviewPanelProps)
             <div className={styles.consoleLog}>
               {statusLine ? (
                 <div className={`${styles.consoleLine} ${styles.consoleSystemLine}`}>
-                  <span className={styles.consolePrompt}>$</span>
                   <span>{statusLine}</span>
                 </div>
               ) : null}
+              {hasSimulationEvents ? (
+                <div className={styles.simulationBlock}>
+                  <div className={styles.simulationTitle}>Simulated actions</div>
+                  {simulationEvents.map((event) => (
+                    <div key={event.id} className={`${styles.consoleLine} ${styles.simulationLine}`}>
+                      <span>{event.message}</span>
+                    </div>
+                  ))}
+                </div>
+              ) : null}
               {hasRuntimeEvents ? (
-                sandbox.events.map((event) => (
+                runtimeEvents.map((event) => (
                   <div key={event.id} className={styles.consoleLine}>
-                    <span className={styles.consolePrompt}>
-                      {event.level === "error" ? "!" : ">"}
-                    </span>
                     {event.level !== "log" ? (
                       <span
                         className={`${styles.consoleLevel} ${event.level === "error" ? styles.levelError : styles.levelWarn}`}

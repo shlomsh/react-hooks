@@ -23,6 +23,7 @@ const lesson: LessonManifest = {
     "Add a visible <input type='number'> that the user can edit",
     "Update both Increment and Decrement to use step",
     "If stuck, temporarily log event values in onChange: console.log(e, e.target.value)",
+    "Optional breakpoint helper while running: (globalThis as any).__lessonDebug?.('onChange event', e)",
     "Keep Reset behavior setCount(0)",
     "Pass Run validation before Submit Gate",
   ],
@@ -60,6 +61,7 @@ You will practice both:
       "The user must control step via a visible number input",
       "State drives behavior: step should control both +/- handlers",
       "Debug tip: log both e and e.target.value inside onChange while testing",
+      "Breakpoint tip: call (globalThis as any).__lessonDebug?.('label', data) to pause in DevTools",
       "Fix Phase 1 first, then implement Phase 2",
     ],
     commonFailures: [
@@ -75,7 +77,7 @@ You will practice both:
     runStepPrompt:
       "Step 2: add step state + a visible number input for user entry, then wire Increment/Decrement to use step.",
     retryPrompt:
-      "Not passed yet. Verify step state, input binding, +/-step handlers, and Reset behavior, then run again.",
+      "Not passed yet. Debug in this order: 1) step state exists, 2) input updates step via e.target.value, 3) +/- use step, 4) Reset stays setCount(0).",
     successPrompt:
       "Great work - you fixed the bug and shipped the phase-2 extension.",
   },
@@ -130,9 +132,9 @@ You will practice both:
           throw new Error("onChange receives an event object. Convert e.target.value (or e.currentTarget.value), not e.");
         }
         const usesTargetValue =
-          /onChange=\\{\\s*\\(\\s*e\\s*\\)\\s*=>\\s*setStep\\s*\\(\\s*Number\\s*\\(\\s*e\\.target\\.value\\s*\\)\\s*\\)\\s*\\}/.test(source) ||
-          /onChange=\\{\\s*\\(\\s*e\\s*\\)\\s*=>\\s*setStep\\s*\\(\\s*Number\\s*\\(\\s*e\\.currentTarget\\.value\\s*\\)\\s*\\)\\s*\\}/.test(source) ||
-          /onChange=\\{\\s*\\(\\s*e\\s*\\)\\s*=>\\s*setStep\\s*\\(\\s*parseInt\\s*\\(\\s*e\\.target\\.value\\s*,\\s*10\\s*\\)\\s*\\)\\s*\\}/.test(source);
+          /onChange=\\{\\s*\\(\\s*e\\s*\\)\\s*=>\\s*(?:\\{[\\s\\S]*?setStep\\s*\\(\\s*Number\\s*\\(\\s*e\\.target\\.value\\s*\\)\\s*\\)[\\s\\S]*?\\}|setStep\\s*\\(\\s*Number\\s*\\(\\s*e\\.target\\.value\\s*\\)\\s*\\))\\s*\\}/.test(source) ||
+          /onChange=\\{\\s*\\(\\s*e\\s*\\)\\s*=>\\s*(?:\\{[\\s\\S]*?setStep\\s*\\(\\s*Number\\s*\\(\\s*e\\.currentTarget\\.value\\s*\\)\\s*\\)[\\s\\S]*?\\}|setStep\\s*\\(\\s*Number\\s*\\(\\s*e\\.currentTarget\\.value\\s*\\)\\s*\\))\\s*\\}/.test(source) ||
+          /onChange=\\{\\s*\\(\\s*e\\s*\\)\\s*=>\\s*(?:\\{[\\s\\S]*?setStep\\s*\\(\\s*parseInt\\s*\\(\\s*e\\.target\\.value\\s*,\\s*10\\s*\\)\\s*\\)[\\s\\S]*?\\}|setStep\\s*\\(\\s*parseInt\\s*\\(\\s*e\\.target\\.value\\s*,\\s*10\\s*\\)\\s*\\))\\s*\\}/.test(source);
         if (!usesTargetValue) {
           throw new Error("Missing numeric step input onChange (use e.target.value).");
         }
@@ -186,18 +188,19 @@ You will practice both:
     {
       tier: 1,
       unlocksAfterFails: 1,
-      text: "Phase 2 starts after the bug fix: declare `const [step, setStep] = useState(1)`, add the number input, and use step in both +/- handlers. If unsure what onChange gets, temporarily log `e` and `e.target.value`.",
+      text: "Use this quick debug checklist: (1) `step` state exists, (2) input is visible with `type=\"number\"` and `value={step}`, (3) onChange reads `e.target.value` (or `e.currentTarget.value`) and converts to number, (4) Increment/Decrement use `step`, (5) Reset still uses `setCount(0)`.",
     },
     {
       tier: 2,
       unlocksAfterFails: 2,
-      text: "Wire a number input to setStep, then update handlers to c + step / c - step. Debug with a temporary log if needed.",
-      focusArea: "step state + input + button handlers",
+      text: "If Run says input binding is wrong, inspect the event directly: `console.log(e, e.target?.value)` or pause with `(globalThis as any).__lessonDebug?.('onChange', e)`. You should see an event object, not a raw number. Convert the value string before saving to state.",
+      focusArea: "onChange event debugging",
       codeSnippet: `const [step, setStep] = useState(1);
 <input type="number" value={step} onChange={(e) => {
-  // temporary debug while learning:
-  console.log(e, e.target.value);
-  setStep(Number(e.target.value));
+  // temporary debug while learning (remove later):
+  console.log("change", e, e.target?.value);
+  (globalThis as any).__lessonDebug?.("onChange", e); // optional breakpoint
+  setStep(Number(e.target.value)); // not Number(e)
 }} />
 <button onClick={() => setCount((c) => c + step)}>Increment</button>
 <button onClick={() => setCount((c) => c - step)}>Decrement</button>`,
@@ -205,13 +208,14 @@ You will practice both:
     {
       tier: 3,
       unlocksAfterFails: 3,
-      text: "Apply both phases: fix +2, then complete the step extension.",
+      text: "Reference solution shape (one valid version):",
       steps: [
-        "Add: const [step, setStep] = useState(1)",
-        "Input: type=number, value={step}, onChange -> setStep(Number(e.target.value))",
-        "Increment: setCount((c) => c + step)",
-        "Decrement: setCount((c) => c - step)",
-        "Reset: setCount(0)",
+        "Keep `const [count, setCount] = useState(0)`",
+        "Add `const [step, setStep] = useState(1)`",
+        "Render a number input bound to step",
+        "Use `setStep(Number(e.target.value))` in onChange",
+        "Increment with `c + step`, Decrement with `c - step`",
+        "Keep Reset exactly `setCount(0)`",
       ],
       pseudoCode: `const [count, setCount] = useState(0);
 const [step, setStep] = useState(1);

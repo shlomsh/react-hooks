@@ -160,16 +160,29 @@
 .levelWarn  { color: var(--amber); }
 .levelError { color: var(--red); }
 
-.consolePrompt {
-  display: inline-block;
-  width: 0.85rem;
-  flex-shrink: 0;
-  color: rgba(0, 229, 255, 0.4);
-  font-weight: 700;
-}
-
 .consoleSystemLine {
   color: #8faad4;
+}
+
+.simulationBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.14rem;
+  margin-bottom: 0.2rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid rgba(143, 170, 212, 0.18);
+}
+
+.simulationTitle {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6f84ad;
+}
+
+.simulationLine {
+  color: #9db2d8;
 }
 
 @media (max-width: 1280px) {

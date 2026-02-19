@@ -110,4 +110,31 @@ describe("useSandbox", () => {
     expect(messages.some((message) => message.includes("input value 3"))).toBe(true);
     expect(messages.some((message) => message.includes("[sim] button click -> Increment"))).toBe(true);
   });
+
+  it("exposes __lessonDebug helper for breakpoint-style debugging", async () => {
+    const { result } = renderHook(() => useSandbox());
+
+    await act(async () => {
+      await result.current.run(
+        '(globalThis as any).__lessonDebug?.("inspect event", { value: 3 }); console.log("after debug");',
+        "debug.ts"
+      );
+    });
+
+    const messages = result.current.state.events.map((event) => event.message);
+    expect(messages.some((message) => message.includes("[debug] inspect event"))).toBe(true);
+    expect(messages.some((message) => message.includes("after debug"))).toBe(true);
+  });
+
+  it("includes source location in runtime errors", async () => {
+    const { result } = renderHook(() => useSandbox());
+
+    await act(async () => {
+      await result.current.run("console.log(e);", "CounterIntro.tsx");
+    });
+
+    expect(result.current.state.status).toBe("error");
+    expect(result.current.state.errorMessage).toContain("e is not defined");
+    expect(result.current.state.errorMessage).toContain("CounterIntro.tsx:");
+  });
 });

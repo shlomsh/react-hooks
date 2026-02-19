@@ -4,6 +4,8 @@ export default function CounterIntro() {
   const [count, setCount] = useState(0);
   // TODO: phase 2 - add step state
   // const [step, setStep] = useState(1);
+  // Debug helper (optional while learning):
+  // (globalThis as any).__lessonDebug?.("onChange event", e);
 
   return (
     <div style={{ padding: "1rem", fontFamily: "sans-serif" }}>

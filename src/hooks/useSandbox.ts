@@ -22,6 +22,19 @@ export interface SandboxRunOptions {
   simulateUserFlow?: boolean;
 }
 
+type LessonDebugFn = (label: string, payload?: unknown) => void;
+type SourceMapLike = {
+  mappings: string;
+  sources: string[];
+};
+type SourceMapSegment = {
+  generatedColumn: number;
+  sourceIndex: number;
+  originalLine: number;
+  originalColumn: number;
+};
+type SourceMapIndex = SourceMapSegment[][];
+
 const MAX_EVENTS = 200;
 const TIMEOUT_MS = 5000;
 
@@ -142,9 +155,144 @@ function transpileSource(source: string, fileName: string) {
       esModuleInterop: true,
       allowSyntheticDefaultImports: true,
       isolatedModules: true,
+      sourceMap: true,
+      inlineSources: true,
     },
     fileName,
   });
+}
+
+const BASE64_CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+function decodeVlqMappings(input: string): number[] {
+  const values: number[] = [];
+  let value = 0;
+  let shift = 0;
+
+  for (const char of input) {
+    const digit = BASE64_CHARSET.indexOf(char);
+    if (digit < 0) continue;
+
+    const continuation = (digit & 32) !== 0;
+    const chunk = digit & 31;
+    value += chunk << shift;
+
+    if (continuation) {
+      shift += 5;
+      continue;
+    }
+
+    const negative = (value & 1) === 1;
+    const decoded = value >> 1;
+    values.push(negative ? -decoded : decoded);
+    value = 0;
+    shift = 0;
+  }
+
+  return values;
+}
+
+function buildSourceMapIndex(map: SourceMapLike): SourceMapIndex {
+  const lines = map.mappings.split(";");
+  const index: SourceMapIndex = [];
+
+  let sourceIndex = 0;
+  let originalLine = 0;
+  let originalColumn = 0;
+
+  for (const line of lines) {
+    let generatedColumn = 0;
+    const segments: SourceMapSegment[] = [];
+
+    if (line.trim().length > 0) {
+      const parts = line.split(",");
+      for (const part of parts) {
+        const decoded = decodeVlqMappings(part);
+        if (decoded.length < 4) continue;
+
+        generatedColumn += decoded[0];
+        sourceIndex += decoded[1];
+        originalLine += decoded[2];
+        originalColumn += decoded[3];
+
+        segments.push({
+          generatedColumn,
+          sourceIndex,
+          originalLine,
+          originalColumn,
+        });
+      }
+    }
+
+    index.push(segments);
+  }
+
+  return index;
+}
+
+function remapGeneratedPosition(
+  index: SourceMapIndex,
+  map: SourceMapLike,
+  generatedLineOneBased: number,
+  generatedColumnOneBased: number
+): { source: string; line: number; column: number } | null {
+  const lineIndex = generatedLineOneBased - 1;
+  if (lineIndex < 0 || lineIndex >= index.length) return null;
+
+  const segments = index[lineIndex];
+  if (segments.length === 0) return null;
+
+  const generatedColumnZeroBased = Math.max(0, generatedColumnOneBased - 1);
+  let best = segments[0];
+  for (const segment of segments) {
+    if (segment.generatedColumn > generatedColumnZeroBased) break;
+    best = segment;
+  }
+
+  const source = map.sources[best.sourceIndex];
+  if (!source) return null;
+
+  return {
+    source,
+    line: best.originalLine + 1,
+    column: best.originalColumn + 1,
+  };
+}
+
+function extractErrorLocation(stack: string | undefined): string | null {
+  if (!stack) return null;
+  const lines = stack.split("\n");
+  for (const line of lines) {
+    const directMatch = line.match(/([A-Za-z0-9_./-]+\.(?:ts|tsx|js|jsx)):(\d+):(\d+)/);
+    if (directMatch) {
+      return `${directMatch[1]}:${directMatch[2]}:${directMatch[3]}`;
+    }
+  }
+  return null;
+}
+
+function formatRuntimeError(
+  error: unknown,
+  sourceMaps: Map<string, { raw: SourceMapLike; index: SourceMapIndex }>
+): string {
+  const baseMessage = error instanceof Error ? error.message : String(error);
+  const location = error instanceof Error ? extractErrorLocation(error.stack) : null;
+  if (!location) return baseMessage;
+
+  const match = location.match(/^(.+):(\d+):(\d+)$/);
+  if (!match) return `${baseMessage} (${location})`;
+
+  const [, file, lineText, colText] = match;
+  const line = Number(lineText);
+  const column = Number(colText);
+  const mapEntry = sourceMaps.get(file);
+  if (!mapEntry) return `${baseMessage} (${location})`;
+
+  const mapped = remapGeneratedPosition(mapEntry.index, mapEntry.raw, line, column);
+  if (!mapped) return `${baseMessage} (${location})`;
+
+  const mappedLocation = `${mapped.source}:${mapped.line}:${mapped.column}`;
+  return `${baseMessage} (${mappedLocation})`;
 }
 
 interface MockElementNode {
@@ -315,10 +463,20 @@ export function useSandbox() {
         warn: console.warn,
         error: console.error,
       };
+      const debugHost = globalThis as typeof globalThis & {
+        __lessonDebug?: LessonDebugFn;
+      };
+      const previousLessonDebug = debugHost.__lessonDebug;
 
       console.log = (...args: unknown[]) => appendEvent(runId, "log", args);
       console.warn = (...args: unknown[]) => appendEvent(runId, "warn", args);
       console.error = (...args: unknown[]) => appendEvent(runId, "error", args);
+      debugHost.__lessonDebug = (label: string, payload?: unknown) => {
+        const header = `[debug] ${label}`;
+        appendEvent(runId, "log", payload === undefined ? [header] : [header, payload]);
+        debugger;
+      };
+      const sourceMaps = new Map<string, { raw: SourceMapLike; index: SourceMapIndex }>();
 
       try {
         const sourceIndex = buildSourceIndex(fileName, code, files);
@@ -334,6 +492,14 @@ export function useSandbox() {
           }
 
           const transpiled = transpileSource(source, requestedFile);
+          if (transpiled.sourceMapText) {
+            try {
+              const raw = JSON.parse(transpiled.sourceMapText) as SourceMapLike;
+              sourceMaps.set(requestedFile, { raw, index: buildSourceMapIndex(raw) });
+            } catch {
+              // Ignore malformed source maps; fall back to compiled location.
+            }
+          }
           const module = { exports: {} as Record<string, unknown> };
           moduleCache.set(requestedFile, module.exports);
 
@@ -353,7 +519,8 @@ export function useSandbox() {
           };
 
           // eslint-disable-next-line no-new-func
-          const runner = new Function("require", "module", "exports", transpiled.outputText);
+          const codeWithSourceUrl = `${transpiled.outputText}\n//# sourceURL=${requestedFile}`;
+          const runner = new Function("require", "module", "exports", codeWithSourceUrl);
           runner(localRequire, module, module.exports);
           return module.exports;
         };
@@ -399,7 +566,7 @@ export function useSandbox() {
           return "success";
         }
       } catch (error) {
-        const message = error instanceof Error ? error.message : String(error);
+        const message = formatRuntimeError(error, sourceMaps);
         if (!timedOut && runIdRef.current === runId) {
           setState((prev) => ({
             ...prev,
@@ -417,6 +584,11 @@ export function useSandbox() {
         console.log = originalConsole.log;
         console.warn = originalConsole.warn;
         console.error = originalConsole.error;
+        if (previousLessonDebug) {
+          debugHost.__lessonDebug = previousLessonDebug;
+        } else {
+          delete debugHost.__lessonDebug;
+        }
       }
       return timedOut ? "timeout" : "error";
     },
