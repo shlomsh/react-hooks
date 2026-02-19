@@ -17,9 +17,10 @@ const lesson: LessonManifest = {
 
   title: "Counter Intro",
   description:
-    "Phase 1: fix the Increment bug (+2 -> +1). Phase 2: extend the counter with configurable step state and update Increment/Decrement to use it.",
+    "Phase 1: fix the Increment bug (+2 -> +1). Phase 2: add a visible number input so the user can choose step, then use step in Increment/Decrement.",
   constraints: [
     "Fix Increment first, then add the step extension",
+    "Add a visible <input type='number'> that the user can edit",
     "Update both Increment and Decrement to use step",
     "Keep Reset behavior setCount(0)",
     "Pass Run validation before Submit Gate",
@@ -35,7 +36,7 @@ the Increment button currently uses \`c + 2\` but should use \`c + 1\`.
 
 Phase 2: extend the component to support variable step updates:
 1. Add \`const [step, setStep] = useState(1)\`
-2. Add a number input bound to \`step\`
+2. Add a visible number input that the user types into, bound to \`step\`
 3. Update Increment to \`c + step\`
 4. Update Decrement to \`c - step\`
 
@@ -48,12 +49,14 @@ You will practice both:
 ### Done criteria
 
 1. \`step\` state exists and is editable from the input.
-2. Increment uses \`+step\`.
-3. Decrement uses \`-step\`.
-4. Reset still sets count to \`0\`.
+2. The input is visible and user-controlled (\`type="number"\`, \`value={step}\`, \`onChange -> setStep(...)\`).
+3. Increment uses \`+step\`.
+4. Decrement uses \`-step\`.
+5. Reset still sets count to \`0\`.
     `.trim(),
     keyPoints: [
       "Use updater form: setCount((c) => ...)",
+      "The user must control step via a visible number input",
       "State drives behavior: step should control both +/- handlers",
       "Fix Phase 1 first, then implement Phase 2",
     ],
@@ -68,7 +71,7 @@ You will practice both:
     firstStepPrompt:
       "Step 1: in CounterIntro.tsx, fix Increment from c + 2 to c + 1.",
     runStepPrompt:
-      "Step 2: add step state + input, then wire Increment/Decrement to use step.",
+      "Step 2: add step state + a visible number input for user entry, then wire Increment/Decrement to use step.",
     retryPrompt:
       "Not passed yet. Verify step state, input binding, +/-step handlers, and Reset behavior, then run again.",
     successPrompt:
