@@ -17,14 +17,14 @@ describe("DashboardScreen", () => {
   it("shows module count in progress", () => {
     const progress = createProgressState();
     render(<DashboardScreen progress={progress} onOpenLesson={vi.fn()} />);
-    expect(screen.getByText(/0 of 7 modules completed/i)).toBeInTheDocument();
+    expect(screen.getByText(/0 of 12 modules completed/i)).toBeInTheDocument();
   });
 
-  it("renders 7 track nodes", () => {
+  it("renders 12 track nodes", () => {
     const progress = createProgressState();
     render(<DashboardScreen progress={progress} onOpenLesson={vi.fn()} />);
     expect(screen.getByText("01")).toBeInTheDocument();
-    expect(screen.getByText("07")).toBeInTheDocument();
+    expect(screen.getByText("12")).toBeInTheDocument();
   });
 
   it("shows completed status for passed modules", () => {
@@ -54,7 +54,7 @@ describe("DashboardScreen", () => {
     const onOpenLesson = vi.fn();
     render(<DashboardScreen progress={progress} onOpenLesson={onOpenLesson} />);
     // Module 1 is unlocked/in-progress so its node should be clickable
-    const activeNode = screen.getByText("Internals Primer").closest("div");
+    const activeNode = screen.getByText("State is Memory").closest("div");
     if (activeNode) fireEvent.click(activeNode);
     expect(onOpenLesson).toHaveBeenCalled();
   });

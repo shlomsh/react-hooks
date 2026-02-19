@@ -39,7 +39,7 @@ function makeState(overrides?: Partial<{ passedCount: number; extraAttempts: num
 describe("buildLedger", () => {
   it("returns one entry per module", () => {
     const ledger = buildLedger(createProgressState());
-    expect(ledger).toHaveLength(7);
+    expect(ledger).toHaveLength(12);
   });
 
   it("includes moduleId, status, attempts, score per entry", () => {
@@ -87,11 +87,11 @@ describe("getModuleAttempts", () => {
 
 describe("isTrackComplete", () => {
   it("returns false when not all modules passed", () => {
-    expect(isTrackComplete(makeState({ passedCount: 6 }))).toBe(false);
+    expect(isTrackComplete(makeState({ passedCount: 11 }))).toBe(false);
   });
 
-  it("returns true when all 7 modules passed", () => {
-    expect(isTrackComplete(makeState({ passedCount: 7 }))).toBe(true);
+  it("returns true when all 12 modules passed", () => {
+    expect(isTrackComplete(makeState({ passedCount: 12 }))).toBe(true);
   });
 });
 
@@ -105,6 +105,6 @@ describe("getNextUnlockedModule", () => {
   });
 
   it("returns null when all modules passed", () => {
-    expect(getNextUnlockedModule(makeState({ passedCount: 7 }))).toBeNull();
+    expect(getNextUnlockedModule(makeState({ passedCount: 12 }))).toBeNull();
   });
 });

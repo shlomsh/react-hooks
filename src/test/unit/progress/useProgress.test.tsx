@@ -35,14 +35,14 @@ describe("useProgress", () => {
 
   it("initializes with fresh state when localStorage is empty", () => {
     const { result } = renderHook(() => useProgress());
-    expect(result.current.state.modules).toHaveLength(7);
+    expect(result.current.state.modules).toHaveLength(12);
     expect(result.current.state.badgeEarned).toBe(false);
   });
 
   it("restores state from localStorage on mount", () => {
     // Pre-seed localStorage
     const seed = JSON.stringify({
-      modules: Array.from({ length: 7 }, (_, i) => ({
+      modules: Array.from({ length: 12 }, (_, i) => ({
         moduleId: i + 1,
         status: i === 0 ? "passed" : i === 1 ? "unlocked" : "locked",
         attempts: i === 0 ? 2 : 0,
