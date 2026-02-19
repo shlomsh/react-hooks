@@ -205,7 +205,7 @@ Use this table during execution updates.
 | ST-018 | Eng C | BACKLOG |  |  | ST-014 |  |
 | ST-019 | Eng C | BACKLOG |  |  | ST-018 |  |
 | ST-020 | Eng C | BACKLOG |  |  | ST-019 |  |
-| ST-021 | Eng C/A | BACKLOG |  |  | ST-020 |  |
+| ST-021 | Eng C/A | DONE |  |  | ST-020 |  |
 | ST-022 | Eng B | DONE |  |  | ST-008, ST-013 |  |
 | ST-023 | Eng B | DONE |  |  | ST-008, ST-013 |  |
 | ST-024 | Eng B | DONE |  |  | ST-008, ST-013 |  |
