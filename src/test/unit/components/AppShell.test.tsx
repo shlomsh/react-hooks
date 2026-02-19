@@ -33,7 +33,7 @@ describe("AppShell viewport gate", () => {
       render(<AppShell />);
 
       // Default route (no query params) is launch screen
-      expect(screen.getByText(/start pro track/i)).toBeInTheDocument();
+      expect(screen.getByText(/begin learning/i)).toBeInTheDocument();
       expect(screen.queryByText("Desktop viewport required")).not.toBeInTheDocument();
     }
   );
@@ -47,7 +47,7 @@ describe("AppShell viewport gate", () => {
       setViewportWidth(1280);
     });
     await waitFor(() =>
-      expect(screen.getByText(/start pro track/i)).toBeInTheDocument()
+      expect(screen.getByText(/begin learning/i)).toBeInTheDocument()
     );
   });
 
@@ -55,7 +55,7 @@ describe("AppShell viewport gate", () => {
     setViewportWidth(1440);
     render(<AppShell />);
 
-    expect(screen.getByText(/start pro track/i)).toBeInTheDocument();
+    expect(screen.getByText(/begin learning/i)).toBeInTheDocument();
     act(() => {
       setViewportWidth(1279);
     });
@@ -69,7 +69,7 @@ describe("AppShell viewport gate", () => {
     render(<AppShell />);
 
     // Default is launch
-    expect(screen.getByText(/start pro track/i)).toBeInTheDocument();
+    expect(screen.getByText(/begin learning/i)).toBeInTheDocument();
 
     // Click Dashboard tab
     fireEvent.click(screen.getByRole("button", { name: "Dashboard" }));
@@ -78,7 +78,7 @@ describe("AppShell viewport gate", () => {
 
     // Click Launch tab
     fireEvent.click(screen.getByRole("button", { name: "Launch" }));
-    expect(screen.getByText(/start pro track/i)).toBeInTheDocument();
+    expect(screen.getByText(/begin learning/i)).toBeInTheDocument();
   });
 
   it("supports dashboard deep link via URL", () => {
