@@ -1,6 +1,6 @@
 # Kanban Status
 
-Last updated: 2026-02-19T00:19:00.000Z
+Last updated: 2026-02-19T11:12:00.000Z
 
 This file is the source of truth for the daily kanban board.
 
@@ -335,8 +335,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Performance checks",
     "owner": "Shared",
     "priority": "P2",
-    "status": "backlog",
-    "notes": "",
+    "status": "done",
+    "notes": "Completed 2026-02-19. Performance checks are implemented and validated.",
     "order": 35
   },
   {
@@ -344,8 +344,8 @@ This file is the source of truth for the daily kanban board.
     "title": "Pilot + release checklist",
     "owner": "Shared",
     "priority": "P2",
-    "status": "backlog",
-    "notes": "",
+    "status": "in_progress",
+    "notes": "Started 2026-02-19. Preparing pilot script, release checklist, and go/no-go gates.",
     "order": 36
   },
   {
