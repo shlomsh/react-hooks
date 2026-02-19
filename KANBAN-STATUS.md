@@ -383,6 +383,96 @@ This file is the source of truth for the daily kanban board.
     "status": "done",
     "notes": "All 6 PRD screens implemented as React components: LaunchScreen, DashboardScreen, DebugArenaScreen, CapstoneScreen, StatusRail sidebar, BadgeScreen (aligned with prototype). AppShell routing extended to 6 routes with nav tabs + URL deep links. 310 tests passing (308 unit + 2 e2e). Merged to main.",
     "order": 40
+  },
+  {
+    "id": "ST-043",
+    "title": "Landing page redesign — outcome-led messaging + curriculum preview",
+    "owner": "Claude",
+    "priority": "P2",
+    "status": "done",
+    "notes": "Completed 2026-02-19. LaunchScreen fully redesigned: headline changed to 'Learn React Hooks from first principles'; subtitle drops 'senior engineers' framing; pills updated ('strictly linear' → 'guided progression', 'SaaS capstone' → 'capstone project', '7 gated modules' → '8 gated modules'); CTAs updated ('Start Pro Track' → 'Begin Learning', 'Preview Curriculum' → 'View Curriculum'); feature cards replaced with 3 outcome statements (build hooks, debug patterns, write custom hooks); curriculum overview section added listing all 8 modules with estimated times. LaunchScreen.test.tsx fully rewritten (28 tests). AppShell.test.tsx updated (5 sentinel tests). 356 unit + 2 e2e passing. Branch: codex/st-043-landing-page-redesign.",
+    "order": 41
+  },
+  {
+    "id": "ST-044",
+    "title": "Curriculum redesign — complete hook coverage + smooth difficulty curve",
+    "owner": "Claude",
+    "priority": "P1",
+    "status": "done",
+    "notes": "Design complete 2026-02-19. Curriculum redesigned from 7 to 12 modules with smooth difficulty curve (grades: 2,2,3,3,2,3,3,3,4,4,5,5). Three structural problems fixed: (1) missing hooks — useEffect, useRef, useMemo, useCallback each now get a standalone lesson before appearing in composition/debug contexts; (2) difficulty cliff M1→M2 smoothed; (3) added build-from-scratch exercises (all previous exercises were fix-the-bug). Debug lab order swapped: stale closure=M10 (grade 4, subtle) before infinite loop=M11 (grade 5, dramatic). ST-045 (infra) delivered. ST-046–ST-052 fully specced and ready for other devs.\n\nNew 12-session curriculum:\n  M1  State is Memory (useState, 15 min)\n  M2  State has Shape (useState + objects/arrays, 15 min) — NEW\n  M3  Effects Are Synchronization (useEffect essentials, 20 min) — NEW\n  M4  The Dependency Contract (useEffect deps, 20 min) — was M2\n  M5  The Escape Hatch (useRef stopwatch, 15 min) — NEW\n  M6  Extract and Reuse (custom hooks, 20 min) — was M3\n  M7  Cache Expensive Work (useMemo standalone, 15 min) — NEW\n  M8  Stable Function References (useCallback standalone, 15 min) — NEW\n  M9  Composition and Stability (hook composition, 20 min) — was M4\n  M10 Debug: The Stale Closure (25 min) — was M6, now before M11\n  M11 Debug: The Infinite Loop (25 min) — was M5, now after M10\n  M12 Capstone (30 min) — was M7\n  +   Final Assessment — was M8",
+    "order": 42
+  },
+  {
+    "id": "ST-045",
+    "title": "Infra: update progress model + proficiency validator for 12 modules",
+    "owner": "Claude",
+    "priority": "P1",
+    "status": "done",
+    "notes": "Completed 2026-02-19. TOTAL_MODULES 7→12 in progressModel.ts. DashboardScreen updated: 12 module names (State is Memory → Capstone), time estimate calc, count display, locked badge reference. 8 test files updated: progressModel, completionLedger, DashboardScreen, useProgress, adapters (completionRate 1/7→1/12), AppShellProviders. 358 tests passing (356 unit + 2 e2e). Branch: codex/st-045-12-module-infra.",
+    "order": 43
+  },
+  {
+    "id": "ST-046",
+    "title": "M1: add 'extend it' construction step to Counter lesson",
+    "owner": "Shared",
+    "priority": "P2",
+    "status": "backlog",
+    "notes": "Improve src/content/lessons/01-counter-intro/lesson.ts. After the bug-fix phase (c+2→c+1), add Phase 2 build step: student adds const [step, setStep] = useState(1), wires a number <input> to setStep, and updates Increment/Decrement to use ± step. New checks: step-state-declared (0.20), increment-uses-step (0.20), decrement-uses-step (0.20). Rebalance existing: increment-handler 0.25, preserve-other-buttons 0.15. Add 3-tier hint ladder for Phase 2. Bump estimatedMinutes 10→15. Acceptance: lesson.ts schema-valid, 5 checks defined, npm run test:all green.",
+    "order": 44
+  },
+  {
+    "id": "ST-047",
+    "title": "M2: new lesson — State has Shape (useState + objects/arrays)",
+    "owner": "Shared",
+    "priority": "P1",
+    "status": "backlog",
+    "notes": "Create src/content/lessons/02-usestate-array-state/. Exercise: TodoList.tsx with 3 bugs — Bug1: items.push() direct mutation (no setItems), Bug2: item.done = !item.done direct mutation, Bug3 (correct, preserve): filter delete. Phase 2 build: clearCompleted using filter(!item.done). Files: TodoList.tsx (editable), App.tsx. Checks: add-uses-spread (0.30) /setItems\\(\\s*\\[/ or .concat, toggle-returns-map (0.30) .map() + spread + done:!item.done, delete-preserved (0.15), clear-completed (0.25) /filter\\(.*!\\.done/. 3-tier hint ladder. moduleId:2, moduleName:'State has Shape', difficulty:'intro', estimatedMinutes:15, type:concept-gate, passCondition:all-checks, unlocksModule:3. Acceptance: schema-valid, all 4 checks pass on solution, npm run test:all green.",
+    "order": 45
+  },
+  {
+    "id": "ST-048",
+    "title": "M3: new lesson — Effects Are Synchronization (useEffect from scratch)",
+    "owner": "Shared",
+    "priority": "P1",
+    "status": "backlog",
+    "notes": "Create src/content/lessons/03-useeffect-essentials/. Exercise: build useDocumentTitle hook from scratch. Starter is a stub with TODO comments — student writes the full useEffect body. Files: useDocumentTitle.ts (editable), TitleDemo.tsx (not editable), App.tsx. Checks: uses-useeffect (0.30), sets-document-title /document\\.title\\s*=\\s*title/ (0.30), has-dependency-array /\\[\\s*title\\s*\\]/ (0.20), has-cleanup /return\\s*\\(\\s*\\)\\s*=>/ (0.20). Concept panel: what a side effect is, when effects run (after paint), cleanup function, dependency array. 3-tier hint ladder. moduleId:3, moduleName:'Effects Are Synchronization', difficulty:'intro', estimatedMinutes:20, type:concept-gate, passCondition:all-checks, unlocksModule:4. Acceptance: schema-valid, all 4 checks pass, npm run test:all green.",
+    "order": 46
+  },
+  {
+    "id": "ST-049",
+    "title": "M5: new lesson — The Escape Hatch (useRef + stopwatch)",
+    "owner": "Shared",
+    "priority": "P1",
+    "status": "backlog",
+    "notes": "Create src/content/lessons/05-useref-stopwatch/. Exercise: useStopwatch hook stub — useState + intervalRef provided, student fills start() and stop(). start: intervalRef.current = setInterval(() => setSeconds(s => s+1), 1000). stop: clearInterval(intervalRef.current); intervalRef.current = null. Files: useStopwatch.ts (editable), StopwatchDisplay.tsx, App.tsx. Checks: start-uses-setinterval (0.30), start-stores-in-ref /intervalRef\\.current\\s*=\\s*setInterval/ (0.30), stop-uses-clearinterval /clearInterval\\s*\\(\\s*intervalRef\\.current/ (0.25), stop-nulls-ref /intervalRef\\.current\\s*=\\s*null/ (0.15). Concept panel: two faces of useRef, why not useState (no re-render), refs vs stale closures. 3-tier hint ladder. moduleId:5, moduleName:'The Escape Hatch', difficulty:'intro', estimatedMinutes:15, type:concept-gate, passCondition:all-checks, unlocksModule:6. Acceptance: schema-valid, all 4 checks pass, npm run test:all green.",
+    "order": 47
+  },
+  {
+    "id": "ST-050",
+    "title": "M7: new lesson — Cache Expensive Work (useMemo standalone)",
+    "owner": "Shared",
+    "priority": "P1",
+    "status": "backlog",
+    "notes": "Create src/content/lessons/07-usememo-standalone/. Exercise: useFilteredEmployees hook where filtered and sorted are plain variable assignments. Student wraps both with useMemo + correct deps. Files: useFilteredEmployees.ts (editable), EmployeeList.tsx (shows render count), App.tsx. Checks: filter-uses-usememo /const\\s+filtered\\s*=\\s*useMemo/ (0.40), filter-deps-correct [employees,query] either order (0.35), sort-uses-usememo /const\\s+sorted\\s*=\\s*useMemo/ (0.25). Concept panel: how React re-renders, what useMemo does, dep array rules, when NOT to use, preview useCallback in M8. 3-tier hint ladder. moduleId:7, moduleName:'Cache Expensive Work', difficulty:'intermediate', estimatedMinutes:15, type:concept-gate, passCondition:all-checks, unlocksModule:8. Acceptance: schema-valid, all 3 checks pass, npm run test:all green.",
+    "order": 48
+  },
+  {
+    "id": "ST-051",
+    "title": "M8: new lesson — Stable Function References (useCallback standalone)",
+    "owner": "Shared",
+    "priority": "P1",
+    "status": "backlog",
+    "notes": "Create src/content/lessons/08-usecallback-standalone/. Context: EmployeeBoard parent has onToggle as an inline arrow function — React.memo child EmployeeRow re-renders on every keystroke. Student wraps onToggle with useCallback. Files: EmployeeBoard.tsx (editable), EmployeeRow.tsx (React.memo + render count display, not editable), App.tsx. Checks: ontoggle-uses-usecallback /const\\s+onToggle\\s*=\\s*useCallback\\s*\\(/ (0.50), deps-include-set-employees [setEmployees] or [employees] (0.35), usecallback-imported /import.*useCallback/ (0.15). Concept panel: why inline functions break React.memo, useCallback = useMemo for functions, when NOT to use, preview stale closure (M10). 3-tier hint ladder. moduleId:8, moduleName:'Stable Function References', difficulty:'intermediate', estimatedMinutes:15, type:concept-gate, passCondition:all-checks, unlocksModule:9. Acceptance: schema-valid, all 3 checks pass, npm run test:all green.",
+    "order": 49
+  },
+  {
+    "id": "ST-052",
+    "title": "Renumber and reorder existing lessons to match new curriculum sequence",
+    "owner": "Shared",
+    "priority": "P1",
+    "status": "backlog",
+    "notes": "Run after ST-045 is merged AND ST-046–ST-051 are all merged. Rename lesson folders and update all lesson.ts fields (moduleId, moduleName, order, unlocksModule, exerciseId).\n\nFolder renames:\n  02-search-paging-sync              → 04-useeffect-dependencies\n  03-step-counter-hook               → 06-custom-hooks-extract-reuse\n  04-stable-results-panel            → 09-hook-composition-stability\n  05-debug-lab-infinite-loop         → 11-debug-infinite-loop\n  06-debug-lab-stale-callback        → 10-debug-stale-closure\n  07-capstone-stable-workspace       → 12-capstone-workspace\n  08-final-assessment-track-complete → 13-final-assessment\n\nlesson.ts field updates:\n  04: moduleId 2→4, 'The Dependency Contract', order 4, unlocksModule 5\n  06: moduleId 3→6, 'Extract and Reuse', order 6, unlocksModule 7. PLUS Phase 2: add resetCountRef = useRef(0), increment in reset(), expose resetCount. New checks: reset-count-uses-ref (0.20), reset-count-exposed (0.10). Rebalance: increment 0.28, decrement 0.28, reset-uses-initial 0.14.\n  09: moduleId 4→9, order 9, unlocksModule 10\n  10: moduleId 6→10, 'Debug: The Stale Closure', order 10, unlocksModule 11. PLUS expand to TWO stale useCallbacks (handleSave + handleReset, both with empty deps) to raise difficulty from grade 3 to 4.\n  11: moduleId 5→11, 'Debug: The Infinite Loop', order 11, unlocksModule 12\n  12: moduleId 7→12, order 12, unlocksModule 13\n  13: moduleId 8→13, order 13, unlocksModule null\n\nAlso update LaunchScreen.tsx MODULES array to reflect 12-session titles + times. Verify import.meta.glob in lessons.ts still works. Update any test files referencing old folder names by string. Acceptance: all 13 lessons resolve in correct order, npm run test:all green, no references to old folder names in tests.",
+    "order": 50
   }
 ]
 ```
